@@ -9,6 +9,9 @@ function Sidebar() {
         { to: "/datos", icon: <Square2StackIcon className="h-5 w-5" />, label: "Rpi Historico" },
         { to: "/tempdata", icon: <TicketIcon className="h-5 w-5" />, label: "Rpi Resumen" },
         { to: "/server", icon: <MegaphoneIcon className="h-5 w-5" />, label: "IP Server" },
+        // { to: "/about", icon: <InformationCircleIcon className="h-5 w-5" />, label: "Acerca de" },
+        { to: "/notas", icon: <DocumentTextIcon className="h-5 w-5" />, label: "Notas" },
+
         // { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
     ];
 

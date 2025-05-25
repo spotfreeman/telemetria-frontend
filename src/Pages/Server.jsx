@@ -29,10 +29,10 @@ export const Server = () => {
                 <tbody>
                     {datos.map((dato, idx) => (
                         <tr key={dato._id || idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                            <td className="px-4 py-2 text-center border-b border-gray-300">{dato._id}</td>
+                            <td className="px-4 py-2 text-center border-b border-gray-300">{idx + 1}</td>
                             <td className="px-4 py-2 text-center border-b border-gray-300">{dato.fecha_hora}</td>
                             <td className="px-4 py-2 text-center border-b border-gray-300">{dato.ip_interna}</td>
-                            <td className="px-4 py-2 text-center border-b border-gray-300">Solo a solicitud</td>
+                            <td className="px-4 py-2 text-center border-b border-gray-300"> Solo a solicitud </td>
                             <td className="px-4 py-2 text-center border-b border-gray-300">{dato.descripcion}</td>
                         </tr>
                     ))}
