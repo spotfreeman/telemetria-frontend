@@ -26,10 +26,34 @@ export const TempData = () => {
         temperatura: dato.temperatura
     }));
 
+    // ...dentro de tu componente TempData, antes del return...
+    const temperaturas = datos.map(d => d.temperatura);
+    const max = temperaturas.length ? Math.max(...temperaturas) : '-';
+    const min = temperaturas.length ? Math.min(...temperaturas) : '-';
+    const avg = temperaturas.length
+        ? (temperaturas.reduce((a, b) => a + b, 0) / temperaturas.length).toFixed(2)
+        : '-';
+
     return (
         <div className="flex flex-col items-center mt-8 w-full">
             <h2 className="text-2xl font-bold mb-4">Temperatura CPU RaspberryPi 3</h2>
             <p className="mb-4">Total de registros: {datos.length}</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 w-full max-w-6xl">
+                <div className="bg-white rounded shadow p-4 text-center">
+                    <div className="text-sm text-gray-500">Máxima</div>
+                    <div className="text-2xl font-bold text-red-600">{max}°C</div>
+                </div>
+                <div className="bg-white rounded shadow p-4 text-center">
+                    <div className="text-sm text-gray-500">Mínima</div>
+                    <div className="text-2xl font-bold text-blue-600">{min}°C</div>
+                </div>
+                <div className="bg-white rounded shadow p-4 text-center">
+                    <div className="text-sm text-gray-500">Promedio</div>
+                    <div className="text-2xl font-bold text-green-600">{avg}°C</div>
+                </div>
+            </div>
+
             <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl">
                 {/* Columna izquierda: Tabla */}
                 <div className="flex-1">
@@ -82,9 +106,14 @@ export const TempData = () => {
                     <div className="bg-white rounded shadow p-4 flex-1">
                         <h3 className="text-lg font-semibold mb-2">Línea de tiempo de temperatura</h3>
                         <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={datosGrafica.slice(-50)}>
+                            <LineChart data={datosGrafica.slice(-150)}>
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="fecha" />
+                                <XAxis
+                                    dataKey="fecha"
+                                    interval="preserveStartEnd"
+                                    angle={-45}
+                                    textAnchor="end"
+                                />
                                 <YAxis domain={['auto', 'auto']} />
                                 <Tooltip />
                                 <Line type="monotone" dataKey="temperatura" stroke="#2563eb" strokeWidth={2} dot={false} />
