@@ -8,7 +8,7 @@ function Sidebar() {
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
         { to: "/datos", icon: <Square2StackIcon className="h-5 w-5" />, label: "Rpi Historico" },
         { to: "/tempdata", icon: <TicketIcon className="h-5 w-5" />, label: "Rpi Resumen" },
-        // { to: "/broadcasts", icon: <MegaphoneIcon className="h-5 w-5" />, label: "Broadcasts" },
+        { to: "/server", icon: <MegaphoneIcon className="h-5 w-5" />, label: "IP Server" },
         // { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
     ];
 
