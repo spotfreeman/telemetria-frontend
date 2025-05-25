@@ -1,6 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DatosPage from './DatosPage';
+
 import { TempData } from './Pages/TempData';
 import { Server } from './Pages/Server';
 import { Notas } from './Pages/Notas';
@@ -28,9 +29,8 @@ function App() {
             <Route path="/tempdata" element={<TempData />} />
             <Route path="/server" element={<Server />} />
             <Route path="/notas" element={<Notas />} />
-
-
             {/* Agrega más rutas según sea necesario */}
+
             {/* Ruta para manejar 404 */}
             <Route path="*" element={<div>404 - Página no encontrada</div>} />
           </Routes>
