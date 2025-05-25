@@ -6,7 +6,11 @@ export const Server = () => {
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/rpis')
             .then(res => res.json())
-            .then(setDatos);
+            .then(data => {
+                // Ordena los datos por fecha_hora descendente (más nuevo primero)
+                const datosOrdenados = [...data].sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora));
+                setDatos(datosOrdenados);
+            });
     }, []);
 
     return (
@@ -20,7 +24,6 @@ export const Server = () => {
                         <th className="px-4 py-2 border-b border-gray-300 text-center">IP Interna</th>
                         <th className="px-4 py-2 border-b border-gray-300 text-center">IP Externa</th>
                         <th className="px-4 py-2 border-b border-gray-300 text-center">Descripcion</th>
-                        {/* Agrega más columnas según los campos que tenga cada objeto */}
                     </tr>
                 </thead>
                 <tbody>
@@ -29,9 +32,8 @@ export const Server = () => {
                             <td className="px-4 py-2 text-center border-b border-gray-300">{dato._id}</td>
                             <td className="px-4 py-2 text-center border-b border-gray-300">{dato.fecha_hora}</td>
                             <td className="px-4 py-2 text-center border-b border-gray-300">{dato.ip_interna}</td>
-                            <td className="px-4 py-2 text-center border-b border-gray-300">{dato.ip_externa}</td>
+                            <td className="px-4 py-2 text-center border-b border-gray-300">Solo a solicitud</td>
                             <td className="px-4 py-2 text-center border-b border-gray-300">{dato.descripcion}</td>
-                            {/* Agrega más celdas según los campos */}
                         </tr>
                     ))}
                 </tbody>
