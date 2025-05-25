@@ -9,32 +9,21 @@ function DatosPage() {
             .then(setDatos);
     }, []);
 
-    const thTdStyle = {
-        border: '1px solid #ddd',
-        padding: '8px',
-        textAlign: 'center'
-    };
-
     return (
-        <div>
-            <h2>Datos desde MongoDB</h2>
-            <table style={{
-                width: '50%',
-                margin: 'auto',
-                borderCollapse: 'collapse',
-                marginTop: '20px'
-            }}>
+        <div className="flex flex-col items-center mt-8">
+            <h2 className="text-2xl font-bold mb-4">Datos desde MongoDB</h2>
+            <table className="min-w-[300px] w-1/2 border border-gray-300 rounded-lg overflow-hidden shadow">
                 <thead>
-                    <tr style={{ backgroundColor: '#1976d2', color: 'white' }}>
-                        <th style={thTdStyle}>Fecha y Hora</th>
-                        <th style={thTdStyle}>Temperatura</th>
+                    <tr className="bg-blue-700 text-white">
+                        <th className="px-4 py-2 border-b border-gray-300 text-center">Fecha y Hora</th>
+                        <th className="px-4 py-2 border-b border-gray-300 text-center">Temperatura</th>
                     </tr>
                 </thead>
                 <tbody>
                     {datos.map((dato, idx) => (
-                        <tr key={dato._id} style={{ backgroundColor: idx % 2 === 0 ? '#f2f2f2' : '#ffffff' }}>
-                            <td style={thTdStyle}>{dato.fecha_hora}</td>
-                            <td style={thTdStyle}>{dato.temperatura}</td>
+                        <tr key={dato._id} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                            <td className="px-4 py-2 text-center border-b border-gray-300">{dato.fecha_hora}</td>
+                            <td className="px-4 py-2 text-center border-b border-gray-300">{dato.temperatura}</td>
                         </tr>
                     ))}
                 </tbody>

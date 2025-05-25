@@ -1,22 +1,22 @@
 export const TempData = () => {
     return (
-        <div>
-            <h2>Tabla de Datos de Temperatura</h2>
-            <table style={{ borderCollapse: 'collapse', margin: 'auto', marginTop: '20px' }}>
+        <div className="flex flex-col items-center mt-8">
+            <h2 className="text-2xl font-bold mb-4">Tabla de Datos de Temperatura</h2>
+            <table className="min-w-[300px] border border-gray-300 rounded-lg overflow-hidden shadow">
                 <thead>
-                    <tr style={{ backgroundColor: '#1976d2', color: 'white' }}>
-                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Sensor</th>
-                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Temperatura</th>
+                    <tr className="bg-blue-700 text-white">
+                        <th className="px-4 py-2 border-b border-gray-300">Sensor</th>
+                        <th className="px-4 py-2 border-b border-gray-300">Temperatura</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr style={{ backgroundColor: '#f2f2f2' }}>
-                        <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>2024-05-25</td>
-                        <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>22°C</td>
+                    <tr className="bg-gray-100">
+                        <td className="px-4 py-2 text-center border-b border-gray-300">2024-05-25</td>
+                        <td className="px-4 py-2 text-center border-b border-gray-300">22°C</td>
                     </tr>
                     <tr>
-                        <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>2024-05-24</td>
-                        <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>21°C</td>
+                        <td className="px-4 py-2 text-center border-b border-gray-300">2024-05-24</td>
+                        <td className="px-4 py-2 text-center border-b border-gray-300">21°C</td>
                     </tr>
                 </tbody>
             </table>
