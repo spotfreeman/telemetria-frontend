@@ -6,7 +6,7 @@ import {
 export const TempData = () => {
     const [datos, setDatos] = useState([]);
     const [pagina, setPagina] = useState(1);
-    const porPagina = 15;
+    const porPagina = 10;
 
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/temperaturas')

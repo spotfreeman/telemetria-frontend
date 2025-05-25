@@ -6,10 +6,10 @@ function Sidebar() {
 
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
-        { to: "/datos", icon: <Square2StackIcon className="h-5 w-5" />, label: "Datos Rpi" },
-        { to: "/tempdata", icon: <TicketIcon className="h-5 w-5" />, label: "TempData Rpi" },
-        { to: "/broadcasts", icon: <MegaphoneIcon className="h-5 w-5" />, label: "Broadcasts" },
-        { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
+        { to: "/datos", icon: <Square2StackIcon className="h-5 w-5" />, label: "Rpi Historico" },
+        { to: "/tempdata", icon: <TicketIcon className="h-5 w-5" />, label: "Rpi Resumen" },
+        // { to: "/broadcasts", icon: <MegaphoneIcon className="h-5 w-5" />, label: "Broadcasts" },
+        // { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
     ];
 
     return (
