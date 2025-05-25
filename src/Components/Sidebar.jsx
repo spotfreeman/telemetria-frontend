@@ -1,6 +1,9 @@
 import { Cog6ToothIcon, HomeIcon, MegaphoneIcon, Square2StackIcon, TicketIcon } from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
 
+
+
+
 function Sidebar() {
     return (
         <aside className="w-56 bg-gray-800 text-white min-h-screen flex flex-col py-6 px-2">
