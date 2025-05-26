@@ -1,5 +1,5 @@
 import { HomeIcon } from '@heroicons/react/20/solid';
-import { ServerIcon } from '@heroicons/react/24/outline';
+import { ServerIcon } from '@heroicons/react/16/solid';
 
 //import { HiServer } from "react-icons/hi";
 
