@@ -1,4 +1,4 @@
-import { HomeIcon , server-stack } from '@heroicons/react/20/solid';
+import { HomeIcon } from '@heroicons/react/20/solid';
 import { HiServer } from "react-icons/hi";
 
 // import { CiStickyNote } from "react-icons/ci";
