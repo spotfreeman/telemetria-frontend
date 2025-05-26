@@ -77,79 +77,87 @@ export const Notas = () => {
     };
 
     return (
-        <div className="flex flex-col items-center mt-8">
+        <div className="flex flex-col items-center mt-8 w-full">
             {showModal && (
                 <div className="fixed top-8 z-50 bg-green-600 text-white px-6 py-3 rounded shadow-lg">
                     ¡Nota agregada exitosamente!
                 </div>
             )}
-            <h2 className="text-2xl font-bold mb-4">Notas</h2>
-            <form onSubmit={handleSubmit} className="mb-6 flex flex-col gap-2 w-full max-w-md">
-                <input
-                    className="border p-2 rounded"
-                    name="titulo"
-                    placeholder="Título"
-                    value={form.titulo}
-                    onChange={handleChange}
-                    required
-                />
-                <textarea
-                    className="border p-2 rounded"
-                    name="descripcion"
-                    placeholder="Descripción"
-                    value={form.descripcion}
-                    onChange={handleChange}
-                    required
-                />
-                <input
-                    className="border p-2 rounded"
-                    name="usuario"
-                    placeholder="Usuario"
-                    value={form.usuario}
-                    onChange={handleChange}
-                    required
-                />
-                <button className="bg-blue-700 text-white px-4 py-2 rounded" type="submit">
-                    {editId ? "Actualizar Nota" : "Agregar Nota"}
-                </button>
-            </form>
-            <table className="min-w-[300px] w-full max-w-2xl border border-gray-300 rounded-lg overflow-hidden shadow">
-                <thead>
-                    <tr className="bg-blue-700 text-white">
-                        <th className="px-4 py-2 border-b border-gray-300 text-center">Fecha</th>
-                        <th className="px-4 py-2 border-b border-gray-300 text-center">Título</th>
-                        <th className="px-4 py-2 border-b border-gray-300 text-center">Descripción</th>
-                        <th className="px-4 py-2 border-b border-gray-300 text-center">Usuario</th>
-                        <th className="px-4 py-2 border-b border-gray-300 text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {notas.map((nota, idx) => (
-                        <tr key={nota._id || idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                            <td className="px-4 py-2 text-center border-b border-gray-300">
-                                {new Date(nota.fecha_hora).toLocaleString()}
-                            </td>
-                            <td className="px-4 py-2 text-center border-b border-gray-300">{nota.titulo}</td>
-                            <td className="px-4 py-2 text-center border-b border-gray-300">{nota.descripcion}</td>
-                            <td className="px-4 py-2 text-center border-b border-gray-300">{nota.usuario}</td>
-                            <td className="px-4 py-2 text-center border-b border-gray-300">
-                                <button
-                                    className="bg-red-600 text-white px-2 py-1 rounded mr-2"
-                                    onClick={() => handleDelete(nota._id)}
-                                >
-                                    Eliminar
-                                </button>
-                                <button
-                                    className="bg-yellow-500 text-white px-2 py-1 rounded"
-                                    onClick={() => handleEdit(nota)}
-                                >
-                                    Editar
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <h2 className="text-2xl font-bold mb-8 w-full text-center">Notas</h2>
+            <div className="flex flex-col md:flex-row w-full max-w-5xl gap-8">
+                {/* Columna del formulario */}
+                <div className="md:w-1/3 w-full">
+                    <form onSubmit={handleSubmit} className="mb-6 flex flex-col gap-2 w-full max-w-md mx-auto">
+                        <input
+                            className="border p-2 rounded"
+                            name="titulo"
+                            placeholder="Título"
+                            value={form.titulo}
+                            onChange={handleChange}
+                            required
+                        />
+                        <textarea
+                            className="border p-2 rounded"
+                            name="descripcion"
+                            placeholder="Descripción"
+                            value={form.descripcion}
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            className="border p-2 rounded"
+                            name="usuario"
+                            placeholder="Usuario"
+                            value={form.usuario}
+                            onChange={handleChange}
+                            required
+                        />
+                        <button className="bg-blue-700 text-white px-4 py-2 rounded" type="submit">
+                            {editId ? "Actualizar Nota" : "Agregar Nota"}
+                        </button>
+                    </form>
+                </div>
+                {/* Columna de la tabla */}
+                <div className="md:w-2/3 w-full">
+                    <table className="min-w-[300px] w-full border border-gray-300 rounded-lg overflow-hidden shadow">
+                        <thead>
+                            <tr className="bg-blue-700 text-white">
+                                <th className="px-4 py-2 border-b border-gray-300 text-center">Fecha</th>
+                                <th className="px-4 py-2 border-b border-gray-300 text-center">Título</th>
+                                <th className="px-4 py-2 border-b border-gray-300 text-center">Descripción</th>
+                                <th className="px-4 py-2 border-b border-gray-300 text-center">Usuario</th>
+                                <th className="px-4 py-2 border-b border-gray-300 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {notas.map((nota, idx) => (
+                                <tr key={nota._id || idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                                    <td className="px-4 py-2 text-center border-b border-gray-300">
+                                        {new Date(nota.fecha_hora).toLocaleString()}
+                                    </td>
+                                    <td className="px-4 py-2 text-center border-b border-gray-300">{nota.titulo}</td>
+                                    <td className="px-4 py-2 text-center border-b border-gray-300">{nota.descripcion}</td>
+                                    <td className="px-4 py-2 text-center border-b border-gray-300">{nota.usuario}</td>
+                                    <td className="px-4 py-2 text-center border-b border-gray-300">
+                                        <button
+                                            className="bg-red-600 text-white px-2 py-1 rounded mr-2"
+                                            onClick={() => handleDelete(nota._id)}
+                                        >
+                                            Eliminar
+                                        </button>
+                                        <button
+                                            className="bg-yellow-500 text-white px-2 py-1 rounded"
+                                            onClick={() => handleEdit(nota)}
+                                        >
+                                            Editar
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 };
