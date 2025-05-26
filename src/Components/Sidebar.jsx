@@ -10,10 +10,10 @@ function Sidebar() {
 
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
-        { to: "/datos", icon: <WiThermometer className="h-5 w-5" />, label: "Rpi Historico" },
-        { to: "/tempdata", icon: <WiThermometer className="h-5 w-5" />, label: "Rpi Resumen" },
-        { to: "/server", icon: <GrServerCluster className="h-5 w-5" />, label: "IP Server" },
-        { to: "/notas", icon: <CiStickyNote  className="h-5 w-5" />, label: "Notas" },
+        { to: "/datos", icon: <WiThermometer />, label: "Rpi Historico" },
+        { to: "/tempdata", icon: <WiThermometer />, label: "Rpi Resumen" },
+        { to: "/server", icon: <GrServerCluster />, label: "IP Server" },
+        { to: "/notas", icon: <CiStickyNote />, label: "Notas" },
 
         // { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
     ];
