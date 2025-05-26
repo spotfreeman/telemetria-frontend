@@ -8,41 +8,56 @@ export const Notas = () => {
         usuario: ""
     });
     const [showModal, setShowModal] = useState(false);
+    const [editId, setEditId] = useState(null);
 
-    // Obtener notas al cargar el componente
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/notas')
             .then(res => res.json())
             .then(setNotas);
     }, []);
 
-    // Manejar cambios en el formulario
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // Enviar nueva nota
+    // Enviar nueva nota o editar
     const handleSubmit = async e => {
         e.preventDefault();
-        const nuevaNota = {
-            ...form,
-            fecha_hora: new Date().toISOString() // Agrega la fecha y hora actual
-        };
-        const res = await fetch('https://telemetria-backend.onrender.com/api/notas', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(nuevaNota)
-        });
-        if (res.ok) {
-            const notaGuardada = await res.json();
-            setNotas([notaGuardada, ...notas]);
-            setForm({ titulo: "", descripcion: "", usuario: "" });
-            setShowModal(true);
-            setTimeout(() => setShowModal(false), 2000); // Oculta el modal después de 2 segundos
+        if (editId) {
+            // Editar nota existente
+            const res = await fetch(`https://telemetria-backend.onrender.com/api/notas/${editId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...form })
+            });
+            if (res.ok) {
+                const notaActualizada = await res.json();
+                setNotas(notas.map(n => n._id === editId ? notaActualizada : n));
+                setEditId(null);
+                setShowModal(true);
+                setTimeout(() => setShowModal(false), 2000);
+            }
+        } else {
+            // Crear nueva nota
+            const nuevaNota = {
+                ...form,
+                fecha_hora: new Date().toISOString()
+            };
+            const res = await fetch('https://telemetria-backend.onrender.com/api/notas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevaNota)
+            });
+            if (res.ok) {
+                const notaGuardada = await res.json();
+                setNotas([notaGuardada, ...notas]);
+                setShowModal(true);
+                setTimeout(() => setShowModal(false), 2000);
+            }
         }
+        setForm({ titulo: "", descripcion: "", usuario: "" });
     };
 
-    // Eliminar nota
     const handleDelete = async (id) => {
         const res = await fetch(`https://telemetria-backend.onrender.com/api/notas/${id}`, {
             method: 'DELETE'
@@ -50,6 +65,15 @@ export const Notas = () => {
         if (res.ok) {
             setNotas(notas.filter(nota => nota._id !== id));
         }
+    };
+
+    const handleEdit = (nota) => {
+        setForm({
+            titulo: nota.titulo,
+            descripcion: nota.descripcion,
+            usuario: nota.usuario
+        });
+        setEditId(nota._id);
     };
 
     return (
@@ -86,7 +110,7 @@ export const Notas = () => {
                     required
                 />
                 <button className="bg-blue-700 text-white px-4 py-2 rounded" type="submit">
-                    Agregar Nota
+                    {editId ? "Actualizar Nota" : "Agregar Nota"}
                 </button>
             </form>
             <table className="min-w-[300px] w-full max-w-2xl border border-gray-300 rounded-lg overflow-hidden shadow">
@@ -110,10 +134,16 @@ export const Notas = () => {
                             <td className="px-4 py-2 text-center border-b border-gray-300">{nota.usuario}</td>
                             <td className="px-4 py-2 text-center border-b border-gray-300">
                                 <button
-                                    className="bg-red-600 text-white px-2 py-1 rounded"
+                                    className="bg-red-600 text-white px-2 py-1 rounded mr-2"
                                     onClick={() => handleDelete(nota._id)}
                                 >
                                     Eliminar
+                                </button>
+                                <button
+                                    className="bg-yellow-500 text-white px-2 py-1 rounded"
+                                    onClick={() => handleEdit(nota)}
+                                >
+                                    Editar
                                 </button>
                             </td>
                         </tr>
