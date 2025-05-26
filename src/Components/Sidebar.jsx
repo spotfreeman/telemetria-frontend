@@ -1,4 +1,4 @@
-import { Cog6ToothIcon, HomeIcon, MegaphoneIcon, Square2StackIcon, TicketIcon } from '@heroicons/react/20/solid';
+import { Cog6ToothIcon, HomeIcon, MegaphoneIcon, Square2StackIcon, TicketIcon , WiThermometer , GrServerCluster ,FaRegStickyNote } from '@heroicons/react/20/solid';
 import { Link, useLocation } from 'react-router-dom';
 
 function Sidebar() {
@@ -6,10 +6,10 @@ function Sidebar() {
 
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
-        { to: "/datos", icon: <Square2StackIcon className="h-5 w-5" />, label: "Rpi Historico" },
-        { to: "/tempdata", icon: <TicketIcon className="h-5 w-5" />, label: "Rpi Resumen" },
-        { to: "/server", icon: <MegaphoneIcon className="h-5 w-5" />, label: "IP Server" },
-        { to: "/notas", icon: <TicketIcon className="h-5 w-5" />, label: "Notas" },
+        { to: "/datos", icon: <WiThermometer className="h-5 w-5" />, label: "Rpi Historico" },
+        { to: "/tempdata", icon: <WiThermometer className="h-5 w-5" />, label: "Rpi Resumen" },
+        { to: "/server", icon: <GrServerCluster className="h-5 w-5" />, label: "IP Server" },
+        { to: "/notas", icon: <FaRegStickyNote  className="h-5 w-5" />, label: "Notas" },
 
         // { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
     ];
