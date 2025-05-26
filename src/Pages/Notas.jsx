@@ -24,14 +24,18 @@ export const Notas = () => {
     // Enviar nueva nota
     const handleSubmit = async e => {
         e.preventDefault();
+        const nuevaNota = {
+            ...form,
+            fecha_hora: new Date().toISOString() // Agrega la fecha y hora actual
+        };
         const res = await fetch('https://telemetria-backend.onrender.com/api/notas', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form)
+            body: JSON.stringify(nuevaNota)
         });
         if (res.ok) {
-            const nuevaNota = await res.json();
-            setNotas([nuevaNota, ...notas]);
+            const notaGuardada = await res.json();
+            setNotas([notaGuardada, ...notas]);
             setForm({ titulo: "", descripcion: "", usuario: "" });
             setShowModal(true);
             setTimeout(() => setShowModal(false), 2000); // Oculta el modal después de 2 segundos
