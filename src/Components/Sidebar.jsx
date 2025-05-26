@@ -1,4 +1,8 @@
-import { Cog6ToothIcon, HomeIcon, MegaphoneIcon, Square2StackIcon, TicketIcon , WiThermometer , GrServerCluster ,FaRegStickyNote } from '@heroicons/react/20/solid';
+import { HomeIcon } from '@heroicons/react/20/solid';
+import { CiStickyNote } from "react-icons/ci";
+import { WiThermometer } from "react-icons/wi";
+import { GrServerCluster } from "react-icons/gr";
+
 import { Link, useLocation } from 'react-router-dom';
 
 function Sidebar() {
@@ -9,7 +13,7 @@ function Sidebar() {
         { to: "/datos", icon: <WiThermometer className="h-5 w-5" />, label: "Rpi Historico" },
         { to: "/tempdata", icon: <WiThermometer className="h-5 w-5" />, label: "Rpi Resumen" },
         { to: "/server", icon: <GrServerCluster className="h-5 w-5" />, label: "IP Server" },
-        { to: "/notas", icon: <FaRegStickyNote  className="h-5 w-5" />, label: "Notas" },
+        { to: "/notas", icon: <CiStickyNote  className="h-5 w-5" />, label: "Notas" },
 
         // { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
     ];
