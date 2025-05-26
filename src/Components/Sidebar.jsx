@@ -1,5 +1,7 @@
 import { HomeIcon } from '@heroicons/react/20/solid';
-import { HiServer } from "react-icons/hi";
+import { ServerIcon } from '@heroicons/react/24/outline';
+
+//import { HiServer } from "react-icons/hi";
 
 // import { CiStickyNote } from "react-icons/ci";
 // import { WiThermometer } from "react-icons/wi";
@@ -12,10 +14,10 @@ function Sidebar() {
 
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
-        { to: "/datos", icon: <HiServer />, label: "Rpi Historico" },
-        { to: "/tempdata", icon: <HiServer />, label: "Rpi Resumen" },
-        { to: "/server", icon: <HiServer />, label: "IP Server" },
-        { to: "/notas", icon: <HiServer />, label: "Notas" },
+        { to: "/datos", icon: <ServerIcon />, label: "Rpi Historico" },
+        { to: "/tempdata", icon: <ServerIcon />, label: "Rpi Resumen" },
+        { to: "/server", icon: <ServerIcon />, label: "IP Server" },
+        { to: "/notas", icon: <ServerIcon />, label: "Notas" },
 
         // { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
     ];
