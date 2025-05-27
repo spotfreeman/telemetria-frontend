@@ -20,12 +20,12 @@ export const TempData = () => {
 
     // Prepara los datos para la gráfica
     const datosGrafica = datos
-        .slice() // copia para no mutar el original
-        .sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora)) // más nuevo primero
-        .slice(0, 100) // toma los 100 más nuevos
-        .reverse() // para que el gráfico vaya de más antiguo a más reciente
+        .slice()
+        .sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora))
+        .slice(0, 100)
+        .reverse()
         .map(dato => ({
-            fecha: new Date(dato.fecha_hora).toLocaleTimeString('es-CL', {
+            fecha: new Date(dato.fecha_hora).toLocaleTimeString([], {
                 hour: '2-digit',
                 minute: '2-digit'
             }),
@@ -73,14 +73,7 @@ export const TempData = () => {
                             {datosPagina.map((dato, idx) => (
                                 <tr key={dato._id || idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
                                     <td className="px-4 py-2 text-center border-b border-gray-300">
-                                        {new Date(dato.fecha_hora).toLocaleString('es-CL', {
-                                            timeZone: 'America/Santiago',
-                                            day: '2-digit',
-                                            month: '2-digit',
-                                            year: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit'
-                                        })}
+                                        {new Date(dato.fecha_hora).toLocaleString()}
                                     </td>
                                     <td className="px-4 py-2 text-center border-b border-gray-300">{dato.temperatura}</td>
                                 </tr>
