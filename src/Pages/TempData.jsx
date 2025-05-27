@@ -15,7 +15,8 @@ export const TempData = () => {
     }, []);
 
     const totalPaginas = Math.ceil(datos.length / porPagina);
-    const datosPagina = datos.slice((pagina - 1) * porPagina, pagina * porPagina);
+    const datosOrdenados = datos.slice().sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora));
+    const datosPagina = datosOrdenados.slice((pagina - 1) * porPagina, pagina * porPagina);
 
     // Prepara los datos para la gráfica
     const datosGrafica = datos
