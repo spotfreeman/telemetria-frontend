@@ -18,15 +18,19 @@ export const TempData = () => {
     const datosPagina = datos.slice((pagina - 1) * porPagina, pagina * porPagina);
 
     // Prepara los datos para la gráfica
-    const datosGrafica = datos.map(dato => ({
-        fecha: new Date(dato.fecha_hora).toLocaleTimeString('es-CL', {
-            hour: '2-digit',
-            minute: '2-digit'
-        }),
-        temperatura: dato.temperatura
-    }));
+    const datosGrafica = datos
+        .slice() // copia para no mutar el original
+        .sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora))
+        .slice(0, 100)
+        .reverse() // para que el gráfico vaya de más antiguo a más reciente
+        .map(dato => ({
+            fecha: new Date(dato.fecha_hora).toLocaleTimeString('es-CL', {
+                hour: '2-digit',
+                minute: '2-digit'
+            }),
+            temperatura: dato.temperatura
+        }));
 
-    // ...dentro de tu componente TempData, antes del return...
     const temperaturas = datos.map(d => d.temperatura);
     const max = temperaturas.length ? Math.max(...temperaturas) : '-';
     const min = temperaturas.length ? Math.min(...temperaturas) : '-';
@@ -106,7 +110,7 @@ export const TempData = () => {
                     <div className="bg-white rounded shadow p-4 flex-1">
                         <h3 className="text-lg font-semibold mb-2">Línea de tiempo de temperatura</h3>
                         <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={datosGrafica.slice(-150)}>
+                            <LineChart data={datosGrafica}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis
                                     dataKey="fecha"
