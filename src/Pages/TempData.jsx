@@ -21,8 +21,8 @@ export const TempData = () => {
     // Prepara los datos para la gráfica
     const datosGrafica = datos
         .slice() // copia para no mutar el original
-        .sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora))
-        .slice(0, 100)
+        .sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora)) // más nuevo primero
+        .slice(0, 100) // toma los 100 más nuevos
         .reverse() // para que el gráfico vaya de más antiguo a más reciente
         .map(dato => ({
             fecha: new Date(dato.fecha_hora).toLocaleTimeString('es-CL', {
