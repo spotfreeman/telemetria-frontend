@@ -18,6 +18,7 @@ function Sidebar() {
         { to: "/tempdata", icon: <ServerIcon className="h-5 w-5" />, label: "Rpi Resumen" },
         { to: "/server", icon: <ServerIcon className="h-5 w-5" />, label: "IP Server" },
         { to: "/notas", icon: <ServerIcon className="h-5 w-5" />, label: "Notas" },
+        { to: "/proyectos", icon: <ServerIcon className="h-5 w-5" />, label: "Proyectos" },
 
         // { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
     ];
