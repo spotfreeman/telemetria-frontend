@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-export const Lista = () => {
+const Lista = () => {
     const [proyectos, setProyectos] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [form, setForm] = useState({
+        codigo: "",
+        nombre: "",
+        estado: ""
+    });
 
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/proyectos')
@@ -10,8 +16,31 @@ export const Lista = () => {
     }, []);
 
     const handleCrearProyecto = () => {
-        // Aquí puedes redirigir a un formulario o abrir un modal para crear proyecto
-        alert("Funcionalidad para crear proyecto aún no implementada.");
+        setShowModal(true);
+    };
+
+    const handleChange = e => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const res = await fetch('https://telemetria-backend.onrender.com/api/proyectos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(form)
+        });
+        if (res.ok) {
+            const nuevoProyecto = await res.json();
+            setProyectos([nuevoProyecto, ...proyectos]);
+            setShowModal(false);
+            setForm({ codigo: "", nombre: "", estado: "" });
+        }
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setForm({ codigo: "", nombre: "", estado: "" });
     };
 
     return (
@@ -25,6 +54,57 @@ export const Lista = () => {
                     Crear Proyecto
                 </button>
             </div>
+
+            {/* Modal para crear proyecto */}
+            {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+                        <h3 className="text-xl font-bold mb-4">Crear Proyecto</h3>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                            <input
+                                className="border p-2 rounded"
+                                name="codigo"
+                                placeholder="Código"
+                                value={form.codigo}
+                                onChange={handleChange}
+                                required
+                            />
+                            <input
+                                className="border p-2 rounded"
+                                name="nombre"
+                                placeholder="Nombre"
+                                value={form.nombre}
+                                onChange={handleChange}
+                                required
+                            />
+                            <input
+                                className="border p-2 rounded"
+                                name="estado"
+                                placeholder="Estado"
+                                value={form.estado}
+                                onChange={handleChange}
+                                required
+                            />
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    type="button"
+                                    className="bg-gray-400 text-white px-4 py-2 rounded"
+                                    onClick={handleCloseModal}
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="bg-blue-700 text-white px-4 py-2 rounded"
+                                >
+                                    Guardar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
             <table className="min-w-[300px] w-full max-w-3xl border border-gray-300 rounded-lg overflow-hidden shadow">
                 <thead>
                     <tr className="bg-blue-700 text-white">
