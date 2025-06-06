@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Lista = () => {
+export const Lista = () => {
     const [proyectos, setProyectos] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [form, setForm] = useState({
