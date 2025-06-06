@@ -9,6 +9,7 @@ export const Lista = () => {
         nombre: "",
         estado: ""
     });
+    const [busqueda, setBusqueda] = useState("");
 
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/proyectos')
@@ -44,16 +45,30 @@ export const Lista = () => {
         setForm({ codigo: "", nombre: "", estado: "" });
     };
 
+    // Filtrado por nombre
+    const proyectosFiltrados = proyectos.filter(p =>
+        p.nombre.toLowerCase().includes(busqueda.toLowerCase())
+    );
+
     return (
         <div className="flex flex-col items-center mt-8 w-full">
-            <div className="w-full max-w-3xl flex justify-between items-center mb-4">
+            <div className="w-full max-w-3xl flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-2">
                 <h2 className="text-2xl font-bold">Lista de Proyectos</h2>
-                <button
-                    className="bg-blue-700 text-white px-4 py-2 rounded shadow"
-                    onClick={handleCrearProyecto}
-                >
-                    Crear Proyecto
-                </button>
+                <div className="flex gap-2 w-full md:w-auto">
+                    <input
+                        type="text"
+                        className="border rounded px-3 py-2 w-full md:w-64"
+                        placeholder="Buscar por nombre..."
+                        value={busqueda}
+                        onChange={e => setBusqueda(e.target.value)}
+                    />
+                    <button
+                        className="bg-blue-700 text-white px-4 py-2 rounded shadow"
+                        onClick={handleCrearProyecto}
+                    >
+                        Crear Proyecto
+                    </button>
+                </div>
             </div>
 
             {/* Modal para crear proyecto */}
@@ -115,7 +130,7 @@ export const Lista = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {proyectos.map((proyecto, idx) => (
+                    {proyectosFiltrados.map((proyecto, idx) => (
                         <tr key={proyecto._id || idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
                             <td className="px-4 py-2 text-center border-b border-gray-300">{proyecto.codigo}</td>
                             <td className="px-4 py-2 text-center border-b border-gray-300">
