@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export const Lista = () => {
     const [proyectos, setProyectos] = useState([]);
@@ -117,7 +118,14 @@ export const Lista = () => {
                     {proyectos.map((proyecto, idx) => (
                         <tr key={proyecto._id || idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
                             <td className="px-4 py-2 text-center border-b border-gray-300">{proyecto.codigo}</td>
-                            <td className="px-4 py-2 text-center border-b border-gray-300">{proyecto.nombre}</td>
+                            <td className="px-4 py-2 text-center border-b border-gray-300">
+                                <Link
+                                    to={`/proyectos/${proyecto._id}`}
+                                    className="text-blue-700 hover:underline font-semibold"
+                                >
+                                    {proyecto.nombre}
+                                </Link>
+                            </td>
                             <td className="px-4 py-2 text-center border-b border-gray-300">{proyecto.estado}</td>
                         </tr>
                     ))}

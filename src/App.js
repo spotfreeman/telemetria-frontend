@@ -6,6 +6,7 @@ import { TempData } from './Pages/TempData';
 import { Server } from './Pages/Server';
 import { Notas } from './Pages/Notas';
 import { Lista } from './Pages/proyectos/Lista';
+import { ProyectoDetalle } from './Pages/proyectos/ProyectoDetalle';
 
 import Sidebar from './Components/Sidebar';
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/server" element={<Server />} />
             <Route path="/notas" element={<Notas />} />
             <Route path="/proyectos" element={<Lista />} />
+            <Route path="/proyectos/:id" element={<ProyectoDetalle />} />
             {/* Agrega más rutas según sea necesario */}
 
             {/* Ruta para manejar 404 */}
