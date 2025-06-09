@@ -29,9 +29,13 @@ export const ProyectoDetalle = () => {
     const handleGuardar = async e => {
         e.preventDefault();
         setMensaje("");
+        const token = localStorage.getItem("token"); // Obtén el token guardado
         const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` // Agrega el token aquí
+            },
             body: JSON.stringify(form)
         });
         if (res.ok) {
