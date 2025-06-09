@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+export const Login = () => {
     const [form, setForm] = useState({ usuario: "", password: "" });
     const [error, setError] = useState("");
     const navigate = useNavigate();
