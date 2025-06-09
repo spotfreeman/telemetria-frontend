@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 
 export const Notas = () => {
     const [notas, setNotas] = useState([]);
@@ -140,16 +141,18 @@ export const Notas = () => {
                                     <td className="px-4 py-2 text-center border-b border-gray-300">{nota.usuario}</td>
                                     <td className="px-4 py-2 text-center border-b border-gray-300">
                                         <button
-                                            className="bg-red-600 text-white px-2 py-1 rounded mr-2"
+                                            className="bg-red-600 hover:bg-red-700 text-white p-1 rounded mr-2"
                                             onClick={() => handleDelete(nota._id)}
+                                            title="Eliminar"
                                         >
-                                            Eliminar
+                                            <TrashIcon className="h-5 w-5" />
                                         </button>
                                         <button
-                                            className="bg-yellow-500 text-white px-2 py-1 rounded"
+                                            className="bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded"
                                             onClick={() => handleEdit(nota)}
+                                            title="Editar"
                                         >
-                                            Editar
+                                            <PencilSquareIcon className="h-5 w-5" />
                                         </button>
                                     </td>
                                 </tr>
