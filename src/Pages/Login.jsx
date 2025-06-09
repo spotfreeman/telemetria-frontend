@@ -19,6 +19,8 @@ export const Login = () => {
             body: JSON.stringify(form),
         });
         const data = await res.json();
+        console.log(data);
+
         if (res.ok && data.token) {
             localStorage.setItem("token", data.token);
             navigate("/"); // Redirige a la página principal
