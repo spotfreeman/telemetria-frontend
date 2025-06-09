@@ -13,6 +13,8 @@ export const Login = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         setError("");
+        console.log("Informacion enviada ", form);
+
         const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
