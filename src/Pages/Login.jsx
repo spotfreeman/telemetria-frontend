@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
-    const [form, setForm] = useState({ usuario: "", password: "" });
+    const [form, setForm] = useState({ username: "", password: "" });
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
@@ -38,9 +38,9 @@ export const Login = () => {
                 {error && <div className="mb-4 text-red-600">{error}</div>}
                 <input
                     className="border p-2 rounded w-full mb-4"
-                    name="usuario"
+                    name="username"
                     placeholder="Usuario"
-                    value={form.usuario}
+                    value={form.username}
                     onChange={handleChange}
                     required
                 />
