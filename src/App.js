@@ -6,7 +6,6 @@ import { TempData } from './Pages/TempData';
 import { Server } from './Pages/Server';
 import { Notas } from './Pages/Notas';
 import { Lista } from './Pages/proyectos/Lista';
-import Login from './Pages/Login';
 
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
@@ -32,8 +31,7 @@ function App() {
             <Route path="/tempdata" element={<TempData />} />
             <Route path="/server" element={<Server />} />
             <Route path="/notas" element={<Notas />} />
-            <Route path="/proyectos" element={<PrivateRoute> <Lista />  </PrivateRoute>} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/proyectos" element={<Lista />} />
             {/* Agrega más rutas según sea necesario */}
 
             {/* Ruta para manejar 404 */}
