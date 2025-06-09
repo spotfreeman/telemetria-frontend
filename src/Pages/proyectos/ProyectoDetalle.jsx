@@ -34,12 +34,12 @@ export const ProyectoDetalle = () => {
     const handleGuardar = async e => {
         e.preventDefault();
         setMensaje("");
-        const token = localStorage.getItem("token"); // Obtén el token guardado
+        const token = localStorage.getItem("token");
         const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}` // Agrega el token aquí
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify(form)
         });
@@ -58,11 +58,11 @@ export const ProyectoDetalle = () => {
     }
 
     return (
-        <div className="max-w-2xl mx-auto mt-8 bg-white rounded shadow p-8">
+        <div className="max-w-4xl mx-auto mt-8 bg-white rounded shadow p-8">
             <h2 className="text-2xl font-bold mb-4">{proyecto.nombre}</h2>
             {mensaje && <div className="mb-4 text-green-700 font-semibold">{mensaje}</div>}
             {editando ? (
-                <form onSubmit={handleGuardar} className="flex flex-col gap-4">
+                <form onSubmit={handleGuardar} className="flex flex-col gap-4 mb-8">
                     <label>
                         <span className="font-semibold">Código:</span>
                         <input
@@ -125,7 +125,65 @@ export const ProyectoDetalle = () => {
                     </button>
                 </>
             )}
-            <Link to="/proyectos" className="inline-block mt-6 text-blue-700 hover:underline">
+
+            {/* Tabla 1 */}
+            <div className="mt-10">
+                <h3 className="text-lg font-bold mb-2">Tabla de Actividades</h3>
+                <table className="w-full border border-gray-300 rounded mb-8">
+                    <thead>
+                        <tr className="bg-blue-100">
+                            <th className="px-4 py-2">Actividad</th>
+                            <th className="px-4 py-2">Responsable</th>
+                            <th className="px-4 py-2">Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="px-4 py-2 text-center" colSpan={3}>[Aquí irán las actividades]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Tabla 2 */}
+            <div className="mt-10">
+                <h3 className="text-lg font-bold mb-2">Tabla de Equipos</h3>
+                <table className="w-full border border-gray-300 rounded mb-8">
+                    <thead>
+                        <tr className="bg-blue-100">
+                            <th className="px-4 py-2">Equipo</th>
+                            <th className="px-4 py-2">Modelo</th>
+                            <th className="px-4 py-2">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="px-4 py-2 text-center" colSpan={3}>[Aquí irán los equipos]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Tabla 3 */}
+            <div className="mt-10">
+                <h3 className="text-lg font-bold mb-2">Tabla de Documentos</h3>
+                <table className="w-full border border-gray-300 rounded mb-8">
+                    <thead>
+                        <tr className="bg-blue-100">
+                            <th className="px-4 py-2">Documento</th>
+                            <th className="px-4 py-2">Tipo</th>
+                            <th className="px-4 py-2">Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="px-4 py-2 text-center" colSpan={3}>[Aquí irán los documentos]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <Link to="/proyectos" className="inline-block mt-8 text-blue-700 hover:underline">
                 ← Volver a la lista de proyectos
             </Link>
         </div>
