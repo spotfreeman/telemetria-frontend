@@ -16,10 +16,12 @@ function Sidebar() {
         { to: "/notas", icon: <ServerIcon className="h-5 w-5" />, label: "Notas" },
     ];
 
-    // Oculta "Iniciar Sesión" si hay token
-    const filteredLinks = token
-        ? links.filter(link => link.to !== "/login")
-        : links;
+    // Filtra los enlaces según el estado del token
+    const filteredLinks = links.filter(link => {
+        if (link.to === "/login" && token) return false; // Oculta login si hay token
+        if (link.to === "/proyectos" && !token) return false; // Oculta proyectos si NO hay token
+        return true;
+    });
 
     return (
         <aside className="w-56 bg-gradient-to-b from-blue-900 to-gray-800 text-white min-h-screen flex flex-col py-6 px-2 shadow-lg">
