@@ -9,7 +9,12 @@ export const ProyectoDetalle = () => {
     const [mensaje, setMensaje] = useState("");
 
     useEffect(() => {
-        fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`)
+        const token = localStorage.getItem("token");
+        fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 setProyecto(data);
