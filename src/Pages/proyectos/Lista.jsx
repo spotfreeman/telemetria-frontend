@@ -15,7 +15,9 @@ export const Lista = () => {
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/proyectos')
             .then(res => res.json())
-            .then(setProyectos);
+            .then(data => {
+                setProyectos(Array.isArray(data) ? data : []);
+            });
     }, []);
 
     const handleCrearProyecto = () => {
@@ -52,9 +54,11 @@ export const Lista = () => {
     };
 
     // Filtrado por nombre
-    const proyectosFiltrados = proyectos.filter(p =>
-        p.nombre.toLowerCase().includes(busqueda.toLowerCase())
-    );
+    const proyectosFiltrados = Array.isArray(proyectos)
+        ? proyectos.filter(p =>
+            p.nombre.toLowerCase().includes(busqueda.toLowerCase())
+        )
+        : [];
 
     return (
         <div className="flex flex-col items-center mt-8 w-full">
