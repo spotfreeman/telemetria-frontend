@@ -13,7 +13,12 @@ export const Lista = () => {
     const [busqueda, setBusqueda] = useState("");
 
     useEffect(() => {
-        fetch('https://telemetria-backend.onrender.com/api/proyectos')
+        const token = localStorage.getItem("token");
+        fetch('https://telemetria-backend.onrender.com/api/proyectos', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 setProyectos(Array.isArray(data) ? data : []);
