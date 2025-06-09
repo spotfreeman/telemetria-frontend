@@ -19,6 +19,7 @@ function Sidebar() {
         { to: "/server", icon: <ServerIcon className="h-5 w-5" />, label: "IP Server" },
         { to: "/notas", icon: <ServerIcon className="h-5 w-5" />, label: "Notas" },
         { to: "/proyectos", icon: <ServerIcon className="h-5 w-5" />, label: "Proyectos" },
+        { to: "/login", icon: <ServerIcon className="h-5 w-5" />, label: "Iniciar Sesión" },
 
         // { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
     ];
