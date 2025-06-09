@@ -1,9 +1,10 @@
 import { HomeIcon } from '@heroicons/react/20/solid';
 import { ServerIcon } from '@heroicons/react/16/solid';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function Sidebar() {
     const location = useLocation();
+    const navigate = useNavigate();
     const token = localStorage.getItem("token");
 
     const links = [
@@ -16,12 +17,19 @@ function Sidebar() {
         { to: "/notas", icon: <ServerIcon className="h-5 w-5" />, label: "Notas" },
     ];
 
-    // Filtra los enlaces según el estado del token
     const filteredLinks = links.filter(link => {
-        if (link.to === "/login" && token) return false; // Oculta login si hay token
-        if (link.to === "/proyectos" && !token) return false; // Oculta proyectos si NO hay token
+        if (link.to === "/login" && token) return false;
+        if (link.to === "/proyectos" && !token) return false;
+        if (link.to === "/server" && !token) return false;
+        if (link.to === "/notas" && !token) return false;
         return true;
     });
+
+    // Función para cerrar sesión
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        navigate("/login");
+    };
 
     return (
         <aside className="w-56 bg-gradient-to-b from-blue-900 to-gray-800 text-white min-h-screen flex flex-col py-6 px-2 shadow-lg">
@@ -44,6 +52,15 @@ function Sidebar() {
                     </Link>
                 ))}
             </nav>
+            {/* Botón de cerrar sesión solo si hay token */}
+            {token && (
+                <button
+                    onClick={handleLogout}
+                    className="mt-6 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded w-full transition"
+                >
+                    Cerrar Sesión
+                </button>
+            )}
             <div className="mt-auto border-t border-blue-900 pt-4 text-xs text-blue-200 text-center opacity-60">
                 &copy; {new Date().getFullYear()} Proyecto Telemetría
             </div>
