@@ -82,6 +82,25 @@ export const ProyectoDetalle = () => {
         }
     };
 
+    const handleBorrarAvance = async (idx) => {
+        if (!window.confirm("¿Seguro que deseas eliminar este avance?")) return;
+        const token = localStorage.getItem("token");
+        // Elimina el avance por índice
+        const avanceActualizado = proyecto.avance.filter((_, i) => i !== idx);
+        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ ...proyecto, avance: avanceActualizado })
+        });
+        if (res.ok) {
+            const actualizado = await res.json();
+            setProyecto(actualizado);
+        }
+    };
+
     if (!proyecto) {
         return <div className="p-8">Cargando...</div>;
     }
@@ -264,6 +283,7 @@ export const ProyectoDetalle = () => {
                                 <th className="px-4 py-2">Mes</th>
                                 <th className="px-4 py-2">Año</th>
                                 <th className="px-4 py-2">Avance (%)</th>
+                                <th className="px-4 py-2">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -272,6 +292,15 @@ export const ProyectoDetalle = () => {
                                     <td className="px-4 py-2 text-center">{a.mes}</td>
                                     <td className="px-4 py-2 text-center">{a.anio}</td>
                                     <td className="px-4 py-2 text-center">{a.valor}%</td>
+                                    <td className="px-4 py-2 text-center">
+                                        <button
+                                            className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded"
+                                            onClick={() => handleBorrarAvance(idx)}
+                                            title="Eliminar avance"
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
