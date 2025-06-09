@@ -6,6 +6,7 @@ function Sidebar() {
     const location = useLocation();
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
+    const usuario = localStorage.getItem("usuario");
 
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
@@ -33,8 +34,16 @@ function Sidebar() {
 
     return (
         <aside className="w-56 bg-gradient-to-b from-blue-900 to-gray-800 text-white min-h-screen flex flex-col py-6 px-2 shadow-lg">
-            <div className="mb-8 flex items-center justify-center">
+            <div className="mb-8 flex flex-col items-center justify-center">
                 <span className="text-xl font-bold tracking-wide text-blue-300">Telemetría</span>
+                {usuario && (
+                    <div className="mt-4 flex flex-col items-center">
+                        <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-blue-200 text-blue-800 font-bold text-xl">
+                            {usuario.charAt(0).toUpperCase()}
+                        </span>
+                        <span className="mt-2 text-blue-100 text-sm">{usuario}</span>
+                    </div>
+                )}
             </div>
             <nav className="flex flex-col gap-1">
                 {filteredLinks.map(link => (

@@ -60,6 +60,9 @@ export const Notas = () => {
     };
 
     const handleDelete = async (id) => {
+        const confirmar = window.confirm("¿Estás seguro de que deseas eliminar esta nota?");
+        if (!confirmar) return;
+
         const res = await fetch(`https://telemetria-backend.onrender.com/api/notas/${id}`, {
             method: 'DELETE'
         });
@@ -87,7 +90,7 @@ export const Notas = () => {
             <h2 className="text-2xl font-bold mb-8 w-full text-center">Notas</h2>
             <div className="flex flex-col md:flex-row w-full max-w-5xl gap-8">
                 {/* Columna del formulario */}
-                <div className="md:w-1/3 w-full">
+                <div className="md:basis-1/3 w-full">
                     <form onSubmit={handleSubmit} className="mb-6 flex flex-col gap-2 w-full max-w-md mx-auto">
                         <input
                             className="border p-2 rounded"
@@ -119,7 +122,7 @@ export const Notas = () => {
                     </form>
                 </div>
                 {/* Columna de la tabla */}
-                <div className="md:w-2/3 w-full">
+                <div className="md:basis-2/3 w-full">
                     <table className="min-w-[300px] w-full border border-gray-300 rounded-lg overflow-hidden shadow">
                         <thead>
                             <tr className="bg-blue-700 text-white">
