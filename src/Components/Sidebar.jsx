@@ -1,38 +1,33 @@
 import { HomeIcon } from '@heroicons/react/20/solid';
 import { ServerIcon } from '@heroicons/react/16/solid';
-
-//import { HiServer } from "react-icons/hi";
-
-// import { CiStickyNote } from "react-icons/ci";
-// import { WiThermometer } from "react-icons/wi";
-// import { GrServerCluster } from "react-icons/gr";
-
 import { Link, useLocation } from 'react-router-dom';
 
 function Sidebar() {
     const location = useLocation();
+    const token = localStorage.getItem("token");
 
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
+        { to: "/login", icon: <ServerIcon className="h-5 w-5" />, label: "Iniciar Sesión" },
+        { to: "/proyectos", icon: <ServerIcon className="h-5 w-5" />, label: "Proyectos" },
         { to: "/datos", icon: <ServerIcon className="h-5 w-5" />, label: "Rpi Historico" },
         { to: "/tempdata", icon: <ServerIcon className="h-5 w-5" />, label: "Rpi Resumen" },
         { to: "/server", icon: <ServerIcon className="h-5 w-5" />, label: "IP Server" },
         { to: "/notas", icon: <ServerIcon className="h-5 w-5" />, label: "Notas" },
-        { to: "/proyectos", icon: <ServerIcon className="h-5 w-5" />, label: "Proyectos" },
-        { to: "/login", icon: <ServerIcon className="h-5 w-5" />, label: "Iniciar Sesión" },
-
-        // { to: "/settings", icon: <Cog6ToothIcon className="h-5 w-5" />, label: "Configuración" },
     ];
+
+    // Oculta "Iniciar Sesión" si hay token
+    const filteredLinks = token
+        ? links.filter(link => link.to !== "/login")
+        : links;
 
     return (
         <aside className="w-56 bg-gradient-to-b from-blue-900 to-gray-800 text-white min-h-screen flex flex-col py-6 px-2 shadow-lg">
-            {/* Encabezado */}
             <div className="mb-8 flex items-center justify-center">
                 <span className="text-xl font-bold tracking-wide text-blue-300">Telemetría</span>
             </div>
-            {/* Navegación */}
             <nav className="flex flex-col gap-1">
-                {links.map(link => (
+                {filteredLinks.map(link => (
                     <Link
                         key={link.to}
                         to={link.to}
@@ -47,7 +42,6 @@ function Sidebar() {
                     </Link>
                 ))}
             </nav>
-            {/* Separador visual */}
             <div className="mt-auto border-t border-blue-900 pt-4 text-xs text-blue-200 text-center opacity-60">
                 &copy; {new Date().getFullYear()} Proyecto Telemetría
             </div>
