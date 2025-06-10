@@ -14,6 +14,7 @@ export const ProyectoDetalle = () => {
         latitud: proyecto?.georeferencia?.latitud || "",
         longitud: proyecto?.georeferencia?.longitud || ""
     });
+    const [nuevoDetalleMes, setNuevoDetalleMes] = useState({ mes: "", anio: "", descripcion: "" });
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -137,6 +138,33 @@ export const ProyectoDetalle = () => {
         }
     };
 
+    const handleDetalleMesChange = e => {
+        setNuevoDetalleMes({ ...nuevoDetalleMes, [e.target.name]: e.target.value });
+    };
+
+    const handleAgregarDetalleMes = async e => {
+        e.preventDefault();
+        const token = localStorage.getItem("token");
+        const detalledelmesActualizado = [...(proyecto.detalledelmes || []), {
+            mes: parseInt(nuevoDetalleMes.mes),
+            anio: parseInt(nuevoDetalleMes.anio),
+            descripcion: nuevoDetalleMes.descripcion
+        }];
+        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ ...proyecto, detalledelmes: detalledelmesActualizado })
+        });
+        if (res.ok) {
+            const actualizado = await res.json();
+            setProyecto(actualizado);
+            setNuevoDetalleMes({ mes: "", anio: "", descripcion: "" });
+        }
+    };
+
     if (!proyecto) {
         return <div className="p-8">Cargando...</div>;
     }
@@ -144,6 +172,26 @@ export const ProyectoDetalle = () => {
     return (
         <div className="max-w-4xl mx-auto mt-8 bg-white rounded shadow p-8">
             <h2 className="text-2xl font-bold mb-4">{proyecto.nombre}</h2>
+            <table className="mb-8 w-full border border-gray-300 rounded">
+                <tbody>
+                    <tr>
+                        <th className="bg-blue-100 px-4 py-2 text-left w-1/4">Nombre</th>
+                        <td className="px-4 py-2">{proyecto.nombre}</td>
+                    </tr>
+                    <tr>
+                        <th className="bg-blue-100 px-4 py-2 text-left">Código</th>
+                        <td className="px-4 py-2">{proyecto.codigo}</td>
+                    </tr>
+                    <tr>
+                        <th className="bg-blue-100 px-4 py-2 text-left">Estado</th>
+                        <td className="px-4 py-2">{proyecto.estado}</td>
+                    </tr>
+                    <tr>
+                        <th className="bg-blue-100 px-4 py-2 text-left">Detalle</th>
+                        <td className="px-4 py-2">{proyecto.descripcion}</td>
+                    </tr>
+                </tbody>
+            </table>
             {mensaje && <div className="mb-4 text-green-700 font-semibold">{mensaje}</div>}
             {editando ? (
                 <form onSubmit={handleGuardar} className="flex flex-col gap-4 mb-8">
@@ -369,6 +417,46 @@ export const ProyectoDetalle = () => {
                 </form>
             </div>
 
+            <div className="mt-10 mb-6">
+                <h3 className="text-lg font-bold mb-2">Agregar detalle del mes</h3>
+                <form onSubmit={handleAgregarDetalleMes} className="flex flex-wrap gap-2 items-end">
+                    <input
+                        className="border rounded px-2 py-1"
+                        name="mes"
+                        type="number"
+                        min="1"
+                        max="12"
+                        placeholder="Mes (1-12)"
+                        value={nuevoDetalleMes.mes}
+                        onChange={handleDetalleMesChange}
+                        required
+                    />
+                    <input
+                        className="border rounded px-2 py-1"
+                        name="anio"
+                        type="number"
+                        min="2000"
+                        max="2100"
+                        placeholder="Año"
+                        value={nuevoDetalleMes.anio}
+                        onChange={handleDetalleMesChange}
+                        required
+                    />
+                    <input
+                        className="border rounded px-2 py-1"
+                        name="descripcion"
+                        type="text"
+                        placeholder="Descripción del mes"
+                        value={nuevoDetalleMes.descripcion}
+                        onChange={handleDetalleMesChange}
+                        required
+                    />
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="submit">
+                        Agregar Detalle
+                    </button>
+                </form>
+            </div>
+
             {proyecto.avance && proyecto.avance.length > 0 && (
                 <div className="mt-6">
                     <button
@@ -410,6 +498,30 @@ export const ProyectoDetalle = () => {
                             </table>
                         </>
                     )}
+                </div>
+            )}
+
+            {proyecto.detalledelmes && proyecto.detalledelmes.length > 0 && (
+                <div className="mt-6">
+                    <h3 className="text-lg font-bold mb-2">Detalle mensual histórico</h3>
+                    <table className="w-full border border-gray-300 rounded mb-8">
+                        <thead>
+                            <tr className="bg-blue-100">
+                                <th className="px-4 py-2">Mes</th>
+                                <th className="px-4 py-2">Año</th>
+                                <th className="px-4 py-2">Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {proyecto.detalledelmes.map((d, idx) => (
+                                <tr key={idx}>
+                                    <td className="px-4 py-2 text-center">{d.mes}</td>
+                                    <td className="px-4 py-2 text-center">{d.anio}</td>
+                                    <td className="px-4 py-2 text-center">{d.descripcion}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             )}
 
