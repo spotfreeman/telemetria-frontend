@@ -10,6 +10,10 @@ export const ProyectoDetalle = () => {
     const [mensaje, setMensaje] = useState("");
     const [nuevoAvance, setNuevoAvance] = useState({ mes: "", anio: "", valor: "" });
     const [mostrarEvolucion, setMostrarEvolucion] = useState(true);
+    const [geoForm, setGeoForm] = useState({
+        latitud: proyecto?.georeferencia?.latitud || "",
+        longitud: proyecto?.georeferencia?.longitud || ""
+    });
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -27,11 +31,19 @@ export const ProyectoDetalle = () => {
                     estado: data.estado || "",
                     descripcion: data.descripcion || ""
                 });
+                setGeoForm({
+                    latitud: data.georeferencia?.latitud || "",
+                    longitud: data.georeferencia?.longitud || ""
+                });
             });
     }, [id]);
 
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleGeoChange = e => {
+        setGeoForm({ ...geoForm, [e.target.name]: e.target.value });
     };
 
     const handleGuardar = async e => {
@@ -53,6 +65,29 @@ export const ProyectoDetalle = () => {
             setMensaje("Proyecto actualizado correctamente.");
         } else {
             setMensaje("Error al actualizar el proyecto.");
+        }
+    };
+
+    const handleGuardarGeo = async e => {
+        e.preventDefault();
+        const token = localStorage.getItem("token");
+        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                ...proyecto,
+                georeferencia: {
+                    latitud: parseFloat(geoForm.latitud),
+                    longitud: parseFloat(geoForm.longitud)
+                }
+            })
+        });
+        if (res.ok) {
+            const actualizado = await res.json();
+            setProyecto(actualizado);
         }
     };
 
@@ -230,6 +265,69 @@ export const ProyectoDetalle = () => {
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            {/* Tabla 4 */}
+            <div className="mt-10">
+                <h3 className="text-lg font-bold mb-2">Georeferencia</h3>
+                <table className="w-full border border-gray-300 rounded mb-8">
+                    <thead>
+                        <tr className="bg-blue-100">
+                            <th className="px-4 py-2">Mapa</th>
+                            <th className="px-4 py-2">Latitud</th>
+                            <th className="px-4 py-2">Longitud</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
+                            <tr>
+                                <td className="px-4 py-2 text-center">
+                                    <iframe
+                                        title="mapa-georeferencia"
+                                        width="150"
+                                        height="100"
+                                        style={{ border: 0 }}
+                                        loading="lazy"
+                                        allowFullScreen
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
+                                    />
+                                </td>
+                                <td className="px-4 py-2 text-center">{proyecto.georeferencia.latitud}</td>
+                                <td className="px-4 py-2 text-center">{proyecto.georeferencia.longitud}</td>
+                            </tr>
+                        ) : (
+                            <tr>
+                                <td className="px-4 py-2 text-center" colSpan={3}>No hay georreferencia registrada</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+                <form onSubmit={handleGuardarGeo} className="flex flex-wrap gap-2 items-end mb-4">
+                    <input
+                        className="border rounded px-2 py-1"
+                        name="latitud"
+                        type="number"
+                        step="any"
+                        placeholder="Latitud"
+                        value={geoForm.latitud}
+                        onChange={handleGeoChange}
+                        required
+                    />
+                    <input
+                        className="border rounded px-2 py-1"
+                        name="longitud"
+                        type="number"
+                        step="any"
+                        placeholder="Longitud"
+                        value={geoForm.longitud}
+                        onChange={handleGeoChange}
+                        required
+                    />
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="submit">
+                        Guardar Georreferencia
+                    </button>
+                </form>
             </div>
 
             <div className="mt-10 mb-6">
