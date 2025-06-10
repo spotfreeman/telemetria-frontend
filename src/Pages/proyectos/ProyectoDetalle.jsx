@@ -173,6 +173,7 @@ export const ProyectoDetalle = () => {
         <div className="max-w-4xl mx-auto mt-8 bg-white rounded shadow p-8">
             <h2 className="text-2xl font-bold mb-4">{proyecto.nombre}</h2>
 
+            {/*
             <table className="mb-8 w-full border border-gray-300 rounded">
                 <tbody>
                     <tr>
@@ -193,6 +194,9 @@ export const ProyectoDetalle = () => {
                     </tr>
                 </tbody>
             </table>
+            */}
+
+
             {mensaje && <div className="mb-4 text-green-700 font-semibold">{mensaje}</div>}
             {editando ? (
                 <form onSubmit={handleGuardar} className="flex flex-col gap-4 mb-8">
@@ -276,6 +280,68 @@ export const ProyectoDetalle = () => {
                 </div>
             )}
 
+            {/* Tabla 4 MAPA */}
+            <div className="mt-10">
+                <h3 className="text-lg font-bold mb-2">Georeferencia</h3>
+                <table className="w-full border border-gray-300 rounded mb-8">
+                    <thead>
+                        <tr className="bg-blue-100">
+                            <th className="px-4 py-2">Mapa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
+                            <tr>
+                                <td className="px-4 py-2 text-center">
+                                    <iframe
+                                        title="mapa-georeferencia"
+                                        width="100%"
+                                        height="400"
+                                        style={{ border: 0 }}
+                                        loading="lazy"
+                                        allowFullScreen
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
+                                    />
+                                </td>
+                            </tr>
+                        ) : (
+                            <tr>
+                                <td className="px-4 py-2 text-center" colSpan={3}>No hay georreferencia registrada</td>
+                            </tr>
+                        )}
+                        <tr>
+                            <form onSubmit={handleGuardarGeo} className="flex flex-wrap gap-2 items-end mb-4">
+                                <input
+                                    className="border rounded px-2 py-1"
+                                    name="latitud"
+                                    type="number"
+                                    step="any"
+                                    placeholder="Latitud"
+                                    value={geoForm.latitud}
+                                    onChange={handleGeoChange}
+                                    required
+                                />
+                                <input
+                                    className="border rounded px-2 py-1"
+                                    name="longitud"
+                                    type="number"
+                                    step="any"
+                                    placeholder="Longitud"
+                                    value={geoForm.longitud}
+                                    onChange={handleGeoChange}
+                                    required
+                                />
+                                <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="submit">
+                                    Guardar Georreferencia
+                                </button>
+                            </form>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
             {/* Tabla 1 */}
             <div className="mt-10">
                 <h3 className="text-lg font-bold mb-2">Tabla de Actividades</h3>
@@ -333,64 +399,6 @@ export const ProyectoDetalle = () => {
                 </table>
             </div>
 
-            {/* Tabla 4 */}
-            <div className="mt-10">
-                <h3 className="text-lg font-bold mb-2">Georeferencia</h3>
-                <table className="w-full border border-gray-300 rounded mb-8">
-                    <thead>
-                        <tr className="bg-blue-100">
-                            <th className="px-4 py-2">Mapa</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
-                            <tr>
-                                <td className="px-4 py-2 text-center">
-                                    <iframe
-                                        title="mapa-georeferencia"
-                                        width="100%"
-                                        height="400"
-                                        style={{ border: 0 }}
-                                        loading="lazy"
-                                        allowFullScreen
-                                        referrerPolicy="no-referrer-when-downgrade"
-                                        src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
-                                    />
-                                </td>
-                            </tr>
-                        ) : (
-                            <tr>
-                                <td className="px-4 py-2 text-center" colSpan={3}>No hay georreferencia registrada</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-                <form onSubmit={handleGuardarGeo} className="flex flex-wrap gap-2 items-end mb-4">
-                    <input
-                        className="border rounded px-2 py-1"
-                        name="latitud"
-                        type="number"
-                        step="any"
-                        placeholder="Latitud"
-                        value={geoForm.latitud}
-                        onChange={handleGeoChange}
-                        required
-                    />
-                    <input
-                        className="border rounded px-2 py-1"
-                        name="longitud"
-                        type="number"
-                        step="any"
-                        placeholder="Longitud"
-                        value={geoForm.longitud}
-                        onChange={handleGeoChange}
-                        required
-                    />
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="submit">
-                        Guardar Georreferencia
-                    </button>
-                </form>
-            </div>
 
             {/* Agregar avance mensual */}
             <div className="mt-10 mb-6">
@@ -560,9 +568,28 @@ export const ProyectoDetalle = () => {
                 </div>
             )}
 
-            <Link to="/proyectos" className="inline-block mt-8 text-blue-700 hover:underline">
-                ← Volver a la lista de proyectos
-            </Link>
+
+            {/* Tabla 6 */}
+            <div className="mt-10">
+                <table className="w-full border border-gray-300 rounded mb-8">
+                    <thead>
+                        <tr className="bg-blue-100">
+                            <th className="px-4 py-2">Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="px-4 py-2 text-center" colSpan={3}>
+
+                                <Link to="/proyectos" className="inline-block mt-8 text-blue-700 hover:underline">
+                                    ← Volver a la lista de proyectos
+                                </Link>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
