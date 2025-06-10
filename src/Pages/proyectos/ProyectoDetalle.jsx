@@ -245,17 +245,34 @@ export const ProyectoDetalle = () => {
                     </div>
                 </form>
             ) : (
-                <>
-                    <p><span className="font-semibold">Código:</span> {proyecto.codigo}</p>
-                    <p><span className="font-semibold">Estado:</span> {proyecto.estado}</p>
-                    <p><span className="font-semibold">Detalle:</span> {proyecto.descripcion}</p>
+                <div className="relative">
+                    <table className="mb-8 w-full border border-gray-300 rounded">
+                        <tbody>
+                            <tr>
+                                <th className="bg-blue-100 px-4 py-2 text-left w-1/4">Nombre</th>
+                                <td className="px-4 py-2">{proyecto.nombre}</td>
+                            </tr>
+                            <tr>
+                                <th className="bg-blue-100 px-4 py-2 text-left">Código</th>
+                                <td className="px-4 py-2">{proyecto.codigo}</td>
+                            </tr>
+                            <tr>
+                                <th className="bg-blue-100 px-4 py-2 text-left">Estado</th>
+                                <td className="px-4 py-2">{proyecto.estado}</td>
+                            </tr>
+                            <tr>
+                                <th className="bg-blue-100 px-4 py-2 text-left">Detalle</th>
+                                <td className="px-4 py-2">{proyecto.descripcion}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <button
-                        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        className="absolute top-2 right-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                         onClick={() => setEditando(true)}
                     >
                         Editar
                     </button>
-                </>
+                </div>
             )}
 
             {/* Tabla 1 */}

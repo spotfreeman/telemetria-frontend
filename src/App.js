@@ -8,6 +8,7 @@ import { Notas } from './Pages/Notas';
 import { Lista } from './Pages/proyectos/Lista';
 import { Login } from './Pages/Login';
 import { ProyectoDetalle } from './Pages/proyectos/ProyectoDetalle';
+import { Calendario } from './Pages/calendario/Calendario';
 
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
@@ -42,6 +43,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route path='/calendario' element={<Calendario />} />
             <Route path="/login" element={<Login />} />
             {/* Agrega más rutas según sea necesario */}
 
