@@ -169,8 +169,22 @@ export const ProyectoDetalle = () => {
     };
 
     const exportarAWord = () => {
-        const contenidoHTML = contenidoRef.current.innerHTML;
-        const docx = htmlDocx.asBlob(`<html><body>${contenidoHTML}</body></html>`);
+        const estilos = `
+            <style>
+                body { font-family: Arial, sans-serif; }
+                h2, h3 { color: #1d4ed8; }
+                table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
+                th, td { border: 1px solid #d1d5db; padding: 8px; }
+                th { background: #dbeafe; color: #1e293b; }
+                .text-center { text-align: center; }
+                .font-bold { font-weight: bold; }
+                .mb-4 { margin-bottom: 1rem; }
+                .mb-8 { margin-bottom: 2rem; }
+                .mt-10 { margin-top: 2.5rem; }
+            </style>
+        `;
+        const contenidoHTML = estilos + contenidoRef.current.innerHTML;
+        const docx = htmlDocx.asBlob(`<html><head>${estilos}</head><body>${contenidoRef.current.innerHTML}</body></html>`);
         saveAs(docx, `${proyecto.nombre || "proyecto"}.docx`);
     };
 
