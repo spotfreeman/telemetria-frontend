@@ -274,8 +274,6 @@ export const ProyectoDetalle = () => {
                     <thead>
                         <tr className="bg-blue-100">
                             <th className="px-4 py-2">Mapa</th>
-                            <th className="px-4 py-2">Latitud</th>
-                            <th className="px-4 py-2">Longitud</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -293,8 +291,6 @@ export const ProyectoDetalle = () => {
                                         src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
                                     />
                                 </td>
-                                <td className="px-4 py-2 text-center">{proyecto.georeferencia.latitud}</td>
-                                <td className="px-4 py-2 text-center">{proyecto.georeferencia.longitud}</td>
                             </tr>
                         ) : (
                             <tr>
