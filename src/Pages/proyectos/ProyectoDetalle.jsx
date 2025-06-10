@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { saveAs } from "file-saver";
+import htmlDocx from "html-docx-js/dist/html-docx";
 
 export const ProyectoDetalle = () => {
     const { id } = useParams();
@@ -15,6 +17,7 @@ export const ProyectoDetalle = () => {
         longitud: proyecto?.georeferencia?.longitud || ""
     });
     const [nuevoDetalleMes, setNuevoDetalleMes] = useState({ mes: "", anio: "", descripcion: "" });
+    const contenidoRef = useRef();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -165,12 +168,119 @@ export const ProyectoDetalle = () => {
         }
     };
 
+    const exportarAWord = () => {
+        const contenidoHTML = contenidoRef.current.innerHTML;
+        const docx = htmlDocx.asBlob(`<html><body>${contenidoHTML}</body></html>`);
+        saveAs(docx, `${proyecto.nombre || "proyecto"}.docx`);
+    };
+
     if (!proyecto) {
         return <div className="p-8">Cargando...</div>;
     }
 
     return (
-        <div className="max-w-4xl mx-auto mt-8 bg-white rounded shadow p-8">
+
+
+        <div className="max-w-4xl mx-auto mt-8 bg-white rounded shadow p-8" ref={contenidoRef}>
+
+            <div className="max-w-4xl mx-auto mt-8 bg-white rounded shadow p-8">
+                <button
+                    className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
+                    onClick={exportarAWord}
+                >
+                    Descargar como Word
+                </button>
+                <div ref={contenidoRef}>
+                    {/* TODO el contenido que quieres exportar */}
+
+                    <h2 className="text-2xl font-bold mb-4">{proyecto.nombre}</h2>
+
+                    {mensaje && <div className="mb-4 text-green-700 font-semibold">{mensaje}</div>}
+                    {editando ? (
+                        <form onSubmit={handleGuardar} className="flex flex-col gap-4 mb-8">
+                            <label>
+                                <span className="font-semibold">Código:</span>
+                                <input
+                                    className="border rounded px-2 py-1 w-full"
+                                    name="codigo"
+                                    value={form.codigo}
+                                    onChange={handleChange}
+                                />
+                            </label>
+                            <label>
+                                <span className="font-semibold">Nombre:</span>
+                                <input
+                                    className="border rounded px-2 py-1 w-full"
+                                    name="nombre"
+                                    value={form.nombre}
+                                    onChange={handleChange}
+                                />
+                            </label>
+                            <label>
+                                <span className="font-semibold">Estado:</span>
+                                <input
+                                    className="border rounded px-2 py-1 w-full"
+                                    name="estado"
+                                    value={form.estado}
+                                    onChange={handleChange}
+                                />
+                            </label>
+                            <label>
+                                <span className="font-semibold">Detalle:</span>
+                                <textarea
+                                    className="border rounded px-2 py-1 w-full"
+                                    name="descripcion"
+                                    value={form.descripcion}
+                                    onChange={handleChange}
+                                />
+                            </label>
+                            <div className="flex gap-2">
+                                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                    Guardar
+                                </button>
+                                <button
+                                    type="button"
+                                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                                    onClick={() => { setEditando(false); setForm(proyecto); }}
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    ) : (
+                        <div className="relative">
+                            <table className="mb-8 w-full border border-gray-300 rounded">
+                                <tbody>
+                                    <tr>
+                                        <th className="bg-blue-100 px-4 py-2 text-left w-1/4">Nombre</th>
+                                        <td className="px-4 py-2">{proyecto.nombre}</td>
+                                    </tr>
+                                    <tr>
+                                        <th className="bg-blue-100 px-4 py-2 text-left">Código</th>
+                                        <td className="px-4 py-2">{proyecto.codigo}</td>
+                                    </tr>
+                                    <tr>
+                                        <th className="bg-blue-100 px-4 py-2 text-left">Estado</th>
+                                        <td className="px-4 py-2">{proyecto.estado}</td>
+                                    </tr>
+                                    <tr>
+                                        <th className="bg-blue-100 px-4 py-2 text-left">Detalle</th>
+                                        <td className="px-4 py-2">{proyecto.descripcion}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button
+                                className="absolute top-2 right-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                onClick={() => setEditando(true)}
+                            >
+                                Editar
+                            </button>
+                        </div>
+                    )}
+                    {/* ...tu código actual... */}
+                </div>
+            </div>
+
             <h2 className="text-2xl font-bold mb-4">{proyecto.nombre}</h2>
 
             {/*
@@ -196,89 +306,6 @@ export const ProyectoDetalle = () => {
             </table>
             */}
 
-
-            {mensaje && <div className="mb-4 text-green-700 font-semibold">{mensaje}</div>}
-            {editando ? (
-                <form onSubmit={handleGuardar} className="flex flex-col gap-4 mb-8">
-                    <label>
-                        <span className="font-semibold">Código:</span>
-                        <input
-                            className="border rounded px-2 py-1 w-full"
-                            name="codigo"
-                            value={form.codigo}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <span className="font-semibold">Nombre:</span>
-                        <input
-                            className="border rounded px-2 py-1 w-full"
-                            name="nombre"
-                            value={form.nombre}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <span className="font-semibold">Estado:</span>
-                        <input
-                            className="border rounded px-2 py-1 w-full"
-                            name="estado"
-                            value={form.estado}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <span className="font-semibold">Detalle:</span>
-                        <textarea
-                            className="border rounded px-2 py-1 w-full"
-                            name="descripcion"
-                            value={form.descripcion}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <div className="flex gap-2">
-                        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                            Guardar
-                        </button>
-                        <button
-                            type="button"
-                            className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
-                            onClick={() => { setEditando(false); setForm(proyecto); }}
-                        >
-                            Cancelar
-                        </button>
-                    </div>
-                </form>
-            ) : (
-                <div className="relative">
-                    <table className="mb-8 w-full border border-gray-300 rounded">
-                        <tbody>
-                            <tr>
-                                <th className="bg-blue-100 px-4 py-2 text-left w-1/4">Nombre</th>
-                                <td className="px-4 py-2">{proyecto.nombre}</td>
-                            </tr>
-                            <tr>
-                                <th className="bg-blue-100 px-4 py-2 text-left">Código</th>
-                                <td className="px-4 py-2">{proyecto.codigo}</td>
-                            </tr>
-                            <tr>
-                                <th className="bg-blue-100 px-4 py-2 text-left">Estado</th>
-                                <td className="px-4 py-2">{proyecto.estado}</td>
-                            </tr>
-                            <tr>
-                                <th className="bg-blue-100 px-4 py-2 text-left">Detalle</th>
-                                <td className="px-4 py-2">{proyecto.descripcion}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button
-                        className="absolute top-2 right-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        onClick={() => setEditando(true)}
-                    >
-                        Editar
-                    </button>
-                </div>
-            )}
 
             {/* Tabla 4 MAPA */}
             <div className="mt-10">
