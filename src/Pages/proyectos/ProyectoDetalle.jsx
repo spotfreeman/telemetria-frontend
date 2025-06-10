@@ -282,8 +282,8 @@ export const ProyectoDetalle = () => {
                                 <td className="px-4 py-2 text-center">
                                     <iframe
                                         title="mapa-georeferencia"
-                                        width="150"
-                                        height="100"
+                                        width="400"
+                                        height="400"
                                         style={{ border: 0 }}
                                         loading="lazy"
                                         allowFullScreen
