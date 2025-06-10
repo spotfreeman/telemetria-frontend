@@ -9,6 +9,7 @@ export const ProyectoDetalle = () => {
     const [form, setForm] = useState({ codigo: "", nombre: "", estado: "", descripcion: "" });
     const [mensaje, setMensaje] = useState("");
     const [nuevoAvance, setNuevoAvance] = useState({ mes: "", anio: "", valor: "" });
+    const [mostrarEvolucion, setMostrarEvolucion] = useState(true);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -276,35 +277,45 @@ export const ProyectoDetalle = () => {
 
             {proyecto.avance && proyecto.avance.length > 0 && (
                 <div className="mt-6">
-                    <h3 className="text-lg font-bold mb-2">Evolución del avance</h3>
-                    <table className="w-full border border-gray-300 rounded mb-8">
-                        <thead>
-                            <tr className="bg-blue-100">
-                                <th className="px-4 py-2">Mes</th>
-                                <th className="px-4 py-2">Año</th>
-                                <th className="px-4 py-2">Avance (%)</th>
-                                <th className="px-4 py-2">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {proyecto.avance.map((a, idx) => (
-                                <tr key={idx}>
-                                    <td className="px-4 py-2 text-center">{a.mes}</td>
-                                    <td className="px-4 py-2 text-center">{a.anio}</td>
-                                    <td className="px-4 py-2 text-center">{a.valor}%</td>
-                                    <td className="px-4 py-2 text-center">
-                                        <button
-                                            className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded"
-                                            onClick={() => handleBorrarAvance(idx)}
-                                            title="Eliminar avance"
-                                        >
-                                            Eliminar
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <button
+                        className="mb-4 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded"
+                        onClick={() => setMostrarEvolucion(v => !v)}
+                    >
+                        {mostrarEvolucion ? "Ocultar evolución del avance" : "Mostrar evolución del avance"}
+                    </button>
+                    {mostrarEvolucion && (
+                        <>
+                            <h3 className="text-lg font-bold mb-2">Evolución del avance</h3>
+                            <table className="w-full border border-gray-300 rounded mb-8">
+                                <thead>
+                                    <tr className="bg-blue-100">
+                                        <th className="px-4 py-2">Mes</th>
+                                        <th className="px-4 py-2">Año</th>
+                                        <th className="px-4 py-2">Avance (%)</th>
+                                        <th className="px-4 py-2">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {proyecto.avance.map((a, idx) => (
+                                        <tr key={idx}>
+                                            <td className="px-4 py-2 text-center">{a.mes}</td>
+                                            <td className="px-4 py-2 text-center">{a.anio}</td>
+                                            <td className="px-4 py-2 text-center">{a.valor}%</td>
+                                            <td className="px-4 py-2 text-center">
+                                                <button
+                                                    className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded"
+                                                    onClick={() => handleBorrarAvance(idx)}
+                                                    title="Eliminar avance"
+                                                >
+                                                    Eliminar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </>
+                    )}
                 </div>
             )}
 
