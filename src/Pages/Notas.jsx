@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 export const Notas = () => {
     const [notas, setNotas] = useState([]);
@@ -80,8 +82,34 @@ export const Notas = () => {
         setEditId(nota._id);
     };
 
+    // Función para exportar a Excel
+    const exportarExcel = () => {
+        // Prepara los datos
+        const datos = notas.map(nota => ({
+            Fecha: new Date(nota.fecha_hora).toLocaleString(),
+            Título: nota.titulo,
+            Descripción: nota.descripcion,
+            Usuario: nota.usuario
+        }));
+        // Crea la hoja y el libro
+        const hoja = XLSX.utils.json_to_sheet(datos);
+        const libro = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(libro, hoja, "Notas");
+        // Genera el archivo y lo descarga
+        const excelBuffer = XLSX.write(libro, { bookType: "xlsx", type: "array" });
+        const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+        saveAs(blob, "notas.xlsx");
+    };
+
     return (
         <div className="flex flex-col items-center mt-8 w-full">
+            {/* Botón de exportar */}
+            <button
+                className="mb-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                onClick={exportarExcel}
+            >
+                Exportar a Excel
+            </button>
             {showModal && (
                 <div className="fixed top-8 z-50 bg-green-600 text-white px-6 py-3 rounded shadow-lg">
                     ¡Nota agregada exitosamente!
