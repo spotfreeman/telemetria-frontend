@@ -172,10 +172,11 @@ export const ProyectoDetalle = () => {
     return (
         <div className="max-w-4xl mx-auto mt-8 bg-white rounded shadow p-8">
             <h2 className="text-2xl font-bold mb-4">{proyecto.nombre}</h2>
+
             <table className="mb-8 w-full border border-gray-300 rounded">
                 <tbody>
                     <tr>
-                        <th className="bg-blue-100 px-4 py-2 text-left w-1/4">Nombre</th>
+                        <th className="bg-blue-100 px-4 py-2 text-left w-1/4">Nombre Borrar</th>
                         <td className="px-4 py-2">{proyecto.nombre}</td>
                     </tr>
                     <tr>
@@ -347,7 +348,7 @@ export const ProyectoDetalle = () => {
                                 <td className="px-4 py-2 text-center">
                                     <iframe
                                         title="mapa-georeferencia"
-                                        width="400"
+                                        width="100%"
                                         height="400"
                                         style={{ border: 0 }}
                                         loading="lazy"
@@ -391,6 +392,7 @@ export const ProyectoDetalle = () => {
                 </form>
             </div>
 
+            {/* Agregar avance mensual */}
             <div className="mt-10 mb-6">
                 <h3 className="text-lg font-bold mb-2">Agregar avance mensual</h3>
                 <form onSubmit={handleAgregarAvance} className="flex flex-wrap gap-2 items-end">
@@ -434,6 +436,7 @@ export const ProyectoDetalle = () => {
                 </form>
             </div>
 
+            {/* Agregar detalle del mes */}
             <div className="mt-10 mb-6">
                 <h3 className="text-lg font-bold mb-2">Agregar detalle del mes</h3>
                 <form onSubmit={handleAgregarDetalleMes} className="flex flex-wrap gap-2 items-end">
