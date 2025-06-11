@@ -15,7 +15,17 @@ export const Archivos = () => {
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/archivos')
             .then(res => res.json())
-            .then(setArchivos);
+            .then(data => {
+                // Si la respuesta es un objeto con una propiedad 'archivos', usa esa propiedad
+                if (Array.isArray(data)) {
+                    setArchivos(data);
+                } else if (Array.isArray(data.archivos)) {
+                    setArchivos(data.archivos);
+                } else {
+                    setArchivos([]);
+                }
+            })
+            .catch(() => setArchivos([]));
     }, []);
 
     const handleChange = e => {
@@ -153,7 +163,7 @@ export const Archivos = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {archivos.map(archivo => (
+                    {(Array.isArray(archivos) ? archivos : []).map(archivo => (
                         <tr key={archivo._id} className="hover:bg-gray-100">
                             <td className="px-4 py-2 border-b border-gray-300 text-center">{archivo._id}</td>
                             <td className="px-4 py-2 border-b border-gray-300 text-center">{archivo.nombre}</td>
