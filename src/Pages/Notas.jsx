@@ -206,7 +206,7 @@ export const Notas = () => {
                 <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden shadow">
                     <thead>
                         <tr className="bg-blue-700 text-white">
-                            <th className="px-4 py-2 border-b border-gray-300 text-center">Rank</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">Titulo</th>
                             <th className="px-4 py-2 border-b border-gray-300 text-center">Player</th>
                             <th className="px-4 py-2 border-b border-gray-300 text-center">Pos</th>
                             <th className="px-4 py-2 border-b border-gray-300 text-center">GP</th>
@@ -217,11 +217,11 @@ export const Notas = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {players.map((player, idx) => (
-                            <tr key={player.rank} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">123</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300 font-medium">32</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">32</td>
+                        {notas.map((notas, idx) => (
+                            <tr key={notas._id} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">{nota.titulo}</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">{nota.descripcion}</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">{nota.usuario}</td>
                                 <td className="px-4 py-2 text-center border-b border-gray-300">13</td>
                                 <td className="px-4 py-2 text-center border-b border-gray-300">424</td>
                                 <td className="px-4 py-2 text-center border-b border-gray-300">2</td>
