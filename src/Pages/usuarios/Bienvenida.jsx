@@ -5,7 +5,7 @@ const stats = [
     { id: 4, name: 'Paid out to creators', value: '$70M' },
 ]
 
-export default function Example() {
+export const Bienvenida = () => {
     return (
         <div className="relative bg-white">
             <img
@@ -38,3 +38,5 @@ export default function Example() {
         </div>
     )
 }
+
+export default Bienvenida;

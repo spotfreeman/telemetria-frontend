@@ -219,14 +219,14 @@ export const Notas = () => {
                     <tbody>
                         {players.map((player, idx) => (
                             <tr key={player.rank} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.rank}</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300 font-medium">{player.name}</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.position}</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.gamesPlayed}</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.goals}</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.assists}</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.points}</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.plusMinus}</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">123</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300 font-medium">32</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">32</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">13</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">424</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">2</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">31</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">23</td>
                             </tr>
                         ))}
                     </tbody>
