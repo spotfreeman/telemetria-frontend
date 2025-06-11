@@ -5,7 +5,7 @@ export const Archivos = () => {
     const [form, setForm] = useState({
         nombre: "",
         descripcion: "",
-        archivo: null
+        link: ""
     });
     const [showModal, setShowModal] = useState(false);
     const [editId, setEditId] = useState(null);
@@ -29,11 +29,7 @@ export const Archivos = () => {
     }, []);
 
     const handleChange = e => {
-        if (e.target.name === "archivo") {
-            setForm({ ...form, archivo: e.target.files[0] });
-        } else {
-            setForm({ ...form, [e.target.name]: e.target.value });
-        }
+        setForm({ ...form, [e.target.name]: e.target.value });
     };
 
     // Enviar nuevo archivo o editar
@@ -42,9 +38,7 @@ export const Archivos = () => {
         const formData = new FormData();
         formData.append("nombre", form.nombre);
         formData.append("descripcion", form.descripcion);
-        if (form.archivo) {
-            formData.append("archivo", form.archivo);
-        }
+        formData.append("link", form.link);
 
         if (editId) {
             // Editar archivo existente
@@ -72,7 +66,7 @@ export const Archivos = () => {
                 setTimeout(() => setShowSuccess(false), 2000);
             }
         }
-        setForm({ nombre: "", descripcion: "", archivo: null });
+        setForm({ nombre: "", descripcion: "", link: "" });
     };
 
     const handleDelete = async (id) => {
@@ -93,7 +87,7 @@ export const Archivos = () => {
         setForm({
             nombre: archivo.nombre,
             descripcion: archivo.descripcion,
-            archivo: null
+            link: archivo.link || ""
         });
         setEditId(archivo._id);
     };
@@ -129,11 +123,13 @@ export const Archivos = () => {
                         className="border p-2 rounded w-full mb-4"
                     />
                     <input
-                        type="file"
-                        name="archivo"
+                        type="text"
+                        name="link"
+                        placeholder="URL del archivo"
+                        value={form.link}
                         onChange={handleChange}
-                        accept=".txt,.pdf,.docx,.xlsx,.jpg,.png,.zip"
-                        className="mb-4"
+                        required
+                        className="border p-2 rounded w-full mb-4"
                     />
                     <button type="submit" className="bg-blue-700 text-white px-4 py-2 rounded">
                         {editId ? "Actualizar Archivo" : "Subir Archivo"}
@@ -142,7 +138,7 @@ export const Archivos = () => {
                         type="button"
                         onClick={() => {
                             setShowForm(false);
-                            setForm({ nombre: "", descripcion: "", archivo: null });
+                            setForm({ nombre: "", descripcion: "", link: "" });
                             setEditId(null);
                         }}
                         className="bg-gray-300 text-black px-4 py-2 rounded ml-2"
@@ -170,7 +166,7 @@ export const Archivos = () => {
                             <td className="px-4 py-2 border-b border-gray-300 text-center">{archivo.descripcion}</td>
                             <td className="px-4 py-2 border-b border-gray-300 text-center">
                                 <button
-                                    onClick={() => window.open(archivo.url, '_blank')}
+                                    onClick={() => window.open(archivo.link, '_blank')}
                                     className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
                                 >
                                     Ver Archivo
