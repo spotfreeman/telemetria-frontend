@@ -13,11 +13,17 @@ export const Notas = () => {
     });
     const [showModal, setShowModal] = useState(false);
     const [editId, setEditId] = useState(null);
+    const [players, setPlayers] = useState([]); // Added state for players
 
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/notas')
             .then(res => res.json())
             .then(setNotas);
+
+        // Fetch players data (example endpoint)
+        fetch('https://example.com/api/players')
+            .then(res => res.json())
+            .then(setPlayers);
     }, []);
 
     const handleChange = e => {
@@ -195,9 +201,38 @@ export const Notas = () => {
                 </div>
             </div>
 
-
+            {/* Tabla de jugadores */}
+            <div className="mt-8 w-full">
+                <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden shadow">
+                    <thead>
+                        <tr className="bg-blue-700 text-white">
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">Rank</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">Player</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">Pos</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">GP</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">G</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">A</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">P</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">+/-</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {players.map((player, idx) => (
+                            <tr key={player.rank} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.rank}</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300 font-medium">{player.name}</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.position}</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.gamesPlayed}</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.goals}</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.assists}</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.points}</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">{player.plusMinus}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
-
     );
 };
 

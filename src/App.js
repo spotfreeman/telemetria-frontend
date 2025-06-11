@@ -10,6 +10,7 @@ import { Login } from './Pages/Login';
 import { ProyectoDetalle } from './Pages/proyectos/ProyectoDetalle';
 import { Calendario } from './Pages/calendario/Calendario';
 import { Archivos } from './Pages/archivos/Archivos';
+import { Bienvenida } from './Pages/usuarios/Bienvenida';
 
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
@@ -47,6 +48,7 @@ function App() {
             <Route path='/calendario' element={<Calendario />} />
             <Route path="/login" element={<Login />} />
             <Route path="/archivos" element={<Archivos />} />
+            <Route path='/bienvenida' element={<Bienvenida />} />
             {/* Agrega más rutas según sea necesario */}
 
             {/* Ruta para manejar 404 */}
