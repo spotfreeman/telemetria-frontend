@@ -15,19 +15,29 @@ export const Archivos = () => {
     const token = localStorage.getItem("token");
 
     useEffect(() => {
-        fetch('https://telemetria-backend.onrender.com/api/archivos')
-            .then(res => res.json())
-            .then(data => {
-                if (Array.isArray(data)) {
-                    setArchivos(data);
-                } else if (Array.isArray(data.archivos)) {
-                    setArchivos(data.archivos);
+        const fetchArchivos = async () => {
+            try {
+                const res = await fetch('https://telemetria-backend.onrender.com/api/archivos', {
+                    headers: token ? { "Authorization": `Bearer ${token}` } : {}
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        setArchivos(data);
+                    } else if (Array.isArray(data.archivos)) {
+                        setArchivos(data.archivos);
+                    } else {
+                        setArchivos([]);
+                    }
                 } else {
                     setArchivos([]);
                 }
-            })
-            .catch(() => setArchivos([]));
-    }, []);
+            } catch {
+                setArchivos([]);
+            }
+        };
+        fetchArchivos();
+    }, [token]);
 
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
