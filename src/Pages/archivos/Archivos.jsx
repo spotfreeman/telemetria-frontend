@@ -10,6 +10,7 @@ export const Archivos = () => {
     const [showForm, setShowForm] = useState(false);
     const [editId, setEditId] = useState(null);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [busqueda, setBusqueda] = useState(""); // Nuevo estado para búsqueda
 
     // Obtener token del localStorage
     const token = localStorage.getItem("token");
@@ -102,9 +103,22 @@ export const Archivos = () => {
         setShowForm(true);
     };
 
+    // Filtrar archivos por nombre
+    const archivosFiltrados = archivos.filter(a =>
+        a.nombre.toLowerCase().includes(busqueda.toLowerCase())
+    );
+
     return (
         <div className="flex flex-col items-center mt-8">
             <h2 className="text-2xl font-bold mb-4">Archivos</h2>
+            {/* Buscador */}
+            <input
+                type="text"
+                placeholder="Buscar por nombre..."
+                value={busqueda}
+                onChange={e => setBusqueda(e.target.value)}
+                className="border rounded px-3 py-2 mb-4 w-full max-w-md"
+            />
             {token && (
                 <button
                     onClick={() => setShowForm(true)}
@@ -163,7 +177,6 @@ export const Archivos = () => {
             <table className="min-w-[300px] w-full border border-gray-300 rounded-lg overflow-hidden shadow mt-6">
                 <thead>
                     <tr className="bg-blue-700 text-white">
-
                         <th className="px-4 py-2 border-b border-gray-300 text-center">Nombre</th>
                         <th className="px-4 py-2 border-b border-gray-300 text-center">Descripción</th>
                         <th className="px-4 py-2 border-b border-gray-300 text-center">Archivo</th>
@@ -171,9 +184,8 @@ export const Archivos = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {(Array.isArray(archivos) ? archivos : []).map(archivo => (
+                    {(Array.isArray(archivosFiltrados) ? archivosFiltrados : []).map(archivo => (
                         <tr key={archivo._id} className="hover:bg-gray-100">
-
                             <td className="px-4 py-2 border-b border-gray-300 text-center">{archivo.nombre}</td>
                             <td className="px-4 py-2 border-b border-gray-300 text-center">{archivo.descripcion}</td>
                             <td className="px-4 py-2 border-b border-gray-300 text-center">

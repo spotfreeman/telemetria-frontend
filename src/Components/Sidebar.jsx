@@ -25,6 +25,8 @@ function Sidebar() {
         if (link.to === "/proyectos" && !token) return false;
         if (link.to === "/server" && !token) return false;
         if (link.to === "/notas" && !token) return false;
+        if (link.to === "/calendario" && !token) return false;
+        if (link.to === "/archivos" && !token) return false;
         return true;
     });
 
