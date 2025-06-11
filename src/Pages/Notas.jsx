@@ -217,8 +217,8 @@ export const Notas = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {notas.map((notas, idx) => (
-                            <tr key={notas._id} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                        {notas.map((nota, idx) => (
+                            <tr key={nota._id} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
                                 <td className="px-4 py-2 text-center border-b border-gray-300">{nota.titulo}</td>
                                 <td className="px-4 py-2 text-center border-b border-gray-300">{nota.descripcion}</td>
                                 <td className="px-4 py-2 text-center border-b border-gray-300">{nota.usuario}</td>
