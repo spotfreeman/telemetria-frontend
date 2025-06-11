@@ -202,18 +202,16 @@ export const Notas = () => {
             </div>
 
             {/* Tabla de jugadores */}
+            <h2 className="text-2xl font-bold mt-8 mb-4 w-full text-center">Ejemplo Tabla 2</h2>
             <div className="mt-8 w-full">
                 <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden shadow">
                     <thead>
-                        <tr className="bg-blue-700 text-white">
+                        <tr className="bg-gray-600 text-white">
                             <th className="px-4 py-2 border-b border-gray-300 text-center">Titulo</th>
-                            <th className="px-4 py-2 border-b border-gray-300 text-center">Player</th>
-                            <th className="px-4 py-2 border-b border-gray-300 text-center">Pos</th>
-                            <th className="px-4 py-2 border-b border-gray-300 text-center">GP</th>
-                            <th className="px-4 py-2 border-b border-gray-300 text-center">G</th>
-                            <th className="px-4 py-2 border-b border-gray-300 text-center">A</th>
-                            <th className="px-4 py-2 border-b border-gray-300 text-center">P</th>
-                            <th className="px-4 py-2 border-b border-gray-300 text-center">+/-</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">Descripcion</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">Usuario</th>
+                            <th className="px-4 py-2 border-b border-gray-300 text-center">Acciones</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -222,11 +220,24 @@ export const Notas = () => {
                                 <td className="px-4 py-2 text-center border-b border-gray-300">{nota.titulo}</td>
                                 <td className="px-4 py-2 text-center border-b border-gray-300">{nota.descripcion}</td>
                                 <td className="px-4 py-2 text-center border-b border-gray-300">{nota.usuario}</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">13</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">424</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">2</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">31</td>
-                                <td className="px-4 py-2 text-center border-b border-gray-300">23</td>
+                                <td className="px-4 py-2 text-center border-b border-gray-300">
+                                    <button
+                                        className="bg-red-600 hover:bg-red-700 text-white p-1 rounded mr-2"
+                                        onClick={() => handleDelete(nota._id)}
+                                        title="Eliminar"
+                                    >
+                                        <TrashIcon className="h-5 w-5" />
+                                    </button>
+                                    <button
+                                        className="bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded"
+                                        onClick={() => handleEdit(nota)}
+                                        title="Editar"
+                                    >
+                                        <PencilSquareIcon className="h-5 w-5" />
+                                    </button>
+
+                                </td>
+
                             </tr>
                         ))}
                     </tbody>
