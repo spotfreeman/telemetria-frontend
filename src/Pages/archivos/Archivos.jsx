@@ -163,7 +163,7 @@ export const Archivos = () => {
             <table className="min-w-[300px] w-full border border-gray-300 rounded-lg overflow-hidden shadow mt-6">
                 <thead>
                     <tr className="bg-blue-700 text-white">
-                        <th className="px-4 py-2 border-b border-gray-300 text-center">ID</th>
+
                         <th className="px-4 py-2 border-b border-gray-300 text-center">Nombre</th>
                         <th className="px-4 py-2 border-b border-gray-300 text-center">Descripción</th>
                         <th className="px-4 py-2 border-b border-gray-300 text-center">Archivo</th>
@@ -173,7 +173,7 @@ export const Archivos = () => {
                 <tbody>
                     {(Array.isArray(archivos) ? archivos : []).map(archivo => (
                         <tr key={archivo._id} className="hover:bg-gray-100">
-                            <td className="px-4 py-2 border-b border-gray-300 text-center">{archivo._id}</td>
+
                             <td className="px-4 py-2 border-b border-gray-300 text-center">{archivo.nombre}</td>
                             <td className="px-4 py-2 border-b border-gray-300 text-center">{archivo.descripcion}</td>
                             <td className="px-4 py-2 border-b border-gray-300 text-center">
