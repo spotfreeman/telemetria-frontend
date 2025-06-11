@@ -7,16 +7,17 @@ export const Archivos = () => {
         descripcion: "",
         link: ""
     });
-    const [showModal, setShowModal] = useState(false);
-    const [editId, setEditId] = useState(null);
     const [showForm, setShowForm] = useState(false);
+    const [editId, setEditId] = useState(null);
     const [showSuccess, setShowSuccess] = useState(false);
+
+    // Obtener token del localStorage
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/archivos')
             .then(res => res.json())
             .then(data => {
-                // Si la respuesta es un objeto con una propiedad 'archivos', usa esa propiedad
                 if (Array.isArray(data)) {
                     setArchivos(data);
                 } else if (Array.isArray(data.archivos)) {
@@ -32,48 +33,46 @@ export const Archivos = () => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // Enviar nuevo archivo o editar
     const handleSubmit = async e => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append("nombre", form.nombre);
-        formData.append("descripcion", form.descripcion);
-        formData.append("link", form.link);
+        // Solo permitir si hay token
+        if (!token) return;
 
-        if (editId) {
-            // Editar archivo existente
-            const res = await fetch(`https://telemetria-backend.onrender.com/api/archivos/${editId}`, {
-                method: 'PUT',
-                body: formData
-            });
-            if (res.ok) {
-                const archivoActualizado = await res.json();
-                setArchivos(archivos.map(a => a._id === editId ? archivoActualizado : a));
+        const res = await fetch(editId
+            ? `https://telemetria-backend.onrender.com/api/archivos/${editId}`
+            : 'https://telemetria-backend.onrender.com/api/archivos',
+            {
+                method: editId ? 'PUT' : 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(form)
+            }
+        );
+        if (res.ok) {
+            const archivoGuardado = await res.json();
+            if (editId) {
+                setArchivos(archivos.map(a => a._id === editId ? archivoGuardado : a));
                 setEditId(null);
-                setShowSuccess(true);
-                setTimeout(() => setShowSuccess(false), 2000);
-            }
-        } else {
-            // Crear nuevo archivo
-            const res = await fetch('https://telemetria-backend.onrender.com/api/archivos', {
-                method: 'POST',
-                body: formData
-            });
-            if (res.ok) {
-                const archivoGuardado = await res.json();
+            } else {
                 setArchivos([archivoGuardado, ...archivos]);
-                setShowSuccess(true);
-                setTimeout(() => setShowSuccess(false), 2000);
             }
+            setShowSuccess(true);
+            setTimeout(() => setShowSuccess(false), 2000);
         }
         setForm({ nombre: "", descripcion: "", link: "" });
+        setShowForm(false);
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm
-            ("¿Estás seguro de que deseas eliminar este archivo?")) {
+        if (!token) return;
+        if (window.confirm("¿Estás seguro de que deseas eliminar este archivo?")) {
             const res = await fetch(`https://telemetria-backend.onrender.com/api/archivos/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             });
             if (res.ok) {
                 setArchivos(archivos.filter(a => a._id !== id));
@@ -81,8 +80,8 @@ export const Archivos = () => {
                 setTimeout(() => setShowSuccess(false), 2000);
             }
         }
-    }
-        ;
+    };
+
     const handleEdit = (archivo) => {
         setForm({
             nombre: archivo.nombre,
@@ -90,19 +89,22 @@ export const Archivos = () => {
             link: archivo.link || ""
         });
         setEditId(archivo._id);
+        setShowForm(true);
     };
 
     return (
         <div className="flex flex-col items-center mt-8">
             <h2 className="text-2xl font-bold mb-4">Archivos</h2>
-            <button
-                onClick={() => setShowForm(true)}
-                className="bg-blue-700 text-white px-4 py-2 rounded mb-4"
-            >
-                Subir Archivo
-            </button>
+            {token && (
+                <button
+                    onClick={() => setShowForm(true)}
+                    className="bg-blue-700 text-white px-4 py-2 rounded mb-4"
+                >
+                    Subir Archivo
+                </button>
+            )}
 
-            {showForm && (
+            {showForm && token && (
                 <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-md">
                     <h3 className="text-xl font-bold mb-4">{editId ? "Editar Archivo" : "Subir Nuevo Archivo"}</h3>
                     <input
@@ -173,18 +175,22 @@ export const Archivos = () => {
                                 </button>
                             </td>
                             <td className="px-4 py-2 border-b border-gray-300 text-center">
-                                <button
-                                    onClick={() => handleEdit(archivo)}
-                                    className="bg-yellow-500 text-white px-3 py-1 rounded mr-2"
-                                >
-                                    Editar
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(archivo._id)}
-                                    className="bg-red-500 text-white px-3 py-1 rounded"
-                                >
-                                    Eliminar
-                                </button>
+                                {token && (
+                                    <>
+                                        <button
+                                            onClick={() => handleEdit(archivo)}
+                                            className="bg-yellow-500 text-white px-3 py-1 rounded mr-2"
+                                        >
+                                            Editar
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(archivo._id)}
+                                            className="bg-red-500 text-white px-3 py-1 rounded"
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </>
+                                )}
                             </td>
                         </tr>
                     ))}
