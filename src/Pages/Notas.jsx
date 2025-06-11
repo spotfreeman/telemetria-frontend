@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table'
+
 
 export const Notas = () => {
     const [notas, setNotas] = useState([]);
@@ -102,7 +104,7 @@ export const Notas = () => {
     };
 
     return (
-        <div className="flex flex-col items-center mt-8 w-full">
+        <div className="flex flex-col items-center mt-1 w-full"> // Original mt-8
             {/* Botón de exportar */}
             <button
                 className="mb-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
@@ -110,6 +112,7 @@ export const Notas = () => {
             >
                 Exportar a Excel
             </button>
+
             {showModal && (
                 <div className="fixed top-8 z-50 bg-green-600 text-white px-6 py-3 rounded shadow-lg">
                     ¡Nota agregada exitosamente!
@@ -151,7 +154,7 @@ export const Notas = () => {
                 </div>
                 {/* Columna de la tabla */}
                 <div className="md:basis-2/3 w-full">
-                    <table className="min-w-[300px] w-full border border-gray-300 rounded-lg overflow-hidden shadow">
+                    <table dense className="min-w-[300px] w-full border border-gray-300 rounded-lg overflow-hidden shadow">
                         <thead>
                             <tr className="bg-blue-700 text-white">
                                 <th className="px-4 py-2 border-b border-gray-300 text-center">Fecha</th>
