@@ -19,7 +19,7 @@ function Sidebar() {
         { to: "/calendario", icon: <ServerIcon className="h-5 w-5" />, label: "Calendario" },
         { to: "/archivos", icon: <ServerIcon className="h-5 w-5" />, label: "Archivos" },
         { to: "/bienvenida", icon: <ServerIcon className="h-5 w-5" />, label: "Bienvenida" },
-        { to: "/login2", icon: <ServerIcon className="h-5 w-5" />, label: "Login2 - Test" },
+        { to: "/login/login", icon: <ServerIcon className="h-5 w-5" />, label: "Login2 - Test" },
     ];
 
     const filteredLinks = links.filter(link => {

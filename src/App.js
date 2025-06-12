@@ -52,7 +52,7 @@ function App() {
             <Route path='/bienvenida' element={<Bienvenida />} />
 
             {/* Ruta de Pruebas */}
-            <Route path='/login2' element={<Login2 />} />
+            <Route path='/login/login2' element={<Login2 />} />
 
 
             {/* Agrega más rutas según sea necesario */}
