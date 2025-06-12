@@ -139,9 +139,11 @@ export const Notas = () => {
             </div>
 
             {/* Barra superior 2 */}
-            <div className="w-full bg-gray-300 py-3 px-4 flex items-center justify-between shadow mb-8">
+            <div className="w-full bg-emerald-700 py-3 px-4 flex items-center justify-between shadow mb-8">
                 {/* Título a la izquierda */}
-                <h1 className="text-white text-xl font-bold flex-1">Izquierda</h1>
+                <div className="flex-1 flex justify-start">
+                    <h1 className="text-white text-xl font-bold flex-1">Izquierda</h1>
+                </div>
                 {/* Botón Agregar Nota al centro */}
                 <div className="flex-1 flex justify-center">
                     <h1 className="text-white text-xl font-bold flex-1">Centro</h1>
@@ -151,10 +153,6 @@ export const Notas = () => {
                     <h1 className="text-white text-xl font-bold flex-1">Derecha</h1>
                 </div>
             </div>
-
-
-
-
 
 
             {showModal && (

@@ -11,6 +11,7 @@ import { ProyectoDetalle } from './Pages/proyectos/ProyectoDetalle';
 import { Calendario } from './Pages/calendario/Calendario';
 import { Archivos } from './Pages/archivos/Archivos';
 import { Bienvenida } from './Pages/usuarios/Bienvenida';
+import { Login2 } from './Pages/login/Login';
 
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
@@ -49,6 +50,11 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/archivos" element={<Archivos />} />
             <Route path='/bienvenida' element={<Bienvenida />} />
+
+            {/* Ruta de Pruebas */}
+            <Route path='/login2' element={<Login2 />} />
+
+
             {/* Agrega más rutas según sea necesario */}
 
             {/* Ruta para manejar 404 */}
