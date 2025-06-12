@@ -295,33 +295,7 @@ export const ProyectoDetalle = () => {
                 </div>
             </div>
 
-            <h2 className="text-2xl font-bold mb-4">{proyecto.nombre}</h2>
-
-            {/*
-            <table className="mb-8 w-full border border-gray-300 rounded">
-                <tbody>
-                    <tr>
-                        <th className="bg-blue-100 px-4 py-2 text-left w-1/4">Nombre Borrar</th>
-                        <td className="px-4 py-2">{proyecto.nombre}</td>
-                    </tr>
-                    <tr>
-                        <th className="bg-blue-100 px-4 py-2 text-left">Código</th>
-                        <td className="px-4 py-2">{proyecto.codigo}</td>
-                    </tr>
-                    <tr>
-                        <th className="bg-blue-100 px-4 py-2 text-left">Estado</th>
-                        <td className="px-4 py-2">{proyecto.estado}</td>
-                    </tr>
-                    <tr>
-                        <th className="bg-blue-100 px-4 py-2 text-left">Detalle</th>
-                        <td className="px-4 py-2">{proyecto.descripcion}</td>
-                    </tr>
-                </tbody>
-            </table>
-            */}
-
-
-            {/* Tabla 4 MAPA */}
+            {/* Tabla : MAPA */}
             <div className="mt-10">
                 <table className="w-full border border-gray-300 rounded mb-8">
                     <thead>

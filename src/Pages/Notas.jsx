@@ -110,19 +110,35 @@ export const Notas = () => {
 
     return (
         <div className="flex flex-col items-center mt-1 w-full"> // Original mt-8
-            {/* Botón de exportar */}
-            <button
-                className="mb-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-                onClick={exportarExcel}
-            >
-                Exportar a Excel
-            </button>
+            {/* Barra superior con botones */}
+            <div className="w-full bg-blue-700 py-3 px-4 flex flex-wrap items-center justify-between shadow mb-8">
+                <h1 className="text-white text-xl font-bold">Notas</h1>
+                <div className="flex gap-2">
+                    <button
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                        onClick={exportarExcel}
+                    >
+                        Exportar a Excel
+                    </button>
+                    <button
+                        className="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded"
+                        onClick={() => {
+                            setForm({ titulo: "", descripcion: "", usuario: "" });
+                            setEditId(null);
+                            // Aquí podrías mostrar un modal o enfocar el formulario
+                        }}
+                    >
+                        Agregar Nota
+                    </button>
+                </div>
+            </div>
 
             {showModal && (
                 <div className="fixed top-8 z-50 bg-green-600 text-white px-6 py-3 rounded shadow-lg">
                     ¡Nota agregada exitosamente!
                 </div>
             )}
+
             <h2 className="text-2xl font-bold mb-8 w-full text-center">Notas</h2>
             <div className="flex flex-col md:flex-row w-full max-w-5xl gap-8">
                 {/* Columna del formulario */}
@@ -157,7 +173,8 @@ export const Notas = () => {
                         </button>
                     </form>
                 </div>
-                {/* Columna de la tabla */}
+
+                {/* Columna de la tabla 
                 <div className="md:basis-2/3 w-full">
                     <table className="min-w-[300px] w-full border border-gray-300 rounded-lg overflow-hidden shadow">
                         <thead>
@@ -199,9 +216,10 @@ export const Notas = () => {
                         </tbody>
                     </table>
                 </div>
+                */}
             </div>
 
-            {/* Tabla de jugadores */}
+            {/* Tabla de Notas */}
             <h2 className="text-2xl font-bold mt-8 mb-4 w-full text-center">Ejemplo Tabla 2</h2>
             <div className="mt-8 w-full">
                 <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden shadow">
@@ -211,7 +229,6 @@ export const Notas = () => {
                             <th className="px-4 py-2 border-b border-gray-300 text-center">Descripcion</th>
                             <th className="px-4 py-2 border-b border-gray-300 text-center">Usuario</th>
                             <th className="px-4 py-2 border-b border-gray-300 text-center">Acciones</th>
-
                         </tr>
                     </thead>
                     <tbody>
