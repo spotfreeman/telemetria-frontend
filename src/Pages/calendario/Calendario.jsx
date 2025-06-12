@@ -14,7 +14,7 @@ export const Calendario = () => {
     useEffect(() => {
         const fetchVacaciones = async () => {
             try {
-                const res = await fetch('https://tu-backend.com/api/vacaciones', {
+                const res = await fetch('https://telemetria-backend.onrender.com/api/vacaciones', {
                     headers: token ? { "Authorization": `Bearer ${token}` } : {}
                 });
                 if (res.ok) {
@@ -39,8 +39,8 @@ export const Calendario = () => {
             motivo
         };
         const url = editId
-            ? `https://tu-backend.com/api/vacaciones/${editId}`
-            : 'https://tu-backend.com/api/vacaciones';
+            ? `https://telemetria-backend.onrender.com/api/vacaciones/${editId}`
+            : 'https://telemetria-backend.onrender.com/api/vacaciones';
         const method = editId ? 'PUT' : 'POST';
         const res = await fetch(url, {
             method,
@@ -67,7 +67,7 @@ export const Calendario = () => {
     const handleEliminar = async (id) => {
         if (!token) return;
         if (!window.confirm("¿Eliminar este registro de vacaciones?")) return;
-        const res = await fetch(`https://tu-backend.com/api/vacaciones/${id}`, {
+        const res = await fetch(`https://telemetria-backend.onrender.com/api/vacaciones/${id}`, {
             method: 'DELETE',
             headers: { "Authorization": `Bearer ${token}` }
         });
