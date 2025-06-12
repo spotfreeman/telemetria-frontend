@@ -1,4 +1,4 @@
-export const Login = () => {
+export const Login2 = () => {
     return (
         <>
             {/*
@@ -135,4 +135,4 @@ export const Login = () => {
     )
 }
 
-export default Login;
+export default Login2;
