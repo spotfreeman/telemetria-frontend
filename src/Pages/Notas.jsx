@@ -109,17 +109,13 @@ export const Notas = () => {
     };
 
     return (
-        <div className="flex flex-col items-center mt-1 w-full"> // Original mt-8
+        <div className="flex flex-col items-center mt-1 w-full">
             {/* Barra superior con botones */}
-            <div className="w-full bg-blue-700 py-3 px-4 flex flex-wrap items-center justify-between shadow mb-8">
-                <h1 className="text-white text-xl font-bold">Notas</h1>
-                <div className="flex gap-2">
-                    <button
-                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-                        onClick={exportarExcel}
-                    >
-                        Exportar a Excel
-                    </button>
+            <div className="w-full bg-gray-600 py-3 px-4 flex items-center justify-between shadow mb-8">
+                {/* Título a la izquierda */}
+                <h1 className="text-white text-xl font-bold flex-1">Notas</h1>
+                {/* Botón Agregar Nota al centro */}
+                <div className="flex-1 flex justify-center">
                     <button
                         className="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded"
                         onClick={() => {
@@ -131,7 +127,35 @@ export const Notas = () => {
                         Agregar Nota
                     </button>
                 </div>
+                {/* Botón Exportar a Excel a la derecha */}
+                <div className="flex-1 flex justify-end">
+                    <button
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                        onClick={exportarExcel}
+                    >
+                        Exportar a Excel
+                    </button>
+                </div>
             </div>
+
+            {/* Barra superior 2 */}
+            <div className="w-full bg-gray-300 py-3 px-4 flex items-center justify-between shadow mb-8">
+                {/* Título a la izquierda */}
+                <h1 className="text-white text-xl font-bold flex-1">Izquierda</h1>
+                {/* Botón Agregar Nota al centro */}
+                <div className="flex-1 flex justify-center">
+                    <h1 className="text-white text-xl font-bold flex-1">Centro</h1>
+                </div>
+                {/* Botón Exportar a Excel a la derecha */}
+                <div className="flex-1 flex justify-end">
+                    <h1 className="text-white text-xl font-bold flex-1">Derecha</h1>
+                </div>
+            </div>
+
+
+
+
+
 
             {showModal && (
                 <div className="fixed top-8 z-50 bg-green-600 text-white px-6 py-3 rounded shadow-lg">
@@ -220,7 +244,6 @@ export const Notas = () => {
             </div>
 
             {/* Tabla de Notas */}
-            <h2 className="text-2xl font-bold mt-8 mb-4 w-full text-center">Ejemplo Tabla 2</h2>
             <div className="mt-8 w-full">
                 <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden shadow">
                     <thead>
