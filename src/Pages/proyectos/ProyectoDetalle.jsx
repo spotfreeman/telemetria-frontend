@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 
 import { HiOutlineAdjustments } from "react-icons/hi";
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 
 import { useParams, Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -209,8 +210,9 @@ export const ProyectoDetalle = () => {
                 </button>
                 <div ref={contenidoRef}>
                     {/* TODO el contenido que quieres exportar */}
-
-                    <h2 className="text-2xl font-bold mb-4">{proyecto.nombre}</h2>
+                    <div className="w-full bg-slate-800">
+                        <h2 className="text-2xl font-bold mb-4 text-white">{proyecto.nombre}</h2>
+                    </div>
 
                     {mensaje && <div className="mb-4 text-green-700 font-semibold">{mensaje}</div>}
                     {editando ? (
@@ -281,7 +283,7 @@ export const ProyectoDetalle = () => {
                                         <td className="px-4 py-2">{proyecto.estado}</td>
                                     </tr>
                                     <tr>
-                                        <th className="bg-blue-100 px-4 py-2 text-left">Detalle</th>
+                                        <th className="bg-blue-100 px-4 py-2 text-left">Descripcion</th>
                                         <td className="px-4 py-2">{proyecto.descripcion}</td>
                                     </tr>
                                 </tbody>
@@ -291,7 +293,6 @@ export const ProyectoDetalle = () => {
                                 onClick={() => setEditando(true)}
                             >
                                 <HiOutlineAdjustments />
-
                             </button>
                         </div>
                     )}
@@ -620,8 +621,9 @@ export const ProyectoDetalle = () => {
                         <tr>
                             <td className="px-4 py-2 text-center" >
 
-                                <Link to="/proyectos" className="inline-block mt-8 text-blue-700 hover:underline">
-                                    ← Volver a la lista de proyectos
+                                <Link to="/proyectos" className="inline-flex items-center mt-8 text-blue-700 hover:underline">
+                                    <ArrowLeftIcon className="h-5 w-5 mr-2" />
+                                    Volver a la lista de proyectos
                                 </Link>
 
                             </td>
