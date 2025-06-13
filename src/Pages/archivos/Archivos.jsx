@@ -110,7 +110,7 @@ export const Archivos = () => {
 
     return (
         <div className="flex flex-col items-center mt-8">
-            <h2 className="text-2xl font-bold mb-4">Archivos</h2>
+            <h2 className="text-2xl font-bold mb-4">Buscador</h2>
             {/* Buscador */}
             <input
                 type="text"

@@ -299,34 +299,15 @@ export const ProyectoDetalle = () => {
                 <table className="w-full border border-gray-300 rounded mb-8">
                     <thead>
                         <tr className="bg-blue-100">
-                            <th className="px-4 py-2">Ubicacion</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
-                            <tr>
-                                <td className="px-4 py-2 text-center">
-                                    <iframe
-                                        title="mapa-georeferencia"
-                                        width="100%"
-                                        height="400"
-                                        style={{ border: 0 }}
-                                        loading="lazy"
-                                        allowFullScreen
-                                        referrerPolicy="no-referrer-when-downgrade"
-                                        src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
-                                    />
-                                </td>
-                            </tr>
-                        ) : (
-                            <tr>
-                                <td className="px-4 py-2 text-center" colSpan={3}>No hay georreferencia registrada</td>
-                            </tr>
-                        )}
-                        <tr>
-                            <td className="px-4 py-2 text-center" colSpan={3}>
-                                <form onSubmit={handleGuardarGeo} className="flex flex-wrap gap-2 items-end justify-center mb-4">
+                            <th className="px-4 py-2 text-center w-1/2" colSpan={2}>
+                                Ubicación
+                            </th>
+                            <th className="px-4 py-2 text-right w-1/2">
+                                <form
+                                    onSubmit={handleGuardarGeo}
+                                    className="flex flex-wrap gap-2 items-center justify-end"
+                                    style={{ marginBottom: 0 }}
+                                >
                                     <input
                                         className="border rounded px-2 py-1"
                                         name="latitud"
@@ -351,13 +332,33 @@ export const ProyectoDetalle = () => {
                                         Guardar Georreferencia
                                     </button>
                                 </form>
-                            </td>
+                            </th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
+                            <tr>
+                                <td className="px-4 py-2 text-center" colSpan={3}>
+                                    <iframe
+                                        title="mapa-georeferencia"
+                                        width="100%"
+                                        height="400"
+                                        style={{ border: 0 }}
+                                        loading="lazy"
+                                        allowFullScreen
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
+                                    />
+                                </td>
+                            </tr>
+                        ) : (
+                            <tr>
+                                <td className="px-4 py-2 text-center" colSpan={3}>No hay georreferencia registrada</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
-
             </div>
-
 
             {/* Tabla % de Avances  */}
             <div className="mt-10">
