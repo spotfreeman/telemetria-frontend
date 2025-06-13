@@ -1,8 +1,8 @@
 const stats = [
-    { id: 1, name: 'Creators on the platform', value: '8,000+' },
-    { id: 2, name: 'Flat platform fee', value: '3%' },
-    { id: 3, name: 'Uptime guarantee', value: '99.9%' },
-    { id: 4, name: 'Paid out to creators', value: '$70M' },
+    { id: 1, name: 'Proyectos en BD', value: '+100' },
+    { id: 2, name: 'Gasto Proyectado', value: '$500M' },
+    { id: 3, name: 'Gasto Ejecutado', value: '35%' },
+    { id: 4, name: 'Usuarios activos', value: '+10' },
 ]
 
 export const Bienvenida = () => {
@@ -18,11 +18,10 @@ export const Bienvenida = () => {
                     <div className="mx-auto max-w-2xl lg:mr-0 lg:max-w-lg">
                         <h2 className="text-base/8 font-semibold text-indigo-600">Our track record</h2>
                         <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">
-                            Trusted by thousands of creators worldwide
+                            Welcome to Telemetría, your telemetry solution.
                         </p>
                         <p className="mt-6 text-lg/8 text-gray-600">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste
-                            dolor cupiditate blanditiis ratione.
+                            Plataforma para la gestión de telemetría de equipos, que permite a los usuarios monitorear y analizar datos en tiempo real, optimizando el rendimiento y la seguridad.
                         </p>
                         <dl className="mt-16 grid max-w-xl grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 xl:mt-16">
                             {stats.map((stat) => (

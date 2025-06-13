@@ -32,7 +32,7 @@ function App() {
 
           {/* Contenido enlaces */}
           <Routes>
-            <Route path="/" element={<div>Telemetria Página principal</div>} />
+            <Route path="/" element={<Bienvenida />} />
             <Route path="/datos" element={<DatosPage />} />
             <Route path="/tempdata" element={<TempData />} />
             <Route path="/server" element={<Server />} />

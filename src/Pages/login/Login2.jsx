@@ -57,7 +57,7 @@ export const Login2 = () => {
                                                 type="password"
                                                 required
                                                 autoComplete="current-password"
-                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                             />
                                         </div>
                                     </div>
@@ -78,14 +78,14 @@ export const Login2 = () => {
                                                         className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
                                                     >
                                                         <path
-                                                            d="M3 8L6 11L11 3.5"
+                                                            id="M3 8L6 11L11 3.5"
                                                             strokeWidth={2}
                                                             strokeLinecap="round"
                                                             strokeLinejoin="round"
                                                             className="opacity-0 group-has-checked:opacity-100"
                                                         />
                                                         <path
-                                                            d="M3 7H11"
+                                                            id="M3 7H11"
                                                             strokeWidth={2}
                                                             strokeLinecap="round"
                                                             strokeLinejoin="round"

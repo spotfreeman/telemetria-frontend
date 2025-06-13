@@ -19,11 +19,6 @@ export const Notas = () => {
         fetch('https://telemetria-backend.onrender.com/api/notas')
             .then(res => res.json())
             .then(setNotas);
-
-        // Fetch players data (example endpoint)
-        fetch('https://example.com/api/players')
-            .then(res => res.json())
-            .then(setPlayers);
     }, []);
 
     const handleChange = e => {
