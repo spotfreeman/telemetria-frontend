@@ -1,4 +1,36 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 export const Login2 = () => {
+
+    const [form, setForm] = useState({ email: "", password: "" });
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
+    const handleChange = e => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+    const handleSubmit = async e => {
+        e.preventDefault();
+        setError("");
+        console.log("Informacion enviada ", form);
+
+        const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(form),
+        });
+        const data = await res.json();
+        console.log(data);
+
+        if (res.ok && data.token) {
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("usuario", data.usuario);
+            navigate("/bienvenida"); // Redirige a la página principal
+        } else {
+            setError(data.message || "Usuario o contraseña incorrectos");
+        }
+    };
+
     return (
         <>
             {/*
@@ -29,18 +61,24 @@ export const Login2 = () => {
 
                         <div className="mt-10">
                             <div>
-                                <form action="#" method="POST" className="space-y-6">
+                                <form onSubmit={handleSubmit} action="#" method="POST" className="space-y-6">
                                     <div>
-                                        <label htmlFor="email" className="block text-sm font-medium text-gray-900">
-                                            Email address
+                                        <label htmlFor="text" className="block text-sm font-medium text-gray-900">
+                                            Nombre de usuario
                                         </label>
+
+                                        {error && <div className="mb-4 text-red-600">{error}</div>}
+
                                         <div className="mt-2">
                                             <input
-                                                id="email"
-                                                name="email"
-                                                type="email"
+                                                id="username"
+                                                name="username"
+                                                placeholder="Usuario"
+                                                type="text"
+                                                value={form.username}
+                                                onChange={handleChange}
                                                 required
-                                                autoComplete="email"
+                                                autoComplete="text"
                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                             />
                                         </div>
@@ -55,6 +93,9 @@ export const Login2 = () => {
                                                 id="password"
                                                 name="password"
                                                 type="password"
+                                                placeholder="Contraseña"
+                                                value={form.password}
+                                                onChange={handleChange}
                                                 required
                                                 autoComplete="current-password"
                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
