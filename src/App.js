@@ -24,23 +24,12 @@ function App() {
       <div className="flex min-h-screen">
         <Sidebar />
         <div className="flex-1">
-          {/* Título principal */}
-          {/* 
-          <header className="bg-blue-700 py-6 px-8 mb-6 shadow">
-            <h1 className="text-3xl font-bold text-white">Prototipo Telemetria</h1>
-            <p className="text-white text-lg mt-2 opacity-80">
-              Monitoreo en tiempo real de temperatura y datos de Raspberry Pi
-            </p>
-          </header>
-          */}
 
-          {/* Contenido enlaces */}
           <Routes>
             <Route path="/" element={<Bienvenida />} />
 
             {/* <Route path="/login" element={<Login />} /> */}
             <Route path='/login/login2' element={<Login2 />} />
-
 
             <Route path="/datos" element={<DatosPage />} />
             <Route path="/tempdata" element={<TempData />} />
@@ -49,7 +38,6 @@ function App() {
             <Route path='/calendario' element={<Calendario />} />
             <Route path="/archivos" element={<Archivos />} />
             <Route path='/bienvenida' element={<Bienvenida />} />
-
 
             <Route path="/proyectos" element={<Lista />} />
             <Route

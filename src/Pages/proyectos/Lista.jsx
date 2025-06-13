@@ -136,7 +136,7 @@ export const Lista = () => {
                 </div>
             )}
 
-            <table className="min-w-[300px] w-full max-w-3xl border border-gray-300 rounded-lg overflow-hidden shadow">
+            <table className="min-w-[300px] w-auto border border-gray-300 rounded-lg overflow-hidden shadow">
                 <thead>
                     <tr className="bg-blue-700 text-white">
                         <th className="px-4 py-2 border-b border-gray-300 text-center">Código</th>

@@ -139,7 +139,52 @@ export const Notas = () => {
                 </div>
             )}
 
-            <h2 className="text-2xl font-bold mb-8 w-full text-center">Notas</h2>
+            {/* Fomulario mejorado */}
+
+            <div className="w-auto bg-blue-100">
+                <div>Fomulario Notas </div>
+                <div className="text-gray-500 text-sm mb-4">Ingrese los detalles de la nota a continuación:</div>
+
+                <div>
+                    <form onSubmit={handleSubmit} className="mb-6 flex flex-col gap-2 w-full max-w-md mx-auto">
+                        <div>
+                            <input
+                                className="border p-2 rounded"
+                                name="titulo"
+                                placeholder="Título"
+                                value={form.titulo}
+                                onChange={handleChange}
+                                required
+                            />
+                            <textarea
+                                className="border p-2 rounded"
+                                name="descripcion"
+                                placeholder="Descripción"
+                                value={form.descripcion}
+                                onChange={handleChange}
+                                required
+                            />
+                            <input
+                                className="border p-2 rounded"
+                                name="usuario"
+                                placeholder="Usuario"
+                                value={form.usuario}
+                                onChange={handleChange}
+                                required
+                            />
+
+                        </div>
+                        <div>
+                            <button className="bg-blue-700 text-white px-4 py-2 rounded" type="submit">
+                                {editId ? "Actualizar Nota" : "Agregar Nota"}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {/* Título del formulario */}
+            <h2 className="text-2xl font-bold mb-8 w-full text-center">Formulario para ingreso de notas Notas</h2>
             <div className="flex flex-col md:flex-row w-full max-w-5xl gap-8">
                 {/* Columna del formulario */}
                 <div className="md:basis-1/3 w-full">
@@ -168,9 +213,7 @@ export const Notas = () => {
                             onChange={handleChange}
                             required
                         />
-                        <button className="bg-blue-700 text-white px-4 py-2 rounded" type="submit">
-                            {editId ? "Actualizar Nota" : "Agregar Nota"}
-                        </button>
+
                     </form>
                 </div>
 

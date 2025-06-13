@@ -330,10 +330,62 @@ export const ProyectoDetalle = () => {
                         <div className="px-4 py-2 text-center">No hay georreferencia registrada</div>
                     )}
                 </div>
+
+                {showGeoModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+                        <div className="bg-white rounded shadow-lg p-8 w-full max-w-sm">
+                            <h3 className="text-lg font-bold mb-4 text-center">Ingresar Georreferencia</h3>
+                            <form
+                                onSubmit={e => {
+                                    handleGuardarGeo(e);
+                                    setShowGeoModal(false);
+                                }}
+                                className="flex flex-col gap-4"
+                            >
+                                <input
+                                    className="border rounded px-2 py-1"
+                                    name="latitud"
+                                    type="number"
+                                    step="any"
+                                    placeholder="Latitud"
+                                    value={geoForm.latitud}
+                                    onChange={handleGeoChange}
+                                    required
+                                />
+                                <input
+                                    className="border rounded px-2 py-1"
+                                    name="longitud"
+                                    type="number"
+                                    step="any"
+                                    placeholder="Longitud"
+                                    value={geoForm.longitud}
+                                    onChange={handleGeoChange}
+                                    required
+                                />
+                                <div className="flex gap-2 justify-end">
+                                    <button
+                                        type="button"
+                                        className="bg-gray-400 text-white px-4 py-2 rounded"
+                                        onClick={() => setShowGeoModal(false)}
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                        type="submit"
+                                    >
+                                        Guardar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
             </div>
 
 
-            {/* Tabla de Georreferencia */}
+            {/* Tabla de Georreferencia 
             <div className="">
                 <table className="w-full border border-gray-300 rounded">
                     <thead>
@@ -378,56 +430,8 @@ export const ProyectoDetalle = () => {
                 </table>
             </div>
 
-            {showGeoModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                    <div className="bg-white rounded shadow-lg p-8 w-full max-w-sm">
-                        <h3 className="text-lg font-bold mb-4 text-center">Ingresar Georreferencia</h3>
-                        <form
-                            onSubmit={e => {
-                                handleGuardarGeo(e);
-                                setShowGeoModal(false);
-                            }}
-                            className="flex flex-col gap-4"
-                        >
-                            <input
-                                className="border rounded px-2 py-1"
-                                name="latitud"
-                                type="number"
-                                step="any"
-                                placeholder="Latitud"
-                                value={geoForm.latitud}
-                                onChange={handleGeoChange}
-                                required
-                            />
-                            <input
-                                className="border rounded px-2 py-1"
-                                name="longitud"
-                                type="number"
-                                step="any"
-                                placeholder="Longitud"
-                                value={geoForm.longitud}
-                                onChange={handleGeoChange}
-                                required
-                            />
-                            <div className="flex gap-2 justify-end">
-                                <button
-                                    type="button"
-                                    className="bg-gray-400 text-white px-4 py-2 rounded"
-                                    onClick={() => setShowGeoModal(false)}
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                                    type="submit"
-                                >
-                                    Guardar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+            
+*/}
 
             {/* Tabla % de Avances  */}
             <div className="mt-10">
