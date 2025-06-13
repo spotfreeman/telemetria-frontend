@@ -12,7 +12,12 @@ function Sidebar() {
 
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
-        { to: "/login", icon: <ServerIcon className="h-5 w-5" />, label: "Iniciar Sesión" },
+
+        { to: "/login/login2", icon: <ServerIcon className="h-5 w-5" />, label: "Login" },
+
+        // { to: "/login", icon: <ServerIcon className="h-5 w-5" />, label: "Iniciar Sesión v1" },
+
+
         { to: "/proyectos", icon: <ServerIcon className="h-5 w-5" />, label: "Proyectos" },
         { to: "/datos", icon: <ServerIcon className="h-5 w-5" />, label: "Rpi Historico" },
         { to: "/tempdata", icon: <ServerIcon className="h-5 w-5" />, label: "Rpi Resumen" },
@@ -21,16 +26,21 @@ function Sidebar() {
         { to: "/calendario", icon: <ServerIcon className="h-5 w-5" />, label: "Calendario" },
         { to: "/archivos", icon: <ServerIcon className="h-5 w-5" />, label: "Archivos" },
         { to: "/bienvenida", icon: <ServerIcon className="h-5 w-5" />, label: "Bienvenida" },
-        { to: "/login/login2", icon: <ServerIcon className="h-5 w-5" />, label: "Login2 - Test" },
+
     ];
 
     const filteredLinks = links.filter(link => {
-        if (link.to === "/login" && token) return false;
+        if (link.to === "/login/login2" && token) return false;
+
         if (link.to === "/proyectos" && !token) return false;
         if (link.to === "/server" && !token) return false;
         if (link.to === "/notas" && !token) return false;
         if (link.to === "/calendario" && !token) return false;
         if (link.to === "/archivos" && !token) return false;
+        if (link.to === "/tempdata" && !token) return false;
+        if (link.to === "/datos" && !token) return false;
+
+
         return true;
     });
 
