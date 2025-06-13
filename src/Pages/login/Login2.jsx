@@ -51,12 +51,7 @@ export const Login2 = () => {
                                 className="h-10 w-auto"
                             />
                             <h2 className="mt-8 text-2xl font-bold tracking-tight text-gray-900">Inicio de Sesion</h2>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Not a member?{' '}
-                                <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                                    Start a 14 day free trial
-                                </a>
-                            </p>
+
                         </div>
 
                         <div className="mt-10">
@@ -135,16 +130,10 @@ export const Login2 = () => {
                                                     </svg>
                                                 </div>
                                             </div>
-                                            <label htmlFor="remember-me" className="block text-sm/6 text-gray-900">
-                                                Remember me
-                                            </label>
+
                                         </div>
 
-                                        <div className="text-sm/6">
-                                            <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                                                Forgot password?
-                                            </a>
-                                        </div>
+
                                     </div>
 
                                     <div>
