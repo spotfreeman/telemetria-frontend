@@ -199,18 +199,19 @@ export const ProyectoDetalle = () => {
 
     return (
 
-        <div className="w-auto mx-auto mt-8 bg-white rounded shadow p-8" ref={contenidoRef}>
+        <div className="w-auto mx-auto mt-8 bg-white rounded shadow p-4" ref={contenidoRef}>
+            <button
+                className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
+                onClick={exportarAWord}
+            >
+                Descargar como Word
+            </button>
 
             <div className="w-auto mx-auto mt-8 bg-white rounded shadow p-8">
-                <button
-                    className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
-                    onClick={exportarAWord}
-                >
-                    Descargar como Word
-                </button>
+
                 <div ref={contenidoRef}>
                     {/* TODO el contenido que quieres exportar */}
-                    <div className="w-full bg-slate-800">
+                    <div className="w-full bg-blue-100 rounded">
                         <h2 className="text-2xl font-bold mb-4 text-white">{proyecto.nombre}</h2>
                     </div>
 
