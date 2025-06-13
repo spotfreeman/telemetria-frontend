@@ -141,37 +141,46 @@ export const Notas = () => {
 
             {/* Fomulario mejorado */}
 
-            <div className="w-auto bg-blue-100">
-                <div>Fomulario Notas </div>
+            <div className="w-auto p-2">
+                <div className="bg-blue-100">Fomulario Notas </div>
                 <div className="text-gray-500 text-sm mb-4">Ingrese los detalles de la nota a continuación:</div>
 
                 <div>
                     <form onSubmit={handleSubmit} className="mb-6 flex flex-col gap-2 w-full max-w-md mx-auto">
                         <div>
-                            <input
-                                className="border p-2 rounded"
-                                name="titulo"
-                                placeholder="Título"
-                                value={form.titulo}
-                                onChange={handleChange}
-                                required
-                            />
-                            <textarea
-                                className="border p-2 rounded"
-                                name="descripcion"
-                                placeholder="Descripción"
-                                value={form.descripcion}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                className="border p-2 rounded"
-                                name="usuario"
-                                placeholder="Usuario"
-                                value={form.usuario}
-                                onChange={handleChange}
-                                required
-                            />
+                            <div>
+                                <input
+                                    className="border p-2 rounded"
+                                    name="titulo"
+                                    placeholder="Título"
+                                    value={form.titulo}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <textarea
+                                    className="border p-2 rounded"
+                                    name="descripcion"
+                                    placeholder="Descripción"
+                                    value={form.descripcion}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                            </div>
+
+                            <div>
+                                <input
+                                    className="border p-2 rounded"
+                                    name="usuario"
+                                    placeholder="Usuario"
+                                    value={form.usuario}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
 
                         </div>
                         <div>
