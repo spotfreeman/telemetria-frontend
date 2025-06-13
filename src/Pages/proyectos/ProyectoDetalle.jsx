@@ -212,7 +212,7 @@ export const ProyectoDetalle = () => {
                 <div ref={contenidoRef}>
                     {/* TODO el contenido que quieres exportar */}
                     <div className="w-full bg-blue-100 rounded">
-                        <h2 className="text-2xl font-bold mb-4 text-white">{proyecto.nombre}</h2>
+                        <h2 className="text-2xl font-bold mb-4 px-2 py-2 text-black">{proyecto.nombre}</h2>
                     </div>
 
                     {mensaje && <div className="mb-4 text-green-700 font-semibold">{mensaje}</div>}
@@ -302,11 +302,47 @@ export const ProyectoDetalle = () => {
             </div>
 
             {/* Tabla : MAPA */}
+
+            <div>
+                <div>
+                    <h3 className="text-lg font-bold mb-2 text-center">Georreferencia</h3>
+                    <button
+                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-left"
+                        onClick={() => setShowGeoModal(true)}
+                        type="button"
+                    >
+                        <HiOutlineAdjustments />
+                    </button>
+                </div>
+                <div>
+                    {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
+                        <tr>
+                            <td className="px-4 py-2 text-center" colSpan={3}>
+                                <iframe
+                                    title="mapa-georeferencia"
+                                    width="100%"
+                                    height="400"
+                                    style={{ border: 0 }}
+                                    loading="lazy"
+                                    allowFullScreen
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
+                                />
+                            </td>
+                        </tr>
+                    ) : (
+                        <tr>
+                            <td className="px-4 py-2 text-center" colSpan={3}>No hay georreferencia registrada</td>
+                        </tr>
+                    )}
+                </div>
+            </div>
+
             <div className="">
                 <table className="w-full border border-gray-300 rounded">
                     <thead>
                         <tr className="bg-blue-100">
-                            <th className="px-4 py-2 text-center w-1/2" colSpan={2}>
+                            <th className="px-4 py-2 text-center w-1/2">
                                 Ubicación
                             </th>
                             <th className="px-4 py-2 text-right w-1/2">
@@ -320,6 +356,7 @@ export const ProyectoDetalle = () => {
                             </th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
                             <tr>
