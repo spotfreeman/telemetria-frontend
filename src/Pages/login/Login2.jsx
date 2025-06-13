@@ -14,7 +14,7 @@ export const Login2 = () => {
                     <div className="mx-auto w-full max-w-sm lg:w-96">
                         <div>
                             <img
-                                alt="Your Company"
+                                alt="ROB Studios"
                                 src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
                                 className="h-10 w-auto"
                             />
@@ -116,10 +116,6 @@ export const Login2 = () => {
                                     </div>
                                 </form>
                             </div>
-
-
-
-
                         </div>
                     </div>
                 </div>

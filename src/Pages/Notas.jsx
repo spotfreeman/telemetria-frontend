@@ -106,7 +106,7 @@ export const Notas = () => {
     return (
         <div className="flex flex-col items-center mt-1 w-full">
             {/* Barra superior con botones */}
-            <div className="w-full bg-gray-600 py-3 px-4 flex items-center justify-between shadow mb-8">
+            <div className="w-full bg-gray-300 py-3 px-4 flex items-center justify-between shadow mb-8">
                 {/* Título a la izquierda */}
                 <h1 className="text-white text-xl font-bold flex-1">Notas</h1>
                 {/* Botón Agregar Nota al centro */}
@@ -132,23 +132,6 @@ export const Notas = () => {
                     </button>
                 </div>
             </div>
-
-            {/* Barra superior 2 */}
-            <div className="w-full bg-emerald-700 py-3 px-4 flex items-center justify-between shadow mb-8">
-                {/* Título a la izquierda */}
-                <div className="flex-1 flex justify-start">
-                    <h1 className="text-white text-xl font-bold flex-1">Izquierda</h1>
-                </div>
-                {/* Botón Agregar Nota al centro */}
-                <div className="flex-1 flex justify-center">
-                    <h1 className="text-white text-xl font-bold flex-1">Centro</h1>
-                </div>
-                {/* Botón Exportar a Excel a la derecha */}
-                <div className="flex-1 flex justify-end">
-                    <h1 className="text-white text-xl font-bold flex-1">Derecha</h1>
-                </div>
-            </div>
-
 
             {showModal && (
                 <div className="fixed top-8 z-50 bg-green-600 text-white px-6 py-3 rounded shadow-lg">
@@ -237,7 +220,7 @@ export const Notas = () => {
             </div>
 
             {/* Tabla de Notas */}
-            <div className="mt-8 w-full">
+            <div className="mt-8 w- w-full px-4">
                 <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden shadow">
                     <thead>
                         <tr className="bg-gray-600 text-white">
