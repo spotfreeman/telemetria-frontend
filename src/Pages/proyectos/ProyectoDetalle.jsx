@@ -301,43 +301,39 @@ export const ProyectoDetalle = () => {
                 </div>
             </div>
 
-            {/* Tabla : MAPA */}
+            {/* Tabla : MAPA 2*/}
 
             <div className="w-auto">
-                <div className="w-auto bg-blue-100">
-                    <h3 className="text-lg font-bold mb-2 text-center">Georreferencia</h3>
+                <div className="w-auto bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
+                    <h3 className="text-lg font-bold text-center flex-1">Georreferencia</h3>
                     <button
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-left"
+                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ml-4"
                         onClick={() => setShowGeoModal(true)}
                         type="button"
                     >
                         <HiOutlineAdjustments />
                     </button>
                 </div>
-                <div className="w-auto">
+                <div className="w-full">
                     {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
-                        <tr>
-                            <td className="px-4 py-2 text-center" colSpan={3}>
-                                <iframe
-                                    title="mapa-georeferencia"
-                                    width="100%"
-                                    height="400"
-                                    style={{ border: 0 }}
-                                    loading="lazy"
-                                    allowFullScreen
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                    src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
-                                />
-                            </td>
-                        </tr>
+                        <iframe
+                            title="mapa-georeferencia"
+                            width="100%"
+                            height="400"
+                            style={{ border: 0 }}
+                            loading="lazy"
+                            allowFullScreen
+                            referrerPolicy="no-referrer-when-downgrade"
+                            src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
+                        />
                     ) : (
-                        <tr>
-                            <td className="px-4 py-2 text-center" colSpan={3}>No hay georreferencia registrada</td>
-                        </tr>
+                        <div className="px-4 py-2 text-center">No hay georreferencia registrada</div>
                     )}
                 </div>
             </div>
 
+
+            {/* Tabla de Georreferencia */}
             <div className="">
                 <table className="w-full border border-gray-300 rounded">
                     <thead>
