@@ -199,7 +199,7 @@ export const ProyectoDetalle = () => {
 
     return (
 
-        <div className="w-auto mx-auto mt-8 bg-white rounded shadow p-4" ref={contenidoRef}>
+        <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-4" ref={contenidoRef}>
             <button
                 className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
                 onClick={exportarAWord}
@@ -207,7 +207,7 @@ export const ProyectoDetalle = () => {
                 Descargar como Word
             </button>
 
-            <div className="w-auto mx-auto mt-8 bg-white rounded shadow p-8">
+            <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-8">
 
                 <div ref={contenidoRef}>
                     {/* TODO el contenido que quieres exportar */}
@@ -302,8 +302,8 @@ export const ProyectoDetalle = () => {
             </div>
 
             {/* Tabla : MAPA */}
-            <div className="mt-10">
-                <table className="w-full border border-gray-300 rounded mb-8">
+            <div className="">
+                <table className="w-full border border-gray-300 rounded">
                     <thead>
                         <tr className="bg-blue-100">
                             <th className="px-4 py-2 text-center w-1/2" colSpan={2}>
@@ -481,10 +481,10 @@ export const ProyectoDetalle = () => {
                                                     <tbody>
                                                         {proyecto.avance.map((a, idx) => (
                                                             <tr key={idx}>
-                                                                <td className="px-4 py-2 text-center">{a.mes}</td>
-                                                                <td className="px-4 py-2 text-center">{a.anio}</td>
-                                                                <td className="px-4 py-2 text-center">{a.valor}%</td>
-                                                                <td className="px-4 py-2 text-center">
+                                                                <td className=" text-center">{a.mes}</td>
+                                                                <td className=" text-center">{a.anio}</td>
+                                                                <td className=" text-center">{a.valor}%</td>
+                                                                <td className=" text-center">
                                                                     <button
                                                                         className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded"
                                                                         onClick={() => handleBorrarAvance(idx)}
