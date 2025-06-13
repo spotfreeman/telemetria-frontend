@@ -194,10 +194,9 @@ export const ProyectoDetalle = () => {
 
     return (
 
+        <div className="w-auto mx-auto mt-8 bg-white rounded shadow p-8" ref={contenidoRef}>
 
-        <div className="max-w-4xl mx-auto mt-8 bg-white rounded shadow p-8" ref={contenidoRef}>
-
-            <div className="max-w-4xl mx-auto mt-8 bg-white rounded shadow p-8">
+            <div className="w-auto mx-auto mt-8 bg-white rounded shadow p-8">
                 <button
                     className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
                     onClick={exportarAWord}
