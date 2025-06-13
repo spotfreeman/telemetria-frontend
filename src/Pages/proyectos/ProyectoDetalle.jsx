@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
+
+import { HiOutlineAdjustments } from "react-icons/hi";
+
 import { useParams, Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { saveAs } from "file-saver";
@@ -287,7 +290,8 @@ export const ProyectoDetalle = () => {
                                 className="absolute top-2 right-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                                 onClick={() => setEditando(true)}
                             >
-                                Editar
+                                <HiOutlineAdjustments />
+
                             </button>
                         </div>
                     )}
@@ -309,7 +313,7 @@ export const ProyectoDetalle = () => {
                                     onClick={() => setShowGeoModal(true)}
                                     type="button"
                                 >
-                                    Ingresar Georreferencia
+                                    <HiOutlineAdjustments />
                                 </button>
                             </th>
                         </tr>
