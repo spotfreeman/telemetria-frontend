@@ -303,8 +303,8 @@ export const ProyectoDetalle = () => {
 
             {/* Tabla : MAPA */}
 
-            <div>
-                <div>
+            <div className="w-auto">
+                <div className="w-auto bg-blue-100">
                     <h3 className="text-lg font-bold mb-2 text-center">Georreferencia</h3>
                     <button
                         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-left"
@@ -314,7 +314,7 @@ export const ProyectoDetalle = () => {
                         <HiOutlineAdjustments />
                     </button>
                 </div>
-                <div>
+                <div className="w-auto">
                     {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
                         <tr>
                             <td className="px-4 py-2 text-center" colSpan={3}>
