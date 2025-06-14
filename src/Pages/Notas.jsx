@@ -13,7 +13,6 @@ export const Notas = () => {
     });
     const [showModal, setShowModal] = useState(false);
     const [editId, setEditId] = useState(null);
-    const [players, setPlayers] = useState([]); // Added state for players
 
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/notas')
@@ -139,7 +138,7 @@ export const Notas = () => {
                 </div>
             )}
 
-            {/* Fomulario mejorado */}
+            {/* Formulario mejorado */}
 
             <div className="w-full p-2">
                 <div className="bg-blue-100 p-4 rounded shadow mb-6">
@@ -194,84 +193,6 @@ export const Notas = () => {
                 </div>
             </div>
 
-            {/* Título del formulario */}
-            <h2 className="text-2xl font-bold mb-8 w-full text-center">Formulario para ingreso de notas Notas</h2>
-            <div className="flex flex-col md:flex-row w-full max-w-5xl gap-8">
-                {/* Columna del formulario */}
-                <div className="md:basis-1/3 w-full">
-                    <form onSubmit={handleSubmit} className="mb-6 flex flex-col gap-2 w-full max-w-md mx-auto">
-                        <input
-                            className="border p-2 rounded"
-                            name="titulo"
-                            placeholder="Título"
-                            value={form.titulo}
-                            onChange={handleChange}
-                            required
-                        />
-                        <textarea
-                            className="border p-2 rounded"
-                            name="descripcion"
-                            placeholder="Descripción"
-                            value={form.descripcion}
-                            onChange={handleChange}
-                            required
-                        />
-                        <input
-                            className="border p-2 rounded"
-                            name="usuario"
-                            placeholder="Usuario"
-                            value={form.usuario}
-                            onChange={handleChange}
-                            required
-                        />
-
-                    </form>
-                </div>
-
-                {/* Columna de la tabla 
-                <div className="md:basis-2/3 w-full">
-                    <table className="min-w-[300px] w-full border border-gray-300 rounded-lg overflow-hidden shadow">
-                        <thead>
-                            <tr className="bg-blue-700 text-white">
-                                <th className="px-4 py-2 border-b border-gray-300 text-center">Fecha</th>
-                                <th className="px-4 py-2 border-b border-gray-300 text-center">Título</th>
-                                <th className="px-4 py-2 border-b border-gray-300 text-center">Descripción</th>
-                                <th className="px-4 py-2 border-b border-gray-300 text-center">Usuario</th>
-                                <th className="px-4 py-2 border-b border-gray-300 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {notas.map((nota, idx) => (
-                                <tr key={nota._id || idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                                    <td className="px-4 py-2 text-center border-b border-gray-300">
-                                        {new Date(nota.fecha_hora).toLocaleString()}
-                                    </td>
-                                    <td className="px-4 py-2 text-center border-b border-gray-300">{nota.titulo}</td>
-                                    <td className="px-4 py-2 text-center border-b border-gray-300">{nota.descripcion}</td>
-                                    <td className="px-4 py-2 text-center border-b border-gray-300">{nota.usuario}</td>
-                                    <td className="px-4 py-2 text-center border-b border-gray-300">
-                                        <button
-                                            className="bg-red-600 hover:bg-red-700 text-white p-1 rounded mr-2"
-                                            onClick={() => handleDelete(nota._id)}
-                                            title="Eliminar"
-                                        >
-                                            <TrashIcon className="h-5 w-5" />
-                                        </button>
-                                        <button
-                                            className="bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded"
-                                            onClick={() => handleEdit(nota)}
-                                            title="Editar"
-                                        >
-                                            <PencilSquareIcon className="h-5 w-5" />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                */}
-            </div>
 
             {/* Tabla de Notas */}
             <div className="mt-8 w- w-full px-4">
@@ -373,6 +294,7 @@ export const Notas = () => {
                     </button>
                 </form>
             </div>
+            );
         </div>
     );
 };
