@@ -4,9 +4,23 @@ export const Bienvenida = () => {
     const [totalProyectos, setTotalProyectos] = useState(0);
 
     useEffect(() => {
-        fetch('https://telemetria-backend.onrender.com/api/proyectos')
-            .then(res => res.json())
-            .then(data => setTotalProyectos(Array.isArray(data) ? data.length : 0));
+        const token = localStorage.getItem('token');
+        if (!token) {
+            // Si no hay token, no hace la petición
+            setTotalProyectos(0);
+            return;
+        }
+        fetch('https://telemetria-backend.onrender.com/api/proyectos', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('No autorizado');
+                return res.json();
+            })
+            .then(data => setTotalProyectos(Array.isArray(data) ? data.length : 0))
+            .catch(() => setTotalProyectos(0));
     }, []);
 
     const stats = [
