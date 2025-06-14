@@ -142,8 +142,10 @@ export const Notas = () => {
             {/* Fomulario mejorado */}
 
             <div className="w-auto p-2">
-                <div className="bg-blue-100">Fomulario Notas </div>
-                <div className="text-gray-500 text-sm mb-4">Ingrese los detalles de la nota a continuación:</div>
+                <div className="bg-blue-100 p-4 rounded shadow mb-6">
+                    <div>Fomulario Notas </div>
+                    <div className="text-gray-500 text-sm mb-4">Ingrese los detalles de la nota a continuación:</div>
+                </div>
 
                 <div>
                     <form onSubmit={handleSubmit} className="mb-6 flex flex-col gap-2 w-full max-w-md mx-auto">

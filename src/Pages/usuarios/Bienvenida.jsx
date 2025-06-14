@@ -1,11 +1,21 @@
-const stats = [
-    { id: 1, name: 'Proyectos en BD', value: '+100' },
-    { id: 2, name: 'Gasto Proyectado', value: '$500M' },
-    { id: 3, name: 'Gasto Ejecutado', value: '35%' },
-    { id: 4, name: 'Usuarios activos', value: '+10' },
-]
+import React, { useState, useEffect } from 'react';
 
 export const Bienvenida = () => {
+    const [totalProyectos, setTotalProyectos] = useState(0);
+
+    useEffect(() => {
+        fetch('https://telemetria-backend.onrender.com/api/proyectos')
+            .then(res => res.json())
+            .then(data => setTotalProyectos(Array.isArray(data) ? data.length : 0));
+    }, []);
+
+    const stats = [
+        { id: 1, name: 'Proyectos en BD', value: `+${totalProyectos}` },
+        { id: 2, name: 'Gasto Proyectado', value: '$500M' },
+        { id: 3, name: 'Gasto Ejecutado', value: '35%' },
+        { id: 4, name: 'Usuarios activos', value: '+10' },
+    ];
+
     return (
         <div className="relative bg-white">
             <img
@@ -18,7 +28,7 @@ export const Bienvenida = () => {
                     <div className="mx-auto max-w-2xl lg:mr-0 lg:max-w-lg">
                         <h2 className="text-base/8 font-semibold text-indigo-600">Plataforma : ROB Studios</h2>
                         <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">
-                            Welcome to Telemetría, your telemetry solution.
+                            Welcome to Telemetría, your telemetry solution. {totalProyectos > 0 ? `Total Proyectos: ${totalProyectos}` : 'Cargando...'}
                         </p>
                         <p className="mt-6 text-lg/8 text-gray-600">
                             Plataforma para la gestión de telemetría de equipos, que permite a los usuarios monitorear y analizar datos en tiempo real, optimizando el rendimiento y la seguridad.
@@ -35,7 +45,7 @@ export const Bienvenida = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Bienvenida;
