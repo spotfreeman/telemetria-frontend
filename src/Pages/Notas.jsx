@@ -108,7 +108,7 @@ export const Notas = () => {
             {/* Barra superior con botones */}
             <div className="w-full bg-gray-300 py-3 px-4 flex items-center justify-between shadow mb-8">
                 {/* Título a la izquierda */}
-                <h1 className="text-white text-xl font-bold flex-1">Notas</h1>
+                <h1 className="text-black text-xl font-bold flex-1">Notas</h1>
                 {/* Botón Agregar Nota al centro */}
                 <div className="flex-1 flex justify-center">
                     <button
@@ -141,9 +141,9 @@ export const Notas = () => {
 
             {/* Fomulario mejorado */}
 
-            <div className="w-auto p-2">
+            <div className="w-full p-2">
                 <div className="bg-blue-100 p-4 rounded shadow mb-6">
-                    <div>Fomulario Notas </div>
+                    <div className="">Fomulario Notas </div>
                     <div className="text-gray-500 text-sm mb-4">Ingrese los detalles de la nota a continuación:</div>
                 </div>
 
@@ -312,6 +312,66 @@ export const Notas = () => {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Formulario mejorado */}
+            <div className="w-full max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                    {editId ? "Editar Nota" : "Agregar Nueva Nota"}
+                </h2>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                    <div>
+                        <label className="block text-gray-700 font-medium mb-1" htmlFor="titulo">
+                            Título
+                        </label>
+                        <input
+                            id="titulo"
+                            name="titulo"
+                            type="text"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            placeholder="Ej: Revisión de sensores"
+                            value={form.titulo}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 font-medium mb-1" htmlFor="descripcion">
+                            Descripción
+                        </label>
+                        <textarea
+                            id="descripcion"
+                            name="descripcion"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+                            placeholder="Describe la nota aquí..."
+                            value={form.descripcion}
+                            onChange={handleChange}
+                            rows={4}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 font-medium mb-1" htmlFor="usuario">
+                            Usuario
+                        </label>
+                        <input
+                            id="usuario"
+                            name="usuario"
+                            type="text"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            placeholder="Tu nombre"
+                            value={form.usuario}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition-colors"
+                    >
+                        {editId ? "Actualizar Nota" : "Agregar Nota"}
+                    </button>
+                </form>
             </div>
         </div>
     );

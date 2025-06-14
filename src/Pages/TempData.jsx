@@ -18,17 +18,14 @@ export const TempData = () => {
     const datosOrdenados = datos.slice().sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora));
     const datosPagina = datosOrdenados.slice((pagina - 1) * porPagina, pagina * porPagina);
 
-    // Prepara los datos para la gráfica
+    // Prepara los datos para la gráfica (sin modificar la hora)
     const datosGrafica = datos
         .slice()
         .sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora))
         .slice(0, 100)
         .reverse()
         .map(dato => ({
-            fecha: new Date(dato.fecha_hora).toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit'
-            }),
+            fecha: dato.fecha_hora,
             temperatura: dato.temperatura
         }));
 
@@ -73,7 +70,7 @@ export const TempData = () => {
                             {datosPagina.map((dato, idx) => (
                                 <tr key={dato._id || idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
                                     <td className="px-4 py-2 text-center border-b border-gray-300">
-                                        {new Date(dato.fecha_hora).toLocaleString()}
+                                        {dato.fecha_hora}
                                     </td>
                                     <td className="px-4 py-2 text-center border-b border-gray-300">{dato.temperatura}</td>
                                 </tr>
