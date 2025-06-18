@@ -8,6 +8,7 @@ export const Bienvenida = () => {
         if (!token) {
             // Si no hay token, no hace la petición
             setTotalProyectos(0);
+            window.location.href = '/login/login2'; // Redirige al login si no hay token
             return;
         }
         fetch('https://telemetria-backend.onrender.com/api/proyectos', {
@@ -16,9 +17,16 @@ export const Bienvenida = () => {
             }
         })
             .then(res => {
-                if (!res.ok) throw new Error('No autorizado');
+                if (res.status === 401) {
+                    // Token inválido o vencido
+                    localStorage.removeItem('token');
+                    window.location.href = '/login/login2';
+                    throw new Error('No autorizado');
+                }
+                if (!res.ok) throw new Error('Error en la petición');
                 return res.json();
             })
+
             .then(data => setTotalProyectos(Array.isArray(data) ? data.length : 0))
             .catch(() => setTotalProyectos(0));
     }, []);

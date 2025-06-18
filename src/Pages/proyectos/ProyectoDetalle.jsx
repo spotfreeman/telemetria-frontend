@@ -384,55 +384,6 @@ export const ProyectoDetalle = () => {
 
             </div>
 
-
-            {/* Tabla de Georreferencia 
-            <div className="">
-                <table className="w-full border border-gray-300 rounded">
-                    <thead>
-                        <tr className="bg-blue-100">
-                            <th className="px-4 py-2 text-center w-1/2">
-                                Ubicación
-                            </th>
-                            <th className="px-4 py-2 text-right w-1/2">
-                                <button
-                                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                                    onClick={() => setShowGeoModal(true)}
-                                    type="button"
-                                >
-                                    <HiOutlineAdjustments />
-                                </button>
-                            </th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
-                            <tr>
-                                <td className="px-4 py-2 text-center" colSpan={3}>
-                                    <iframe
-                                        title="mapa-georeferencia"
-                                        width="100%"
-                                        height="400"
-                                        style={{ border: 0 }}
-                                        loading="lazy"
-                                        allowFullScreen
-                                        referrerPolicy="no-referrer-when-downgrade"
-                                        src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
-                                    />
-                                </td>
-                            </tr>
-                        ) : (
-                            <tr>
-                                <td className="px-4 py-2 text-center" colSpan={3}>No hay georreferencia registrada</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-
-            
-*/}
-
             {/* Tabla % de Avances  */}
             <div className="mt-10">
                 <h3 className="text-lg font-bold mb-2">Tabla de Avances Fisicos</h3>
@@ -645,7 +596,24 @@ export const ProyectoDetalle = () => {
                 </div>
             )}
 
-
+            {/* Tabla Fechas */}
+            <div>
+                <div>
+                    <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
+                </div>
+                <div>
+                    <h3>Fecha Inicio</h3>
+                </div>
+                <div>
+                    <h3>Fecha Termino</h3>
+                </div>
+                <div>
+                    <h3>Aumento</h3>
+                </div>
+                <div>
+                    <h3>Fecha Actualizada (Fecha de Termino + Aumento)</h3>
+                </div>
+            </div>
 
             {/* Tabla FOOTER */}
             <div className="mt-10">
