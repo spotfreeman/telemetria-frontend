@@ -69,8 +69,12 @@ export const Lista = () => {
 
     return (
         <div className="flex flex-col items-center mt-8 w-full">
+            <div>
+                <h1 className="text-3xl font-bold mb-4">Gestión de Proyectos</h1>
+                <p className="text-gray-600">Aquí puedes ver, crear y gestionar tus proyectos.</p>
+            </div>
             <div className="w-full max-w-3xl flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-2">
-                <h2 className="text-2xl font-bold">Lista de Proyectos</h2>
+                <h2 className="text-2xl font-bold">Buscador</h2>
                 <div className="flex gap-2 w-full md:w-auto">
                     { /* Campo de búsqueda por código */}
                     <input
@@ -150,7 +154,7 @@ export const Lista = () => {
                 </div>
             )}
 
-            <table className="w-auto border border-gray-300 rounded-lg overflow-hidden shadow">
+            <table className="w-full border border-gray-300 rounded-lg overflow-hidden shadow">
                 <thead>
                     <tr className="bg-blue-700 text-white">
                         <th className="px-4 py-2 border-b border-gray-300 text-center">Código</th>
