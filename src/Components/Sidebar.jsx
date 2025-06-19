@@ -17,6 +17,7 @@ function Sidebar() {
 
         // { to: "/login", icon: <ServerIcon className="h-5 w-5" />, label: "Iniciar Sesión v1" },
 
+        { to: "/bienvenida", icon: <ServerIcon className="h-5 w-5" />, label: "Bienvenida" },
 
         { to: "/proyectos", icon: <ServerIcon className="h-5 w-5" />, label: "Proyectos" },
         { to: "/datos", icon: <ServerIcon className="h-5 w-5" />, label: "Rpi Historico" },
@@ -25,7 +26,6 @@ function Sidebar() {
         { to: "/notas", icon: <ServerIcon className="h-5 w-5" />, label: "Notas" },
         { to: "/calendario", icon: <ServerIcon className="h-5 w-5" />, label: "Calendario" },
         { to: "/archivos", icon: <ServerIcon className="h-5 w-5" />, label: "Archivos" },
-        { to: "/bienvenida", icon: <ServerIcon className="h-5 w-5" />, label: "Bienvenida" },
 
     ];
 
@@ -39,7 +39,7 @@ function Sidebar() {
         if (link.to === "/archivos" && !token) return false;
         if (link.to === "/tempdata" && !token) return false;
         if (link.to === "/datos" && !token) return false;
-
+        if (link.to === "/bienvenida" && !token) return false;
 
         return true;
     });
@@ -47,7 +47,7 @@ function Sidebar() {
     // Función para cerrar sesión
     const handleLogout = () => {
         localStorage.removeItem("token");
-        navigate("/login");
+        navigate("/login/login2");
     };
 
     return (
