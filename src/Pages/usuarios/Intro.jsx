@@ -34,8 +34,8 @@ export const Intro = () => {
             </div>
             <div className="relative mx-auto max-w-7xl py-24 sm:py-32 lg:px-8 lg:py-40">
                 <div className="pr-6 pl-6 md:ml-auto md:w-2/3 md:pl-16 lg:w-1/2 lg:pr-0 lg:pl-24 xl:pl-32">
-                    <h2 className="text-base/7 font-semibold text-indigo-400">Award winning support</h2>
-                    <p className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-5xl">We’re here to help</p>
+                    <h2 className="text-base/7 font-semibold text-indigo-400">Plataforma</h2>
+                    <p className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-5xl">Gestion de Informacion</p>
                     <p className="mt-6 text-base/7 text-gray-300">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et, egestas tempus tellus etiam sed. Quam a
                         scelerisque amet ullamcorper eu enim et fermentum, augue. Aliquet amet volutpat quisque ut interdum
@@ -43,10 +43,10 @@ export const Intro = () => {
                     </p>
                     <div className="mt-8">
                         <a
-                            href="#"
+                            href="https://telemetria-frontend.onrender.com/login/login2"
                             className="inline-flex rounded-md bg-white/10 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                         >
-                            Visit the help center
+                            Inicia sesión
                         </a>
                     </div>
                 </div>

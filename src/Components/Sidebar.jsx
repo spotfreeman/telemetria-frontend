@@ -54,11 +54,15 @@ function Sidebar() {
         <aside className="w-56 bg-gradient-to-b from-blue-900 to-gray-800 text-white min-h-screen flex flex-col py-6 px-2 shadow-lg">
             <div className="mb-8 flex flex-col items-center justify-center">
                 <span className="text-xl font-bold tracking-wide text-blue-300">Telemetría</span>
-                {usuario && (
+                {token && usuario && (
                     <div className="mt-4 flex flex-col items-center">
-                        <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-blue-200 text-blue-800 font-bold text-xl">
+                        <button
+                            onClick={() => navigate("/usuarioconfig")}
+                            className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-blue-200 text-blue-800 font-bold text-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition hover:scale-105"
+                            title="Editar información personal"
+                        >
                             {usuario.charAt(0).toUpperCase()}
-                        </span>
+                        </button>
                         <span className="mt-2 text-blue-100 text-sm">{usuario}</span>
                     </div>
                 )}
