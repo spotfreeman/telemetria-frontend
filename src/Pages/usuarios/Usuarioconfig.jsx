@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Usuarioconfig = () => {
+export const Usuarioconfig = () => {
     const [form, setForm] = useState({
         username: "",
         email: "",
