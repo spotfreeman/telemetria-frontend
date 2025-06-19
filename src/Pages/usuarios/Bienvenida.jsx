@@ -20,7 +20,7 @@ export const Bienvenida = () => {
                 if (res.status === 401) {
                     // Token inválido o vencido
                     // localStorage.removeItem('token');
-                    //window.location.href = '/login/login2';
+                    // window.location.href = '/login/login2';
                     throw new Error('No autorizado');
                 }
                 if (!res.ok) throw new Error('Error en la petición');
