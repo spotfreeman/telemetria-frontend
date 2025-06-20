@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'react';
+
 import { HomeIcon } from '@heroicons/react/20/solid';
 import { ServerIcon } from '@heroicons/react/16/solid';
 
+import { ValorUF } from './ValorUF'; // Asegúrate de que este componente esté correctamente importado
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -31,8 +34,11 @@ function Sidebar() {
     ];
 
     const filteredLinks = links.filter(link => {
+        // Si no hay token, solo mostrar el login
         if (link.to === "/login/login2" && token) return false;
+        if (link.to === "/" && token) return false;
 
+        // Si hay token, mostrar todos los enlaces excepto el login
         if (link.to === "/proyectos" && !token) return false;
         if (link.to === "/server" && !token) return false;
         if (link.to === "/notas" && !token) return false;
@@ -65,6 +71,7 @@ function Sidebar() {
                             {nombre.charAt(0).toUpperCase()}
                         </button>
                         <span className="mt-2 text-blue-100 text-sm">{nombre}</span>
+                        <ValorUF />
                     </div>
                 )}
             </div>
