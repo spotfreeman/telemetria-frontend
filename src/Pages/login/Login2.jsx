@@ -5,14 +5,17 @@ export const Login2 = () => {
 
     const [form, setForm] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
     const handleSubmit = async e => {
         e.preventDefault();
         setError("");
-        console.log("Informacion enviada ", form);
+        setLoading(true);
+        //console.log("Informacion enviada ", form);
 
         const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/login", {
             method: "POST",
@@ -20,7 +23,7 @@ export const Login2 = () => {
             body: JSON.stringify(form),
         });
         const data = await res.json();
-        console.log(data);
+        //console.log(data);
 
         if (res.ok && data.token) {
             localStorage.setItem("token", data.token);
@@ -30,6 +33,7 @@ export const Login2 = () => {
         } else {
             setError(data.message || "Usuario o contraseña incorrectos");
         }
+        setLoading(false);
     };
 
     return (
