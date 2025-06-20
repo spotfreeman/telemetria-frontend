@@ -15,7 +15,7 @@ export const Login2 = () => {
         e.preventDefault();
         setError("");
         setLoading(true);
-        //console.log("Informacion enviada ", form);
+        console.log("Informacion enviada ", form);
 
         const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/login", {
             method: "POST",
@@ -23,7 +23,7 @@ export const Login2 = () => {
             body: JSON.stringify(form),
         });
         const data = await res.json();
-        //console.log(data);
+        console.log(data);
 
         if (res.ok && data.token) {
             localStorage.setItem("token", data.token);

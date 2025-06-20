@@ -62,7 +62,7 @@ function Sidebar() {
                             className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-blue-200 text-blue-800 font-bold text-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition hover:scale-105"
                             title="Editar información personal"
                         >
-                            {usuario.charAt(0).toUpperCase()}
+                            {nombre.charAt(0).toUpperCase()}
                         </button>
                         <span className="mt-2 text-blue-100 text-sm">{nombre}</span>
                     </div>
