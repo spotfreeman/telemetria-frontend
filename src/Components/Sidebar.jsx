@@ -9,6 +9,7 @@ function Sidebar() {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const usuario = localStorage.getItem("usuario");
+    const nombre = localStorage.getItem("nombre");
 
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
@@ -63,7 +64,7 @@ function Sidebar() {
                         >
                             {usuario.charAt(0).toUpperCase()}
                         </button>
-                        <span className="mt-2 text-blue-100 text-sm">{usuario}</span>
+                        <span className="mt-2 text-blue-100 text-sm">{nombre}</span>
                     </div>
                 )}
             </div>
