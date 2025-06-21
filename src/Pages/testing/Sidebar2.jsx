@@ -1,15 +1,15 @@
 import React from 'react'
-import { CalendarIcon, ChartPieIcon, DocumentDuplicateIcon, FolderIcon, HomeIcon, UsersIcon } from '@heroicons/react/24/outline';
+import { HomeIcon } from '@heroicons/react/24/outline';
 
 export const Sidebar2 = () => {
 
     const navigation = [
         { name: 'Dashboard', href: '#', icon: HomeIcon, count: '5', current: true },
-        { name: 'Team', href: '#', icon: UsersIcon, current: false },
-        { name: 'Projects', href: '#', icon: FolderIcon, count: '12', current: false },
-        { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
-        { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-        { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+        { name: 'Team', href: '#', icon: HomeIcon, current: false },
+        { name: 'Projects', href: '#', icon: HomeIcon, count: '12', current: false },
+        { name: 'Calendar', href: '#', icon: HomeIcon, count: '20+', current: false },
+        { name: 'Documents', href: '#', icon: HomeIcon, current: false },
+        { name: 'Reports', href: '#', icon: HomeIcon, current: false },
     ]
     const teams = [
         { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
