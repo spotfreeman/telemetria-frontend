@@ -24,6 +24,13 @@ function Sidebar() {
     const usuario = localStorage.getItem("usuario");
     const nombre = localStorage.getItem("nombre");
 
+    const hoy = new Date();
+    const fechaFormateada = hoy.toLocaleDateString('es-CL', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    });
+
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
 
@@ -87,6 +94,7 @@ function Sidebar() {
                             {nombre.charAt(0).toUpperCase()}
                         </button>
                         <span className="mt-2 text-blue-100 text-sm">{nombre}</span>
+                        <span className="text-blue-200 text-xs">{fechaFormateada}</span>
                         <ValorUF />
                     </div>
                 )}
