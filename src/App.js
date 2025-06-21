@@ -22,7 +22,7 @@ import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
 
 {/* Testing */ }
-import { SidebarV2 } from './Pages/testing/SidebarV2';
+import SidebarV2 from './Pages/testing/SidebarV2';
 
 
 function App() {
