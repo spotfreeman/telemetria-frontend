@@ -18,9 +18,12 @@ import { Intro } from './Pages/usuarios/Intro';
 import { Usuarioconfig } from './Pages/usuarios/Usuarioconfig';
 import { Roles } from './Pages/usuarios/Roles';
 
-
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
+
+{/* Testing */ }
+import { Sidebarv2 } from './Pages/testing/sidebarV2';
+
 
 function App() {
   useEffect(() => {
@@ -48,6 +51,11 @@ function App() {
             <Route path='/bienvenida' element={<Bienvenida />} />
             <Route path="/usuarioconfig" element={<Usuarioconfig />} />
             <Route path="/roles" element={<Roles />} />
+
+
+            {/* Rutas de testing */}
+            <Route path="/sidebarV2" element={<Sidebarv2 />} />
+
 
             {/* Rutas de proyectos */}
 
