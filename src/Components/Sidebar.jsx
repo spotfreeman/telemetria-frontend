@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+// Importa los íconos de Heroicons
 import { HomeIcon } from '@heroicons/react/20/solid';
 import { ServerIcon } from '@heroicons/react/16/solid';
 
+// Importa el componente ValorUF
 import { ValorUF } from './ValorUF'; // Asegúrate de que este componente esté correctamente importado
 
 
