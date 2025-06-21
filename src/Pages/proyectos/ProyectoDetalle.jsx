@@ -32,7 +32,11 @@ export const ProyectoDetalle = () => {
     const [fechas, setFechas] = useState([]);
     const [showFechasModal, setShowFechasModal] = useState(false);
     const [editFechasIdx, setEditFechasIdx] = useState(null);
-    const [fechasForm, setFechasForm] = useState({ fechainicio: "", fechafin: "", aumento: 0 });
+    const [fechasForm, setFechasForm] = useState({
+        fechainicio: "",
+        fechafin: "",
+        aumento: 0
+    });
 
     const contenidoRef = useRef();
 
@@ -106,7 +110,9 @@ export const ProyectoDetalle = () => {
     };
 
     // Fechas importantes
-    const handleFechasChange = e => setFechasForm({ ...fechasForm, [e.target.name]: e.target.value });
+    const handleFechasChange = e => {
+        setFechasForm({ ...fechasForm, [e.target.name]: e.target.value });
+    };
 
     const handleAgregarFechas = async e => {
         e.preventDefault();
@@ -268,6 +274,17 @@ export const ProyectoDetalle = () => {
         saveAs(docx, `${proyecto.nombre || "proyecto"}.docx`);
     };
 
+    // Función para parsear fechas tipo 'YYYY-MM-DD' a objeto Date seguro
+    function parseFecha(fechaStr) {
+        if (!fechaStr) return null;
+        if (fechaStr instanceof Date) return fechaStr;
+        if (typeof fechaStr === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
+            const [anio, mes, dia] = fechaStr.split('-').map(Number);
+            return new Date(anio, mes - 1, dia);
+        }
+        return new Date(fechaStr);
+    }
+
     if (loading) return <div className="p-8">Cargando...</div>;
     if (error) return <div className="p-8 text-red-600">{error}</div>;
     if (!proyecto) return <div className="p-8">No se encontró el proyecto.</div>;
@@ -411,12 +428,12 @@ export const ProyectoDetalle = () => {
                             <tr key={idx}>
                                 <td className="border">
                                     {fecha.fechainicio
-                                        ? new Date(fecha.fechainicio).toLocaleDateString('es-CL')
+                                        ? parseFecha(fecha.fechainicio).toLocaleDateString('es-CL')
                                         : "-"}
                                 </td>
                                 <td className="border">
                                     {fecha.fechafin
-                                        ? new Date(fecha.fechafin).toLocaleDateString('es-CL')
+                                        ? parseFecha(fecha.fechafin).toLocaleDateString('es-CL')
                                         : "-"}
                                 </td>
                                 <td className="border">
@@ -424,11 +441,16 @@ export const ProyectoDetalle = () => {
                                 </td>
                                 <td className="border">
                                     {fecha.fechaactualizada
-                                        ? new Date(fecha.fechaactualizada).toLocaleDateString('es-CL')
+                                        ? parseFecha(fecha.fechaactualizada).toLocaleDateString('es-CL')
                                         : "-"}
                                 </td>
                                 <td className="border">
-                                    {/* Acciones */}
+                                    <button
+                                        className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                                        onClick={() => handleEditarFechas(idx)}
+                                    >
+                                        Editar
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -445,19 +467,51 @@ export const ProyectoDetalle = () => {
                         <form onSubmit={editFechasIdx !== null ? handleGuardarFechas : handleAgregarFechas} className="flex flex-col gap-4">
                             <div>
                                 <label className="block mb-1">Fecha Inicio</label>
-                                <input type="date" name="fechainicio" value={fechasForm.fechainicio} onChange={handleFechasChange} className="w-full border px-2 py-1 rounded" required />
+                                <input
+                                    type="date"
+                                    name="fechainicio"
+                                    value={fechasForm.fechainicio}
+                                    onChange={handleFechasChange}
+                                    className="w-full border px-2 py-1 rounded"
+                                    required
+                                />
                             </div>
                             <div>
                                 <label className="block mb-1">Fecha Fin</label>
-                                <input type="date" name="fechafin" value={fechasForm.fechafin} onChange={handleFechasChange} className="w-full border px-2 py-1 rounded" required />
+                                <input
+                                    type="date"
+                                    name="fechafin"
+                                    value={fechasForm.fechafin}
+                                    onChange={handleFechasChange}
+                                    className="w-full border px-2 py-1 rounded"
+                                    required
+                                />
                             </div>
                             <div>
                                 <label className="block mb-1">Aumento (días)</label>
-                                <input type="number" name="aumento" value={fechasForm.aumento} onChange={handleFechasChange} className="w-full border px-2 py-1 rounded" required />
+                                <input
+                                    type="number"
+                                    name="aumento"
+                                    value={fechasForm.aumento}
+                                    onChange={handleFechasChange}
+                                    className="w-full border px-2 py-1 rounded"
+                                    required
+                                />
                             </div>
                             <div className="flex justify-end gap-2">
-                                <button type="button" className="bg-gray-400 text-white px-3 py-1 rounded" onClick={() => setShowFechasModal(false)}>Cancelar</button>
-                                <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">Guardar</button>
+                                <button
+                                    type="button"
+                                    className="bg-gray-400 text-white px-3 py-1 rounded"
+                                    onClick={() => setShowFechasModal(false)}
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="bg-blue-600 text-white px-3 py-1 rounded"
+                                >
+                                    Guardar
+                                </button>
                             </div>
                         </form>
                     </div>
