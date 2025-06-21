@@ -114,21 +114,36 @@ export const ProyectoDetalle = () => {
         }
     };
 
-    // Fechas importantes
+    // Fechas importantes (INTEGRACIÓN SEGURA)
     const handleFechasChange = e => {
         setFechasForm({ ...fechasForm, [e.target.name]: e.target.value });
     };
 
+    const guardarFechasEnBackend = async (nuevasFechas) => {
+        const token = localStorage.getItem("token");
+        const proyectoActualizado = { ...proyecto, fechas: nuevasFechas };
+        await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(proyectoActualizado)
+        });
+        // Refresca el proyecto
+        await fetchProyecto();
+    };
+
     const handleAgregarFechas = async e => {
         e.preventDefault();
-        setFechas([...fechas, { ...fechasForm }]);
+        const nuevasFechas = [...(proyecto.fechas || []), { ...fechasForm }];
+        await guardarFechasEnBackend(nuevasFechas);
         setShowFechasModal(false);
         setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
-        // Aquí puedes hacer un fetch/PUT para actualizar en el backend si lo necesitas
     };
 
     const handleEditarFechas = idx => {
-        const f = fechas[idx];
+        const f = proyecto.fechas[idx];
         setFechasForm({
             fechainicio: f.fechainicio ? f.fechainicio.slice(0, 10) : "",
             fechafin: f.fechafin ? f.fechafin.slice(0, 10) : "",
@@ -140,20 +155,18 @@ export const ProyectoDetalle = () => {
 
     const handleGuardarFechas = async e => {
         e.preventDefault();
-        const nuevasFechas = [...fechas];
+        const nuevasFechas = [...proyecto.fechas];
         nuevasFechas[editFechasIdx] = { ...fechasForm };
-        setFechas(nuevasFechas);
+        await guardarFechasEnBackend(nuevasFechas);
         setShowFechasModal(false);
         setEditFechasIdx(null);
         setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
-        // Aquí puedes hacer un fetch/PUT para actualizar en el backend si lo necesitas
     };
 
-    const handleBorrarFechas = idx => {
+    const handleBorrarFechas = async idx => {
         if (window.confirm("¿Seguro que deseas borrar esta fila?")) {
-            const nuevasFechas = fechas.filter((_, i) => i !== idx);
-            setFechas(nuevasFechas);
-            // Aquí puedes hacer un fetch/PUT para actualizar en el backend si lo necesitas
+            const nuevasFechas = proyecto.fechas.filter((_, i) => i !== idx);
+            await guardarFechasEnBackend(nuevasFechas);
         }
     };
 
@@ -425,7 +438,7 @@ export const ProyectoDetalle = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {fechas.map((fecha, idx) => (
+                        {proyecto.fechas?.map((fecha, idx) => (
                             <tr key={idx}>
                                 <td className="border">
                                     {fecha.fechainicio
