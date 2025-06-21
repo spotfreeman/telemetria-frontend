@@ -136,7 +136,10 @@ export const ProyectoDetalle = () => {
 
     const handleAgregarFechas = async e => {
         e.preventDefault();
-        const nuevasFechas = [...(proyecto.fechas || []), { ...fechasForm }];
+        const nuevasFechas = [
+            ...(proyecto.fechas || []),
+            { ...fechasForm, aumento: Number(fechasForm.aumento) } // <-- conversión aquí
+        ];
         await guardarFechasEnBackend(nuevasFechas);
         setShowFechasModal(false);
         setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
@@ -156,7 +159,7 @@ export const ProyectoDetalle = () => {
     const handleGuardarFechas = async e => {
         e.preventDefault();
         const nuevasFechas = [...proyecto.fechas];
-        nuevasFechas[editFechasIdx] = { ...fechasForm };
+        nuevasFechas[editFechasIdx] = { ...fechasForm, aumento: Number(fechasForm.aumento) }; // <-- conversión aquí
         await guardarFechasEnBackend(nuevasFechas);
         setShowFechasModal(false);
         setEditFechasIdx(null);
