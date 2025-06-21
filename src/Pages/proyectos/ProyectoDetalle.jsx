@@ -206,11 +206,16 @@ export const ProyectoDetalle = () => {
 
     const handleGuardarDetalleMes = async (e) => {
         e.preventDefault();
+        // Copia el proyecto actual
+        const proyectoActualizado = { ...proyecto };
+        // Actualiza el detalle en el array
+        proyectoActualizado.detalledelmes[editandoDetalleIdx] = { ...detalleEdit };
+        // Envía el proyecto completo actualizado
         const token = localStorage.getItem("token");
-        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}/detalledelmes/${editandoDetalleIdx}`, {
+        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-            body: JSON.stringify(detalleEdit)
+            body: JSON.stringify(proyectoActualizado)
         });
         if (res.ok) {
             setEditandoDetalleIdx(null);
@@ -220,10 +225,16 @@ export const ProyectoDetalle = () => {
 
     const handleBorrarDetalleMes = async (idx) => {
         if (!window.confirm("¿Seguro que deseas borrar este detalle?")) return;
+        // Copia el proyecto actual
+        const proyectoActualizado = { ...proyecto };
+        // Elimina el detalle del array
+        proyectoActualizado.detalledelmes = proyectoActualizado.detalledelmes.filter((_, i) => i !== idx);
+        // Envía el proyecto completo actualizado
         const token = localStorage.getItem("token");
-        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}/detalledelmes/${idx}`, {
-            method: "DELETE",
-            headers: { "Authorization": `Bearer ${token}` }
+        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+            body: JSON.stringify(proyectoActualizado)
         });
         if (res.ok) {
             fetchProyecto();
