@@ -1,3 +1,5 @@
+import React from 'react'
+
 import {
     CalendarIcon,
     ChartPieIcon,
@@ -25,7 +27,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-function SidebarV2() {
+export const SidebarV2 = () => {
     return (
         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6">
             <div className="flex h-16 shrink-0 items-center">

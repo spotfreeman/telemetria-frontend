@@ -7,7 +7,6 @@ import { TempData } from './Pages/TempData';
 import { Server } from './Pages/Server';
 import { Notas } from './Pages/Notas';
 import { Lista } from './Pages/proyectos/Lista';
-import { Login } from './Pages/Login';
 import { ProyectoDetalle } from './Pages/proyectos/ProyectoDetalle';
 import { Calendario } from './Pages/calendario/Calendario';
 import { Archivos } from './Pages/archivos/Archivos';
@@ -24,6 +23,8 @@ import PrivateRoute from './Components/PrivateRoute';
 {/* Testing */ }
 import SidebarV2 from './Pages/testing/SidebarV2';
 
+{ /* Sin uso */ }
+import { Login } from './Pages/Login';
 
 function App() {
   useEffect(() => {
