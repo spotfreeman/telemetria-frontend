@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
-import { HiOutlineAdjustments } from "react-icons/hi";
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { useParams, Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 import { saveAs } from "file-saver";
 import htmlDocx from "html-docx-js/dist/html-docx";
+
+// Import icons
+import { HiOutlineAdjustments } from "react-icons/hi";
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { TrashIcon, PencilSquareIcon, ArroeLef } from '@heroicons/react/24/solid';
 
 export const ProyectoDetalle = () => {
     const { id } = useParams();
@@ -22,6 +24,9 @@ export const ProyectoDetalle = () => {
     const [showGeoModal, setShowGeoModal] = useState(false);
     const [editandoDetalleIdx, setEditandoDetalleIdx] = useState(null);
     const [detalleEdit, setDetalleEdit] = useState({ mes: "", anio: "", descripcion: "" });
+    const [fechas, setFechas] = useState([]); // Array de fechas
+    const [showModal, setShowModal] = useState(false);
+    const [editIdx, setEditIdx] = useState(null);
     const contenidoRef = useRef();
 
     // Función para obtener el proyecto
@@ -436,22 +441,41 @@ export const ProyectoDetalle = () => {
                 <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
                     <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
                 </div>
-                <table className="w-full border border-gray-300 rounded mb-8">
+                <table className="w-full table-fixed border border-gray-300 border-collapse rounded mb-8">
                     <thead className="bg-blue-100">
-                        <tr className="text-center">
-                            <th className="w-1/4 p-2 border border-gray-100">Fecha Inicio</th>
-                            <th className="w-1/4 p-2 border border-gray-100">Fecha Termino</th>
-                            <th className="w-1/4 p-2 border border-gray-100">Aumento</th>
-                            <th className="w-1/4 p-2 border border-gray-100">Fecha Actualizada (Fecha de Termino + Aumento)</th>
+                        <tr>
+                            <th className="w-1/4 border">Fecha Inicio</th>
+                            <th className="w-1/4 border">Fecha Fin</th>
+                            <th className="w-1/4 border">Aumento</th>
+                            <th className="w-1/4 border">Fecha Actualizada</th>
+                            <th className="w-1/4 border">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="text-center">
-                            <td className="w-1/4 p-2 border border-gray-100">01/01/2025</td>
-                            <td className="w-1/4 p-2 border border-gray-100">30/06/2025</td>
-                            <td className="w-1/4 p-2 border border-gray-100">100 dias</td>
-                            <td className="w-1/4 p-2 border border-gray-100">30/09/2025</td>
-                        </tr>
+                        {fechas.map((fecha, idx) => (
+                            <tr key={idx}>
+                                <td className="border">{fecha.fechainicio?.slice(0, 10)}</td>
+                                <td className="border">{fecha.fechafin?.slice(0, 10)}</td>
+                                <td className="border">{fecha.aumento}</td>
+                                <td className="border">{fecha.fechaactualizada ? fecha.fechaactualizada.slice(0, 10) : "-"}</td>
+                                <td className="border">
+                                    <button
+                                        className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                                        onClick={() => {
+                                            setForm({
+                                                fechainicio: fecha.fechainicio?.slice(0, 10) || "",
+                                                fechafin: fecha.fechafin?.slice(0, 10) || "",
+                                                aumento: fecha.aumento || 0
+                                            });
+                                            setEditIdx(idx);
+                                            setShowModal(true);
+                                        }}
+                                    >
+                                        Editar
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

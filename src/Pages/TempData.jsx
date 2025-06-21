@@ -43,7 +43,8 @@ export const TempData = () => {
 
     return (
         <div className="flex flex-col items-center mt-8 w-full">
-            <h2 className="text-2xl font-bold mb-4">Temperatura CPU RaspberryPi 3</h2>
+            <h2 className="text-2xl font-bold mb-4">Telemetria Raspberry Pi +3</h2>
+            <h3 className="text-xl">Registros actualizados cada 60 minutos </h3>
             <p className="mb-4">Total de registros: {datos.length}</p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 w-full max-w-6xl">
@@ -60,7 +61,7 @@ export const TempData = () => {
                     <div className="text-2xl font-bold text-green-600">{avg}°C</div>
                 </div>
                 <div className="bg-white rounded shadow p-4 text-center">
-                    <div className="text-sm text-gray-500">Almacenamiento</div>
+                    <div className="text-sm text-gray-500">Almacenamiento Disponible</div>
                     <div className="text-2xl font-bold text-green-600">{almacenamiento} %</div>
                 </div>
             </div>
@@ -73,7 +74,7 @@ export const TempData = () => {
                             <tr className="bg-blue-700 text-white">
                                 <th className="px-4 py-2 border-b border-gray-300 text-center">Fecha y Hora</th>
                                 <th className="px-4 py-2 border-b border-gray-300 text-center">Temperatura</th>
-                                <th className="px-4 py-2 border-b border-gray-300 text-center">Almacenamiento</th>
+                                <th className="px-4 py-2 border-b border-gray-300 text-center">Almacenamiento Disponible</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -81,7 +82,7 @@ export const TempData = () => {
                                 <tr key={dato._id || idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
                                     <td className="px-4 py-2 text-center border-b border-gray-300">{dato.fecha_hora}</td>
                                     <td className="px-4 py-2 text-center border-b border-gray-300">{dato.temperatura}</td>
-                                    <td className="px-4 py-2 text-center border-b border-gray-300">{dato.almacenamiento} %</td>
+                                    <td className="px-4 py-2 text-center border-b border-gray-300">{dato.almacenamiento} Gb</td>
                                 </tr>
                             ))}
                         </tbody>
