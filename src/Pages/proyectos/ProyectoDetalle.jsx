@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-
 import { HiOutlineAdjustments } from "react-icons/hi";
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
-
 import { useParams, Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { saveAs } from "file-saver";
@@ -11,41 +9,49 @@ import htmlDocx from "html-docx-js/dist/html-docx";
 export const ProyectoDetalle = () => {
     const { id } = useParams();
     const [proyecto, setProyecto] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
     const [editando, setEditando] = useState(false);
     const [form, setForm] = useState({ codigo: "", nombre: "", estado: "", descripcion: "" });
     const [mensaje, setMensaje] = useState("");
     const [nuevoAvance, setNuevoAvance] = useState({ mes: "", anio: "", valor: "" });
     const [mostrarEvolucion, setMostrarEvolucion] = useState(true);
-    const [geoForm, setGeoForm] = useState({
-        latitud: proyecto?.georeferencia?.latitud || "",
-        longitud: proyecto?.georeferencia?.longitud || ""
-    });
+    const [geoForm, setGeoForm] = useState({ latitud: "", longitud: "" });
     const [nuevoDetalleMes, setNuevoDetalleMes] = useState({ mes: "", anio: "", descripcion: "" });
     const [showGeoModal, setShowGeoModal] = useState(false);
+    const [editandoDetalleIdx, setEditandoDetalleIdx] = useState(null);
+    const [detalleEdit, setDetalleEdit] = useState({ mes: "", anio: "", descripcion: "" });
     const contenidoRef = useRef();
 
-    useEffect(() => {
+    // Función para obtener el proyecto
+    const fetchProyecto = async () => {
+        setLoading(true);
+        setError("");
         const token = localStorage.getItem("token");
-        fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
-                setProyecto(data);
-                setForm({
-                    codigo: data.codigo || "",
-                    nombre: data.nombre || "",
-                    estado: data.estado || "",
-                    descripcion: data.descripcion || ""
-                });
-                setGeoForm({
-                    latitud: data.georeferencia?.latitud || "",
-                    longitud: data.georeferencia?.longitud || ""
-                });
+        try {
+            const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
             });
-    }, [id]);
+            if (!res.ok) throw new Error("Error al cargar el proyecto");
+            const data = await res.json();
+            setProyecto(data);
+            setForm({
+                codigo: data.codigo || "",
+                nombre: data.nombre || "",
+                estado: data.estado || "",
+                descripcion: data.descripcion || ""
+            });
+            setGeoForm({
+                latitud: data.georeferencia?.latitud || "",
+                longitud: data.georeferencia?.longitud || ""
+            });
+        } catch (err) {
+            setError(err.message);
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => { fetchProyecto(); }, [id]);
 
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -61,17 +67,13 @@ export const ProyectoDetalle = () => {
         const token = localStorage.getItem("token");
         const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
             body: JSON.stringify(form)
         });
         if (res.ok) {
-            const actualizado = await res.json();
-            setProyecto(actualizado);
             setEditando(false);
             setMensaje("Proyecto actualizado correctamente.");
+            fetchProyecto();
         } else {
             setMensaje("Error al actualizar el proyecto.");
         }
@@ -188,17 +190,51 @@ export const ProyectoDetalle = () => {
                 .mt-10 { margin-top: 2.5rem; }
             </style>
         `;
-        const contenidoHTML = estilos + contenidoRef.current.innerHTML;
         const docx = htmlDocx.asBlob(`<html><head>${estilos}</head><body>${contenidoRef.current.innerHTML}</body></html>`);
         saveAs(docx, `${proyecto.nombre || "proyecto"}.docx`);
     };
 
-    if (!proyecto) {
-        return <div className="p-8">Cargando...</div>;
-    }
+    const handleEditarDetalleMes = (idx) => {
+        const detalle = proyecto.detalledelmes[idx];
+        setDetalleEdit({
+            mes: detalle.mes,
+            anio: detalle.anio,
+            descripcion: detalle.descripcion
+        });
+        setEditandoDetalleIdx(idx);
+    };
+
+    const handleGuardarDetalleMes = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem("token");
+        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}/detalledelmes/${editandoDetalleIdx}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+            body: JSON.stringify(detalleEdit)
+        });
+        if (res.ok) {
+            setEditandoDetalleIdx(null);
+            fetchProyecto();
+        }
+    };
+
+    const handleBorrarDetalleMes = async (idx) => {
+        if (!window.confirm("¿Seguro que deseas borrar este detalle?")) return;
+        const token = localStorage.getItem("token");
+        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}/detalledelmes/${idx}`, {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (res.ok) {
+            fetchProyecto();
+        }
+    };
+
+    if (loading) return <div className="p-8">Cargando...</div>;
+    if (error) return <div className="p-8 text-red-600">{error}</div>;
+    if (!proyecto) return <div className="p-8">No se encontró el proyecto.</div>;
 
     return (
-
         <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-4" ref={contenidoRef}>
             <button
                 className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
@@ -636,6 +672,104 @@ export const ProyectoDetalle = () => {
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            {/* Detalle del Mes Actualizado */}
+            <div className="mt-10">
+                <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
+                <table className="min-w-full border mt-2">
+                    <thead>
+                        <tr className="bg-blue-700 text-white">
+                            <th className="px-4 py-2 border">Mes</th>
+                            <th className="px-4 py-2 border">Año</th>
+                            <th className="px-4 py-2 border">Descripción</th>
+                            <th className="px-4 py-2 border">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {proyecto.detalledelmes?.map((detalle, idx) => (
+                            <tr key={idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                                <td className="px-4 py-2 border">{detalle.mes}</td>
+                                <td className="px-4 py-2 border">{detalle.anio}</td>
+                                <td className="px-4 py-2 border">{detalle.descripcion}</td>
+                                <td className="px-4 py-2 border text-center">
+                                    <button
+                                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded mr-2"
+                                        onClick={() => handleEditarDetalleMes(idx)}
+                                        title="Editar"
+                                    >
+                                        Editar
+                                    </button>
+                                    <button
+                                        className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded"
+                                        onClick={() => handleBorrarDetalleMes(idx)}
+                                        title="Borrar"
+                                    >
+                                        Borrar
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                {/* Modal de edición */}
+                {editandoDetalleIdx !== null && (
+                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                        <div className="bg-white rounded shadow-lg p-6 w-full max-w-md">
+                            <h4 className="text-lg font-bold mb-4">Editar Detalle del Mes</h4>
+                            <form onSubmit={handleGuardarDetalleMes} className="flex flex-col gap-3">
+                                <div>
+                                    <label className="block mb-1">Mes</label>
+                                    <input
+                                        type="text"
+                                        name="mes"
+                                        value={detalleEdit.mes}
+                                        onChange={e => setDetalleEdit({ ...detalleEdit, mes: e.target.value })}
+                                        className="w-full border px-2 py-1 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Año</label>
+                                    <input
+                                        type="text"
+                                        name="anio"
+                                        value={detalleEdit.anio}
+                                        onChange={e => setDetalleEdit({ ...detalleEdit, anio: e.target.value })}
+                                        className="w-full border px-2 py-1 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Descripción</label>
+                                    <textarea
+                                        name="descripcion"
+                                        value={detalleEdit.descripcion}
+                                        onChange={e => setDetalleEdit({ ...detalleEdit, descripcion: e.target.value })}
+                                        className="w-full border px-2 py-1 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div className="flex justify-end gap-2 mt-2">
+                                    <button
+                                        type="button"
+                                        className="bg-gray-400 text-white px-3 py-1 rounded"
+                                        onClick={() => setEditandoDetalleIdx(null)}
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-600 text-white px-3 py-1 rounded"
+                                    >
+                                        Guardar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
