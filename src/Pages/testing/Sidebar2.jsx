@@ -1,13 +1,5 @@
 import React from 'react'
-
-import {
-    CalendarIcon,
-    ChartPieIcon,
-    DocumentDuplicateIcon,
-    FolderIcon,
-    HomeIcon,
-    UsersIcon,
-} from '@heroicons/react/24/outline'
+import { CalendarIcon, ChartPieIcon, DocumentDuplicateIcon, FolderIcon, HomeIcon, UsersIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
     { name: 'Dashboard', href: '#', icon: HomeIcon, count: '5', current: true },
