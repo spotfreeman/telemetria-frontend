@@ -13,6 +13,7 @@ export const Notas = () => {
     });
     const [showModal, setShowModal] = useState(false);
     const [editId, setEditId] = useState(null);
+    const [showFormModal, setShowFormModal] = useState(false);
 
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/notas')
@@ -115,7 +116,7 @@ export const Notas = () => {
                         onClick={() => {
                             setForm({ titulo: "", descripcion: "", usuario: "" });
                             setEditId(null);
-                            // Aquí podrías mostrar un modal o enfocar el formulario
+                            setShowFormModal(true);
                         }}
                     >
                         Agregar Nota
@@ -221,7 +222,10 @@ export const Notas = () => {
                                     </button>
                                     <button
                                         className="bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded"
-                                        onClick={() => handleEdit(nota)}
+                                        onClick={() => {
+                                            handleEdit(nota);
+                                            setShowFormModal(true);
+                                        }}
                                         title="Editar"
                                     >
                                         <PencilSquareIcon className="h-5 w-5" />
@@ -236,65 +240,80 @@ export const Notas = () => {
             </div>
 
             {/* Formulario mejorado */}
-            <div className="w-full max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 mb-8">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                    {editId ? "Editar Nota" : "Agregar Nueva Nota"}
-                </h2>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    <div>
-                        <label className="block text-gray-700 font-medium mb-1" htmlFor="titulo">
-                            Título
-                        </label>
-                        <input
-                            id="titulo"
-                            name="titulo"
-                            type="text"
-                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            placeholder="Ej: Revisión de sensores"
-                            value={form.titulo}
-                            onChange={handleChange}
-                            required
-                        />
+            {showFormModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                            {editId ? "Editar Nota" : "Agregar Nueva Nota"}
+                        </h2>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1" htmlFor="titulo">
+                                    Título
+                                </label>
+                                <input
+                                    id="titulo"
+                                    name="titulo"
+                                    type="text"
+                                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    placeholder="Ej: Revisión de sensores"
+                                    value={form.titulo}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1" htmlFor="descripcion">
+                                    Descripción
+                                </label>
+                                <textarea
+                                    id="descripcion"
+                                    name="descripcion"
+                                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+                                    placeholder="Describe la nota aquí..."
+                                    value={form.descripcion}
+                                    onChange={handleChange}
+                                    rows={4}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1" htmlFor="usuario">
+                                    Usuario
+                                </label>
+                                <input
+                                    id="usuario"
+                                    name="usuario"
+                                    type="text"
+                                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    placeholder="Tu nombre"
+                                    value={form.usuario}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    type="button"
+                                    className="bg-gray-400 text-white px-3 py-1 rounded"
+                                    onClick={() => {
+                                        setShowFormModal(false);
+                                        setEditId(null);
+                                    }}
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition-colors"
+                                >
+                                    {editId ? "Actualizar Nota" : "Agregar Nota"}
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <div>
-                        <label className="block text-gray-700 font-medium mb-1" htmlFor="descripcion">
-                            Descripción
-                        </label>
-                        <textarea
-                            id="descripcion"
-                            name="descripcion"
-                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
-                            placeholder="Describe la nota aquí..."
-                            value={form.descripcion}
-                            onChange={handleChange}
-                            rows={4}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 font-medium mb-1" htmlFor="usuario">
-                            Usuario
-                        </label>
-                        <input
-                            id="usuario"
-                            name="usuario"
-                            type="text"
-                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            placeholder="Tu nombre"
-                            value={form.usuario}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition-colors"
-                    >
-                        {editId ? "Actualizar Nota" : "Agregar Nota"}
-                    </button>
-                </form>
-            </div>
-            );
+                </div>
+            )}
         </div>
     );
 };

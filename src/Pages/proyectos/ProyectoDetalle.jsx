@@ -428,8 +428,34 @@ export const ProyectoDetalle = () => {
                         </div>
                     </div>
                 )}
-
             </div>
+
+
+            {/* Tabla Fechas */}
+            <div className="w-full mt-10 text-center">
+                <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
+                    <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
+                </div>
+                <table className="w-full border border-gray-300 rounded mb-8">
+                    <thead className="bg-blue-100">
+                        <tr className="text-center">
+                            <th className="w-1/4 p-2 border border-gray-100">Fecha Inicio</th>
+                            <th className="w-1/4 p-2 border border-gray-100">Fecha Termino</th>
+                            <th className="w-1/4 p-2 border border-gray-100">Aumento</th>
+                            <th className="w-1/4 p-2 border border-gray-100">Fecha Actualizada (Fecha de Termino + Aumento)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr className="text-center">
+                            <td className="w-1/4 p-2 border border-gray-100">01/01/2025</td>
+                            <td className="w-1/4 p-2 border border-gray-100">30/06/2025</td>
+                            <td className="w-1/4 p-2 border border-gray-100">100 dias</td>
+                            <td className="w-1/4 p-2 border border-gray-100">30/09/2025</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
 
             {/* Tabla % de Avances  */}
             <div className="mt-10">
@@ -615,31 +641,6 @@ export const ProyectoDetalle = () => {
             </div>
 
 
-            {/* Tabla Fechas */}
-            <div className="w-full mt-10">
-                <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
-                    <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
-                </div>
-                <table className="w-full border border-gray-300 rounded mb-8">
-                    <thead className="bg-blue-100">
-                        <tr className="text-center">
-                            <th className="w-1/4 p-2">Fecha Inicio</th>
-                            <th className="w-1/4 p-2">Fecha Termino</th>
-                            <th className="w-1/4 p-2">Aumento</th>
-                            <th className="w-1/4 p-2">Fecha Actualizada (Fecha de Termino + Aumento)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr className="text-center">
-                            <td className="w-1/4 p-2">01/01/2025</td>
-                            <td className="w-1/4 p-2">30/06/2025</td>
-                            <td className="w-1/4 p-2">100%</td>
-                            <td className="w-1/4 p-2">30/09/2025</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
 
             {/* Detalle del Mes Actualizado */}
             <div className="mt-10">
@@ -740,35 +741,16 @@ export const ProyectoDetalle = () => {
             </div>
 
             {/* Tabla FOOTER */}
-            <div className="mt-10 ">
 
-                <div className="w-full bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
-                    <Link to="/proyectos" className="inline-flex items-center mt-8 text-blue-700 hover:underline">
-                        <ArrowLeftIcon className="h-5 w-5 mr-2" />
-                        Volver a la lista de proyectos
-                    </Link>
-                </div>
 
-                <table className="w-full border border-gray-300 rounded mb-8">
-                    <thead>
-                        <tr className="bg-blue-100">
-                            <th className="px-4 py-2">Accion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="px-4 py-2 text-center" >
-
-                                <Link to="/proyectos" className="inline-flex items-center mt-8 text-blue-700 hover:underline">
-                                    <ArrowLeftIcon className="h-5 w-5 mr-2" />
-                                    Volver a la lista de proyectos
-                                </Link>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div className="w-full bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
+                <Link to="/proyectos" className="inline-flex items-center mt-8 text-blue-700 hover:underline">
+                    <ArrowLeftIcon className="h-5 w-5 mr-2" />
+                    Volver a la lista de proyectos
+                </Link>
             </div>
+
+
 
         </div>
     );
