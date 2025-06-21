@@ -616,8 +616,8 @@ export const ProyectoDetalle = () => {
 
 
             {/* Tabla Fechas */}
-            <div>
-                <div>
+            <div className="w-full mt-10">
+                <div className="w-full bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
                     <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
                 </div>
                 <div>
