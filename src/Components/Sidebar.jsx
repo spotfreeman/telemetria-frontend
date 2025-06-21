@@ -109,7 +109,7 @@ function Sidebar() {
                 </button>
             )}
             <div className="mt-auto border-t border-blue-900 pt-4 text-xs text-blue-200 text-center opacity-60">
-                &copy; {new Date().getFullYear()} Proyecto Telemetría
+                &copy; {new Date().getFullYear()} ROB-Data
             </div>
         </aside>
     );
