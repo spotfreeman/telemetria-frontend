@@ -2,8 +2,16 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 // Importa los íconos de Heroicons
-import { HomeIcon } from '@heroicons/react/20/solid';
 import { ServerIcon } from '@heroicons/react/16/solid';
+
+import {
+    CalendarIcon,
+    ChartPieIcon,
+    DocumentDuplicateIcon,
+    FolderIcon,
+    HomeIcon,
+    UsersIcon,
+} from '@heroicons/react/24/outline'
 
 // Importa el componente ValorUF
 import { ValorUF } from './ValorUF'; // Asegúrate de que este componente esté correctamente importado
@@ -19,20 +27,20 @@ function Sidebar() {
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
 
-        { to: "/login/login2", icon: <ServerIcon className="h-5 w-5" />, label: "Login" },
+        { to: "/login/login2", icon: <UsersIcon className="h-5 w-5" />, label: "Login" },
 
         // { to: "/login", icon: <ServerIcon className="h-5 w-5" />, label: "Iniciar Sesión v1" },
 
-        { to: "/bienvenida", icon: <ServerIcon className="h-5 w-5" />, label: "Bienvenida" },
+        { to: "/bienvenida", icon: <FolderIcon className="h-5 w-5" />, label: "Bienvenida" },
 
-        { to: "/proyectos", icon: <ServerIcon className="h-5 w-5" />, label: "Proyectos" },
-        { to: "/datos", icon: <ServerIcon className="h-5 w-5" />, label: "Rpi Historico" },
-        { to: "/tempdata", icon: <ServerIcon className="h-5 w-5" />, label: "Rpi Resumen" },
-        { to: "/server", icon: <ServerIcon className="h-5 w-5" />, label: "IP Server" },
-        { to: "/notas", icon: <ServerIcon className="h-5 w-5" />, label: "Notas" },
-        { to: "/calendario", icon: <ServerIcon className="h-5 w-5" />, label: "Calendario" },
-        { to: "/archivos", icon: <ServerIcon className="h-5 w-5" />, label: "Archivos" },
-        { to: "/roles", icon: <ServerIcon className="h-5 w-5" />, label: "Roles" },
+        { to: "/proyectos", icon: <FolderIcon className="h-5 w-5" />, label: "Proyectos" },
+        { to: "/datos", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Historico" },
+        { to: "/tempdata", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Resumen" },
+        { to: "/server", icon: <FolderIcon className="h-5 w-5" />, label: "IP Server" },
+        { to: "/notas", icon: <FolderIcon className="h-5 w-5" />, label: "Notas" },
+        { to: "/calendario", icon: <CalendarIcon className="h-5 w-5" />, label: "Calendario" },
+        { to: "/archivos", icon: <DocumentDuplicateIcon className="h-5 w-5" />, label: "Archivos" },
+        { to: "/roles", icon: <UsersIcon className="h-5 w-5" />, label: "Roles" },
 
 
         //{/* Enlace de testing para la nueva sidebar */ }
