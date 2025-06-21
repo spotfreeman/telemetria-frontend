@@ -5,6 +5,7 @@ import { saveAs } from "file-saver";
 import htmlDocx from "html-docx-js/dist/html-docx";
 import { HiOutlineAdjustments } from "react-icons/hi";
 import { ArrowLeftIcon, TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
+import FechasProyecto from "./FechasProyecto";
 
 export const ProyectoDetalle = () => {
     const { id } = useParams();
@@ -274,17 +275,6 @@ export const ProyectoDetalle = () => {
         saveAs(docx, `${proyecto.nombre || "proyecto"}.docx`);
     };
 
-    // Función para parsear fechas tipo 'YYYY-MM-DD' a objeto Date seguro
-    function parseFecha(fechaStr) {
-        if (!fechaStr) return null;
-        if (fechaStr instanceof Date) return fechaStr;
-        if (typeof fechaStr === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
-            const [anio, mes, dia] = fechaStr.split('-').map(Number);
-            return new Date(anio, mes - 1, dia);
-        }
-        return new Date(fechaStr);
-    }
-
     if (loading) return <div className="p-8">Cargando...</div>;
     if (error) return <div className="p-8 text-red-600">{error}</div>;
     if (!proyecto) return <div className="p-8">No se encontró el proyecto.</div>;
@@ -406,117 +396,7 @@ export const ProyectoDetalle = () => {
             </div>
 
             {/* Fechas importantes */}
-            <div className="w-full mt-10 text-center">
-                <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
-                    <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
-                    <button className="bg-green-600 text-white px-3 py-1 rounded" onClick={() => { setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 }); setEditFechasIdx(null); setShowFechasModal(true); }}>
-                        Agregar Fechas
-                    </button>
-                </div>
-                <table className="w-full table-fixed border border-gray-300 border-collapse rounded mb-8">
-                    <thead className="bg-blue-100">
-                        <tr>
-                            <th className="w-1/4 border">Fecha Inicio</th>
-                            <th className="w-1/4 border">Fecha Fin</th>
-                            <th className="w-1/4 border">Aumento</th>
-                            <th className="w-1/4 border">Fecha Actualizada</th>
-                            <th className="w-1/4 border">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {fechas.map((fecha, idx) => (
-                            <tr key={idx}>
-                                <td className="border">
-                                    {fecha.fechainicio
-                                        ? parseFecha(fecha.fechainicio).toLocaleDateString('es-CL')
-                                        : "-"}
-                                </td>
-                                <td className="border">
-                                    {fecha.fechafin
-                                        ? parseFecha(fecha.fechafin).toLocaleDateString('es-CL')
-                                        : "-"}
-                                </td>
-                                <td className="border">
-                                    {fecha.aumento}
-                                </td>
-                                <td className="border">
-                                    {fecha.fechaactualizada
-                                        ? parseFecha(fecha.fechaactualizada).toLocaleDateString('es-CL')
-                                        : "-"}
-                                </td>
-                                <td className="border">
-                                    <button
-                                        className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                                        onClick={() => handleEditarFechas(idx)}
-                                    >
-                                        Editar
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            {/* Modal Fechas */}
-            {showFechasModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-                        <h2 className="text-xl font-semibold mb-4">
-                            {editFechasIdx !== null ? "Editar Fechas" : "Agregar Fechas"}
-                        </h2>
-                        <form onSubmit={editFechasIdx !== null ? handleGuardarFechas : handleAgregarFechas} className="flex flex-col gap-4">
-                            <div>
-                                <label className="block mb-1">Fecha Inicio</label>
-                                <input
-                                    type="date"
-                                    name="fechainicio"
-                                    value={fechasForm.fechainicio}
-                                    onChange={handleFechasChange}
-                                    className="w-full border px-2 py-1 rounded"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-1">Fecha Fin</label>
-                                <input
-                                    type="date"
-                                    name="fechafin"
-                                    value={fechasForm.fechafin}
-                                    onChange={handleFechasChange}
-                                    className="w-full border px-2 py-1 rounded"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-1">Aumento (días)</label>
-                                <input
-                                    type="number"
-                                    name="aumento"
-                                    value={fechasForm.aumento}
-                                    onChange={handleFechasChange}
-                                    className="w-full border px-2 py-1 rounded"
-                                    required
-                                />
-                            </div>
-                            <div className="flex justify-end gap-2">
-                                <button
-                                    type="button"
-                                    className="bg-gray-400 text-white px-3 py-1 rounded"
-                                    onClick={() => setShowFechasModal(false)}
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="bg-blue-600 text-white px-3 py-1 rounded"
-                                >
-                                    Guardar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+            <FechasProyecto fechas={fechas} setFechas={setFechas} />
 
             {/* Tabla de Avances */}
             <div className="mt-10">
