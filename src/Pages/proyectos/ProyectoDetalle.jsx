@@ -3,6 +3,7 @@ import { HiOutlineAdjustments } from "react-icons/hi";
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { useParams, Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 import { saveAs } from "file-saver";
 import htmlDocx from "html-docx-js/dist/html-docx";
 
@@ -154,24 +155,23 @@ export const ProyectoDetalle = () => {
 
     const handleAgregarDetalleMes = async e => {
         e.preventDefault();
+        // Copia el proyecto actual
+        const proyectoActualizado = { ...proyecto };
+        // Agrega el nuevo detalle al array
+        proyectoActualizado.detalledelmes = [
+            ...(proyectoActualizado.detalledelmes || []),
+            { ...nuevoDetalleMes }
+        ];
+        // Envía el proyecto completo actualizado
         const token = localStorage.getItem("token");
-        const detalledelmesActualizado = [...(proyecto.detalledelmes || []), {
-            mes: parseInt(nuevoDetalleMes.mes),
-            anio: parseInt(nuevoDetalleMes.anio),
-            descripcion: nuevoDetalleMes.descripcion
-        }];
         const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({ ...proyecto, detalledelmes: detalledelmesActualizado })
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+            body: JSON.stringify(proyectoActualizado)
         });
         if (res.ok) {
-            const actualizado = await res.json();
-            setProyecto(actualizado);
-            setNuevoDetalleMes({ mes: "", anio: "", descripcion: "" });
+            setNuevoDetalleMes({ mes: "", anio: "", descripcion: "" }); // Limpia el formulario
+            fetchProyecto();
         }
     };
 
@@ -574,40 +574,36 @@ export const ProyectoDetalle = () => {
                             <td className="px-4 py-2 text-center">
                                 <div className="mt-10 mb-6">
                                     <h3 className="text-lg font-bold mb-2">Agregar detalle del mes</h3>
-                                    <form onSubmit={handleAgregarDetalleMes} className="flex flex-wrap gap-2 items-end">
+                                    <form onSubmit={handleAgregarDetalleMes} className="flex gap-2 mt-4">
                                         <input
-                                            className="border rounded px-2 py-1"
-                                            name="mes"
-                                            type="number"
-                                            min="1"
-                                            max="12"
-                                            placeholder="Mes (1-12)"
+                                            type="text"
+                                            placeholder="Mes"
                                             value={nuevoDetalleMes.mes}
-                                            onChange={handleDetalleMesChange}
+                                            onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, mes: e.target.value })}
+                                            className="border px-2 py-1 rounded"
                                             required
                                         />
                                         <input
-                                            className="border rounded px-2 py-1"
-                                            name="anio"
-                                            type="number"
-                                            min="2000"
-                                            max="2100"
+                                            type="text"
                                             placeholder="Año"
                                             value={nuevoDetalleMes.anio}
-                                            onChange={handleDetalleMesChange}
+                                            onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, anio: e.target.value })}
+                                            className="border px-2 py-1 rounded"
                                             required
                                         />
                                         <input
-                                            className="border rounded px-2 py-1"
-                                            name="descripcion"
                                             type="text"
-                                            placeholder="Descripción del mes"
+                                            placeholder="Descripción"
                                             value={nuevoDetalleMes.descripcion}
-                                            onChange={handleDetalleMesChange}
+                                            onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, descripcion: e.target.value })}
+                                            className="border px-2 py-1 rounded"
                                             required
                                         />
-                                        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="submit">
-                                            Agregar Detalle
+                                        <button
+                                            type="submit"
+                                            className="bg-green-600 text-white px-3 py-1 rounded"
+                                        >
+                                            Agregar
                                         </button>
                                     </form>
                                 </div>
@@ -705,18 +701,18 @@ export const ProyectoDetalle = () => {
                                 <td className="px-4 py-2 border">{detalle.descripcion}</td>
                                 <td className="px-4 py-2 border text-center">
                                     <button
-                                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded mr-2"
+                                        className="bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded mr-2"
                                         onClick={() => handleEditarDetalleMes(idx)}
                                         title="Editar"
                                     >
-                                        Editar
+                                        <PencilSquareIcon className="h-5 w-5" />
                                     </button>
                                     <button
-                                        className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded"
+                                        className="bg-red-600 hover:bg-red-700 text-white p-1 rounded"
                                         onClick={() => handleBorrarDetalleMes(idx)}
                                         title="Borrar"
                                     >
-                                        Borrar
+                                        <TrashIcon className="h-5 w-5" />
                                     </button>
                                 </td>
                             </tr>
