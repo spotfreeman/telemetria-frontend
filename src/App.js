@@ -21,7 +21,7 @@ import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
 
 {/* Testing */ }
-import SidebarV2 from './Pages/testing/SidebarV2';
+import Sidebar2 from './Pages/testing/Sidebar2';
 
 { /* Sin uso */ }
 import { Login } from './Pages/Login';
@@ -55,7 +55,7 @@ function App() {
 
 
             {/* Rutas de testing */}
-            <Route path="/sidebarV2" element={<SidebarV2 />} />
+            <Route path="/sidebar2" element={<Sidebar2 />} />
 
 
             {/* Rutas de proyectos */}

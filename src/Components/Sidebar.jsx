@@ -36,7 +36,7 @@ function Sidebar() {
 
 
         //{/* Enlace de testing para la nueva sidebar */ }
-        { to: "/sidebarV2", icon: <ServerIcon className="h-5 w-5" />, label: "Sidebar V2" }
+        { to: "/sidebar2", icon: <ServerIcon className="h-5 w-5" />, label: "Sidebar V2" }
 
     ];
 
