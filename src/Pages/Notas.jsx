@@ -39,6 +39,7 @@ export const Notas = () => {
                 const notaActualizada = await res.json();
                 setNotas(notas.map(n => n._id === editId ? notaActualizada : n));
                 setEditId(null);
+                setShowFormModal(false); // Cierra el modal al guardar
                 setShowModal(true);
                 setTimeout(() => setShowModal(false), 2000);
             }
@@ -56,11 +57,13 @@ export const Notas = () => {
             if (res.ok) {
                 const notaGuardada = await res.json();
                 setNotas([notaGuardada, ...notas]);
+                setShowFormModal(false); // Cierra el modal al guardar
                 setShowModal(true);
                 setTimeout(() => setShowModal(false), 2000);
             }
         }
         setForm({ titulo: "", descripcion: "", usuario: "" });
+        setEditId(null); // Asegura limpiar el estado de edición
     };
 
     const handleDelete = async (id) => {
@@ -141,7 +144,7 @@ export const Notas = () => {
 
 
             {/* Tabla de Notas */}
-            <div className="mt-8 w- w-full px-4">
+            <div className="mt-8 w- w-full px-1">
                 <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden shadow">
                     <thead>
                         <tr className="bg-gray-600 text-white">
