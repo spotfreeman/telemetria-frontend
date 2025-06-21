@@ -21,7 +21,7 @@ import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
 
 {/* Testing */ }
-import Sidebar2 from './Pages/testing/Sidebar2';
+import { Sidebar2 } from './Pages/testing/Sidebar2';
 
 { /* Sin uso */ }
 import { Login } from './Pages/Login';
