@@ -27,7 +27,6 @@ export const TempData = () => {
         .map(dato => ({
             fecha: dato.fecha_hora,
             temperatura: dato.temperatura,
-            almacenamiento: dato.almacenamiento
         }));
 
     const temperaturas = datos.map(d => d.temperatura);
@@ -35,6 +34,11 @@ export const TempData = () => {
     const min = temperaturas.length ? Math.min(...temperaturas) : '-';
     const avg = temperaturas.length
         ? (temperaturas.reduce((a, b) => a + b, 0) / temperaturas.length).toFixed(2)
+        : '-';
+
+
+    const almacenamiento = datosOrdenados.length && datosOrdenados[0].almacenamiento !== undefined
+        ? datosOrdenados[0].almacenamiento
         : '-';
 
     return (
