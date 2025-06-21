@@ -38,7 +38,7 @@ function Sidebar() {
 
         // { to: "/login", icon: <ServerIcon className="h-5 w-5" />, label: "Iniciar Sesión v1" },
 
-        { to: "/bienvenida", icon: <FolderIcon className="h-5 w-5" />, label: "Bienvenida" },
+        { to: "/bienvenida", icon: <HomeIcon className="h-5 w-5" />, label: "Bienvenida" },
 
         { to: "/proyectos", icon: <FolderIcon className="h-5 w-5" />, label: "Proyectos" },
         { to: "/datos", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Historico" },
@@ -51,7 +51,7 @@ function Sidebar() {
 
 
         //{/* Enlace de testing para la nueva sidebar */ }
-        { to: "/sidebar2", icon: <ServerIcon className="h-5 w-5" />, label: "Sidebar V2" }
+        { to: "/sidebar2", icon: <ServerIcon className="h-5 w-5" />, label: "Test - Sidebar v2" }
 
     ];
 

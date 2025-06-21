@@ -6,6 +6,7 @@ export const Roles = () => {
     const rol = localStorage.getItem("rol");
 
 
+
     return (
         <>
             <div className="flex min-h-full flex-1">
@@ -25,13 +26,17 @@ export const Roles = () => {
                                     <div>
                                         {/* Contenido solo para administradores */}
                                         <span className="inline-flex items-center rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset">
-                                            Administrador
+                                            Administrador Capsule
                                         </span>
+
                                         <p>otro objeto</p>
+
                                         <div>
+
                                             <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                                                 Email
                                             </label>
+
                                             <div className="mt-2">
                                                 <input
                                                     defaultValue="you@example.com"
@@ -49,19 +54,19 @@ export const Roles = () => {
                                 )}
                                 {rol === "Supervisor" && (
                                     <div>
-                                        {/* Contenido solo para administradores */}
+                                        {/* Contenido solo para Supervisor */}
                                         Validacion eres Supervisor.
                                     </div>
                                 )}
                                 {rol === "Monitor" && (
                                     <div>
-                                        {/* Contenido solo para administradores */}
+                                        {/* Contenido solo para Monitor */}
                                         Validacion eres Monitor.
                                     </div>
                                 )}
                                 {rol === "Invitado" && (
                                     <div>
-                                        {/* Contenido solo para administradores */}
+                                        {/* Contenido solo para Invitado */}
                                         Validacion eres Invitado.
                                     </div>
                                 )}
