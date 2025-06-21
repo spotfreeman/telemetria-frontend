@@ -20,10 +20,8 @@ import { Roles } from './Pages/usuarios/Roles';
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
 
-{/* Testing */ }
 import { Sidebar2 } from './Pages/testing/Sidebar2';
 
-{ /* Sin uso */ }
 import { Login } from './Pages/Login';
 
 function App() {
