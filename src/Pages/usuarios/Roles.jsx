@@ -17,23 +17,42 @@ export const Roles = () => {
                         <div className="mt-6">
                             <p className="text-gray-600">Esta es la pagina de roles.</p>
                         </div>
+
+                        <div>
+                            <p className="mt-6 text-gray-600">Su rol es: <span className="font-bold">{rol}</span> en la DB</p>
+                            <p className="mt-6 ">
+                                {rol === "Administrador" && (
+                                    <div>
+                                        {/* Contenido solo para administradores */}
+                                        Eres administrador.
+                                    </div>
+                                )}
+                                {rol === "Supervisor" && (
+                                    <div>
+                                        {/* Contenido solo para administradores */}
+                                        Eres Supervisor.
+                                    </div>
+                                )}
+                                {rol === "Monitor" && (
+                                    <div>
+                                        {/* Contenido solo para administradores */}
+                                        Eres Monitor.
+                                    </div>
+                                )}
+                                {rol === "Invitado" && (
+                                    <div>
+                                        {/* Contenido solo para administradores */}
+                                        Eres Invitado.
+                                    </div>
+                                )}
+                            </p>
+
+                        </div>
                     </div>
                 </div>
             </div>
 
-            (if (rol == "Administrador") {
-                <div> Usted es Administrador </div>
-            }
-            if (rol == "Supervisor") {
-                <div> Usted es Supervisor </div>
-            }
-            if (rol == "Monitor") {
-                <div> Usted es Usuario </div>
-            }
-            if (rol == "Invitado") {
-                <div> Usted es Invitado </div>
-            }
-            )
+
         </>
 
     )
