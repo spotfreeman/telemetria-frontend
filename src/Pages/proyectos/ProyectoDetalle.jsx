@@ -5,7 +5,6 @@ import { saveAs } from "file-saver";
 import htmlDocx from "html-docx-js/dist/html-docx";
 import { HiOutlineAdjustments } from "react-icons/hi";
 import { ArrowLeftIcon, TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
-import FechasProyecto from "./FechasProyecto";
 
 export const ProyectoDetalle = () => {
     const { id } = useParams();
@@ -30,7 +29,7 @@ export const ProyectoDetalle = () => {
     const [detalleEdit, setDetalleEdit] = useState({ mes: "", anio: "", descripcion: "" });
 
     // Fechas importantes
-    const [fechas, setFechas] = useState([]);
+    const [fechas, setFechas] = useState(proyecto?.fechas || []);
     const [showFechasModal, setShowFechasModal] = useState(false);
     const [editFechasIdx, setEditFechasIdx] = useState(null);
     const [fechasForm, setFechasForm] = useState({
@@ -71,6 +70,11 @@ export const ProyectoDetalle = () => {
     };
 
     useEffect(() => { fetchProyecto(); }, [id]);
+
+    // Sincroniza fechas si cambia el proyecto
+    useEffect(() => {
+        setFechas(proyecto?.fechas || []);
+    }, [proyecto]);
 
     // Handlers generales
     const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
@@ -117,25 +121,17 @@ export const ProyectoDetalle = () => {
 
     const handleAgregarFechas = async e => {
         e.preventDefault();
-        const nuevasFechas = [...fechas, { ...fechasForm }];
-        const token = localStorage.getItem("token");
-        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-            body: JSON.stringify({ ...proyecto, fechas: nuevasFechas })
-        });
-        if (res.ok) {
-            setShowFechasModal(false);
-            setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
-            fetchProyecto();
-        }
+        setFechas([...fechas, { ...fechasForm }]);
+        setShowFechasModal(false);
+        setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
+        // Aquí puedes hacer un fetch/PUT para actualizar en el backend si lo necesitas
     };
 
     const handleEditarFechas = idx => {
         const f = fechas[idx];
         setFechasForm({
-            fechainicio: f.fechainicio?.slice(0, 10) || "",
-            fechafin: f.fechafin?.slice(0, 10) || "",
+            fechainicio: f.fechainicio ? f.fechainicio.slice(0, 10) : "",
+            fechafin: f.fechafin ? f.fechafin.slice(0, 10) : "",
             aumento: f.aumento || 0
         });
         setEditFechasIdx(idx);
@@ -146,17 +142,18 @@ export const ProyectoDetalle = () => {
         e.preventDefault();
         const nuevasFechas = [...fechas];
         nuevasFechas[editFechasIdx] = { ...fechasForm };
-        const token = localStorage.getItem("token");
-        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-            body: JSON.stringify({ ...proyecto, fechas: nuevasFechas })
-        });
-        if (res.ok) {
-            setShowFechasModal(false);
-            setEditFechasIdx(null);
-            setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
-            fetchProyecto();
+        setFechas(nuevasFechas);
+        setShowFechasModal(false);
+        setEditFechasIdx(null);
+        setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
+        // Aquí puedes hacer un fetch/PUT para actualizar en el backend si lo necesitas
+    };
+
+    const handleBorrarFechas = idx => {
+        if (window.confirm("¿Seguro que deseas borrar esta fila?")) {
+            const nuevasFechas = fechas.filter((_, i) => i !== idx);
+            setFechas(nuevasFechas);
+            // Aquí puedes hacer un fetch/PUT para actualizar en el backend si lo necesitas
         }
     };
 
@@ -274,6 +271,17 @@ export const ProyectoDetalle = () => {
         const docx = htmlDocx.asBlob(`<html><head>${estilos}</head><body>${contenidoRef.current.innerHTML}</body></html>`);
         saveAs(docx, `${proyecto.nombre || "proyecto"}.docx`);
     };
+
+    // Función para parsear fechas tipo 'YYYY-MM-DD' a objeto Date seguro
+    function parseFecha(fechaStr) {
+        if (!fechaStr) return null;
+        if (fechaStr instanceof Date) return fechaStr;
+        if (typeof fechaStr === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
+            const [anio, mes, dia] = fechaStr.split('-').map(Number);
+            return new Date(anio, mes - 1, dia);
+        }
+        return new Date(fechaStr);
+    }
 
     if (loading) return <div className="p-8">Cargando...</div>;
     if (error) return <div className="p-8 text-red-600">{error}</div>;
@@ -396,7 +404,128 @@ export const ProyectoDetalle = () => {
             </div>
 
             {/* Fechas importantes */}
-            <FechasProyecto fechas={fechas} setFechas={setFechas} />
+            <div className="w-full mt-10 text-center">
+                <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
+                    <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
+                    <button
+                        className="bg-green-600 text-white px-3 py-1 rounded"
+                        onClick={() => { setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 }); setEditFechasIdx(null); setShowFechasModal(true); }}
+                    >
+                        Agregar Fechas
+                    </button>
+                </div>
+                <table className="w-full table-fixed border border-gray-300 border-collapse rounded mb-8">
+                    <thead className="bg-blue-100">
+                        <tr>
+                            <th className="w-1/5 border">Fecha Inicio</th>
+                            <th className="w-1/5 border">Fecha Fin</th>
+                            <th className="w-1/5 border">Aumento</th>
+                            <th className="w-1/5 border">Fecha Actualizada</th>
+                            <th className="w-1/5 border">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {fechas.map((fecha, idx) => (
+                            <tr key={idx}>
+                                <td className="border">
+                                    {fecha.fechainicio
+                                        ? parseFecha(fecha.fechainicio).toLocaleDateString('es-CL')
+                                        : "-"}
+                                </td>
+                                <td className="border">
+                                    {fecha.fechafin
+                                        ? parseFecha(fecha.fechafin).toLocaleDateString('es-CL')
+                                        : "-"}
+                                </td>
+                                <td className="border">{fecha.aumento}</td>
+                                <td className="border">
+                                    {fecha.fechaactualizada
+                                        ? parseFecha(fecha.fechaactualizada).toLocaleDateString('es-CL')
+                                        : "-"}
+                                </td>
+                                <td className="border">
+                                    <button
+                                        className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                                        onClick={() => handleEditarFechas(idx)}
+                                    >
+                                        Editar
+                                    </button>
+                                    <button
+                                        className="bg-red-600 text-white px-2 py-1 rounded"
+                                        onClick={() => handleBorrarFechas(idx)}
+                                    >
+                                        Borrar
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                {/* Modal */}
+                {showFechasModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                            <h2 className="text-xl font-semibold mb-4">
+                                {editFechasIdx !== null ? "Editar Fechas" : "Agregar Fechas"}
+                            </h2>
+                            <form
+                                onSubmit={editFechasIdx !== null ? handleGuardarFechas : handleAgregarFechas}
+                                className="flex flex-col gap-4"
+                            >
+                                <div>
+                                    <label className="block mb-1">Fecha Inicio</label>
+                                    <input
+                                        type="date"
+                                        name="fechainicio"
+                                        value={fechasForm.fechainicio}
+                                        onChange={handleFechasChange}
+                                        className="w-full border px-2 py-1 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Fecha Fin</label>
+                                    <input
+                                        type="date"
+                                        name="fechafin"
+                                        value={fechasForm.fechafin}
+                                        onChange={handleFechasChange}
+                                        className="w-full border px-2 py-1 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Aumento (días)</label>
+                                    <input
+                                        type="number"
+                                        name="aumento"
+                                        value={fechasForm.aumento}
+                                        onChange={handleFechasChange}
+                                        className="w-full border px-2 py-1 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div className="flex justify-end gap-2">
+                                    <button
+                                        type="button"
+                                        className="bg-gray-400 text-white px-3 py-1 rounded"
+                                        onClick={() => setShowFechasModal(false)}
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-600 text-white px-3 py-1 rounded"
+                                    >
+                                        Guardar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+            </div>
 
             {/* Tabla de Avances */}
             <div className="mt-10">
