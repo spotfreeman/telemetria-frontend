@@ -617,21 +617,27 @@ export const ProyectoDetalle = () => {
 
             {/* Tabla Fechas */}
             <div className="w-full mt-10">
-                <div className="w-full bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
+                <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t">
                     <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
                 </div>
-                <div>
-                    <h3>Fecha Inicio</h3>
-                </div>
-                <div>
-                    <h3>Fecha Termino</h3>
-                </div>
-                <div>
-                    <h3>Aumento</h3>
-                </div>
-                <div>
-                    <h3>Fecha Actualizada (Fecha de Termino + Aumento)</h3>
-                </div>
+                <table>
+                    <thead className="bg-blue-100">
+                        <tr>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Termino</th>
+                            <th>Aumento</th>
+                            <th>Fecha Actualizada (Fecha de Termino + Aumento)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01/01/2025</td>
+                            <td>30/06/2025</td>
+                            <td>100%</td>
+                            <td>30/09/2025</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
 
