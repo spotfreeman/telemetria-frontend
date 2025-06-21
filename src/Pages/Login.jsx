@@ -26,6 +26,7 @@ export const Login = () => {
         if (res.ok && data.token) {
             localStorage.setItem("token", data.token);
             localStorage.setItem("usuario", data.usuario);
+            localStorage.setItem("rol", data.rol);
             navigate("/bienvenida"); // Redirige a la página principal
         } else {
             setError(data.message || "Usuario o contraseña incorrectos");

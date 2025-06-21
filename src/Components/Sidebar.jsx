@@ -30,6 +30,7 @@ function Sidebar() {
         { to: "/notas", icon: <ServerIcon className="h-5 w-5" />, label: "Notas" },
         { to: "/calendario", icon: <ServerIcon className="h-5 w-5" />, label: "Calendario" },
         { to: "/archivos", icon: <ServerIcon className="h-5 w-5" />, label: "Archivos" },
+        { to: "/roles", icon: <ServerIcon className="h-5 w-5" />, label: "Roles" },
 
     ];
 
@@ -47,6 +48,7 @@ function Sidebar() {
         if (link.to === "/tempdata" && !token) return false;
         if (link.to === "/datos" && !token) return false;
         if (link.to === "/bienvenida" && !token) return false;
+        if (link.to === "/roles" && !token) return false;
 
         return true;
     });
@@ -60,7 +62,7 @@ function Sidebar() {
     return (
         <aside className="w-56 bg-gradient-to-b from-blue-900 to-gray-800 text-white min-h-screen flex flex-col py-6 px-2 shadow-lg">
             <div className="mb-8 flex flex-col items-center justify-center">
-                <span className="text-xl font-bold tracking-wide text-blue-300">Telemetría</span>
+                <span className="text-xl font-bold tracking-wide text-blue-300">ROB-Data</span>
                 {token && usuario && (
                     <div className="mt-4 flex flex-col items-center">
                         <button

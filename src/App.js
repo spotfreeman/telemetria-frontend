@@ -16,6 +16,7 @@ import { Login2 } from './Pages/login/Login2';
 import { Page404 } from './Pages/Page404';
 import { Intro } from './Pages/usuarios/Intro';
 import { Usuarioconfig } from './Pages/usuarios/Usuarioconfig';
+import { Roles } from './Pages/usuarios/Roles';
 
 
 import Sidebar from './Components/Sidebar';
@@ -23,7 +24,7 @@ import PrivateRoute from './Components/PrivateRoute';
 
 function App() {
   useEffect(() => {
-    document.title = "ROB Studio";
+    document.title = "ROB-Data";
   }, []);
 
   return (
@@ -46,6 +47,7 @@ function App() {
             <Route path="/archivos" element={<Archivos />} />
             <Route path='/bienvenida' element={<Bienvenida />} />
             <Route path="/usuarioconfig" element={<Usuarioconfig />} />
+            <Route path="/roles" element={<Roles />} />
 
             {/* Rutas de proyectos */}
 
