@@ -1,8 +1,8 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+
 import DatosPage from './DatosPage';
-
-
 import { TempData } from './Pages/TempData';
 import { Server } from './Pages/Server';
 import { Notas } from './Pages/Notas';
@@ -22,6 +22,10 @@ import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
 
 function App() {
+  useEffect(() => {
+    document.title = "ROB Studio";
+  }, []);
+
   return (
     <Router>
       <div className="flex min-h-screen">

@@ -107,9 +107,9 @@ export const Notas = () => {
     };
 
     return (
-        <div className="flex flex-col items-center mt-1 w-full">
+        <div className="flex flex-col items-center w-full">
             {/* Barra superior con botones */}
-            <div className="w-full bg-gray-300 py-3 px-4 flex items-center justify-between shadow mb-8">
+            <div className="w-full bg-gray-300 py-3 px-2 flex items-center justify-between shadow mb-8">
                 {/* Título a la izquierda */}
                 <h1 className="text-black text-xl font-bold flex-1">Notas</h1>
                 {/* Botón Agregar Nota al centro */}
@@ -144,7 +144,7 @@ export const Notas = () => {
 
 
             {/* Tabla de Notas */}
-            <div className="mt-8 w- w-full px-1">
+            <div className="mt-2 w- w-full px-1">
                 <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden shadow">
                     <thead>
                         <tr className="bg-gray-600 text-white">
