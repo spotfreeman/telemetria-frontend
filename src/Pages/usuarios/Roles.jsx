@@ -24,25 +24,25 @@ export const Roles = () => {
                                 {rol === "Administrador" && (
                                     <div>
                                         {/* Contenido solo para administradores */}
-                                        Eres administrador.
+                                        Validacion eres Administrador.
                                     </div>
                                 )}
                                 {rol === "Supervisor" && (
                                     <div>
                                         {/* Contenido solo para administradores */}
-                                        Eres Supervisor.
+                                        Validacion eres Supervisor.
                                     </div>
                                 )}
                                 {rol === "Monitor" && (
                                     <div>
                                         {/* Contenido solo para administradores */}
-                                        Eres Monitor.
+                                        Validacion eres Monitor.
                                     </div>
                                 )}
                                 {rol === "Invitado" && (
                                     <div>
                                         {/* Contenido solo para administradores */}
-                                        Eres Invitado.
+                                        Validacion eres Invitado.
                                     </div>
                                 )}
                             </p>
