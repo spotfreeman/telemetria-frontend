@@ -139,61 +139,6 @@ export const Notas = () => {
                 </div>
             )}
 
-            {/* Formulario mejorado */}
-
-            <div className="w-full p-2">
-                <div className="bg-blue-100 p-4 rounded shadow mb-6">
-                    <div className="">Fomulario Notas </div>
-                    <div className="text-gray-500 text-sm mb-4">Ingrese los detalles de la nota a continuación:</div>
-                </div>
-
-                <div>
-                    <form onSubmit={handleSubmit} className="mb-6 flex flex-col gap-2 w-full max-w-md mx-auto">
-                        <div>
-                            <div>
-                                <input
-                                    className="border p-2 rounded"
-                                    name="titulo"
-                                    placeholder="Título"
-                                    value={form.titulo}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <textarea
-                                    className="border p-2 rounded"
-                                    name="descripcion"
-                                    placeholder="Descripción"
-                                    value={form.descripcion}
-                                    onChange={handleChange}
-                                    required
-                                />
-
-                            </div>
-
-                            <div>
-                                <input
-                                    className="border p-2 rounded"
-                                    name="usuario"
-                                    placeholder="Usuario"
-                                    value={form.usuario}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                        </div>
-                        <div>
-                            <button className="bg-blue-700 text-white px-4 py-2 rounded" type="submit">
-                                {editId ? "Actualizar Nota" : "Agregar Nota"}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
 
             {/* Tabla de Notas */}
             <div className="mt-8 w- w-full px-4">
@@ -230,9 +175,7 @@ export const Notas = () => {
                                     >
                                         <PencilSquareIcon className="h-5 w-5" />
                                     </button>
-
                                 </td>
-
                             </tr>
                         ))}
                     </tbody>
