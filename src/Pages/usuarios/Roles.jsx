@@ -1,5 +1,4 @@
 import React from 'react'
-import { Badge } from '@components/badge'
 
 export const Roles = () => {
 
@@ -26,7 +25,6 @@ export const Roles = () => {
                                     <div>
                                         {/* Contenido solo para administradores */}
                                         Validacion eres Administrador.
-                                        <Badge className="bg-green-500 text-white">Administrador</Badge>
                                     </div>
 
                                 )}
