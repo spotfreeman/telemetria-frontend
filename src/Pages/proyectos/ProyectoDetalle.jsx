@@ -614,30 +614,6 @@ export const ProyectoDetalle = () => {
                 </table>
             </div>
 
-            {/* Tabla Detalle del Mes Actualizada */}
-            {proyecto.detalledelmes && proyecto.detalledelmes.length > 0 && (
-                <div className="mt-6">
-                    <h3 className="text-lg font-bold mb-2">Detalle mensual histórico</h3>
-                    <table className="w-full border border-gray-300 rounded mb-8">
-                        <thead>
-                            <tr className="bg-blue-100">
-                                <th className="px-4 py-2">Mes</th>
-                                <th className="px-4 py-2">Año</th>
-                                <th className="px-4 py-2">Descripción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {proyecto.detalledelmes.map((d, idx) => (
-                                <tr key={idx}>
-                                    <td className="px-4 py-2 text-center">{d.mes}</td>
-                                    <td className="px-4 py-2 text-center">{d.anio}</td>
-                                    <td className="px-4 py-2 text-center">{d.descripcion}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
 
             {/* Tabla Fechas */}
             <div>
@@ -658,28 +634,6 @@ export const ProyectoDetalle = () => {
                 </div>
             </div>
 
-            {/* Tabla FOOTER */}
-            <div className="mt-10">
-                <table className="w-full border border-gray-300 rounded mb-8">
-                    <thead>
-                        <tr className="bg-blue-100">
-                            <th className="px-4 py-2">Accion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="px-4 py-2 text-center" >
-
-                                <Link to="/proyectos" className="inline-flex items-center mt-8 text-blue-700 hover:underline">
-                                    <ArrowLeftIcon className="h-5 w-5 mr-2" />
-                                    Volver a la lista de proyectos
-                                </Link>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
 
             {/* Detalle del Mes Actualizado */}
             <div className="mt-10">
@@ -778,6 +732,30 @@ export const ProyectoDetalle = () => {
                     </div>
                 )}
             </div>
+
+            {/* Tabla FOOTER */}
+            <div className="mt-10">
+                <table className="w-full border border-gray-300 rounded mb-8">
+                    <thead>
+                        <tr className="bg-blue-100">
+                            <th className="px-4 py-2">Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="px-4 py-2 text-center" >
+
+                                <Link to="/proyectos" className="inline-flex items-center mt-8 text-blue-700 hover:underline">
+                                    <ArrowLeftIcon className="h-5 w-5 mr-2" />
+                                    Volver a la lista de proyectos
+                                </Link>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     );
 };
