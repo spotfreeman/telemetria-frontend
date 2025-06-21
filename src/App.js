@@ -54,7 +54,7 @@ function App() {
 
 
             {/* Rutas de testing */}
-            <Route path="/sidebarV2" element={<Sidebarv2 />} />
+            <Route path="/sidebarV2" element={<SidebarV2 />} />
 
 
             {/* Rutas de proyectos */}
