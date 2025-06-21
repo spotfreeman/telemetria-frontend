@@ -26,7 +26,8 @@ export const TempData = () => {
         .reverse()
         .map(dato => ({
             fecha: dato.fecha_hora,
-            temperatura: dato.temperatura
+            temperatura: dato.temperatura,
+            almacenamiento: dato.almacenamiento
         }));
 
     const temperaturas = datos.map(d => d.temperatura);
@@ -54,6 +55,10 @@ export const TempData = () => {
                     <div className="text-sm text-gray-500">Promedio</div>
                     <div className="text-2xl font-bold text-green-600">{avg}°C</div>
                 </div>
+                <div className="bg-white rounded shadow p-4 text-center">
+                    <div className="text-sm text-gray-500">Almacenamiento</div>
+                    <div className="text-2xl font-bold text-green-600">{almacenamiento} %</div>
+                </div>
             </div>
 
             <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl">
@@ -64,19 +69,20 @@ export const TempData = () => {
                             <tr className="bg-blue-700 text-white">
                                 <th className="px-4 py-2 border-b border-gray-300 text-center">Fecha y Hora</th>
                                 <th className="px-4 py-2 border-b border-gray-300 text-center">Temperatura</th>
+                                <th className="px-4 py-2 border-b border-gray-300 text-center">Almacenamiento</th>
                             </tr>
                         </thead>
                         <tbody>
                             {datosPagina.map((dato, idx) => (
                                 <tr key={dato._id || idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                                    <td className="px-4 py-2 text-center border-b border-gray-300">
-                                        {dato.fecha_hora}
-                                    </td>
+                                    <td className="px-4 py-2 text-center border-b border-gray-300">{dato.fecha_hora}</td>
                                     <td className="px-4 py-2 text-center border-b border-gray-300">{dato.temperatura}</td>
+                                    <td className="px-4 py-2 text-center border-b border-gray-300">{dato.almacenamiento} %</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+
                     {/* Paginación */}
                     <div className="flex gap-2 mt-4 justify-center">
                         <button
@@ -96,6 +102,7 @@ export const TempData = () => {
                         </button>
                     </div>
                 </div>
+
                 {/* Columna derecha: Gráfico */}
                 <div className="flex-1 flex flex-col">
                     <div className="bg-white rounded shadow p-4 flex-1">

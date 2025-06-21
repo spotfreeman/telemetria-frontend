@@ -5,8 +5,6 @@ export const Roles = () => {
     const nombre = localStorage.getItem("nombre");
     const rol = localStorage.getItem("rol");
 
-
-
     return (
         <>
             <div className="flex min-h-full flex-1">
