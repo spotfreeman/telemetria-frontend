@@ -618,9 +618,9 @@ export const ProyectoDetalle = () => {
             {/* Tabla Fechas */}
             <div className="w-full mt-10">
                 <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t">
-                    <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
+                    <h3 className="text-lg font-bold mb-2 text-center">Fechas importantes</h3>
                 </div>
-                <table>
+                <table className="w-full border border-gray-300 rounded mb-8">
                     <thead className="bg-blue-100">
                         <tr>
                             <th>Fecha Inicio</th>
@@ -740,7 +740,13 @@ export const ProyectoDetalle = () => {
             </div>
 
             {/* Tabla FOOTER */}
-            <div className="mt-10">
+            <div className="mt-10 ">
+                <div className="w-full bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
+                    <Link to="/proyectos" className="inline-flex items-center mt-8 text-blue-700 hover:underline">
+                        <ArrowLeftIcon className="h-5 w-5 mr-2" />
+                        Volver a la lista de proyectos
+                    </Link>
+                </div>
                 <table className="w-full border border-gray-300 rounded mb-8">
                     <thead>
                         <tr className="bg-blue-100">
