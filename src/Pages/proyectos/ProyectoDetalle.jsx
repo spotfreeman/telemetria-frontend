@@ -409,14 +409,26 @@ export const ProyectoDetalle = () => {
                     <tbody>
                         {fechas.map((fecha, idx) => (
                             <tr key={idx}>
-                                <td className="border">{fecha.fechainicio?.slice(0, 10)}</td>
-                                <td className="border">{fecha.fechafin?.slice(0, 10)}</td>
-                                <td className="border">{fecha.aumento}</td>
-                                <td className="border">{fecha.fechaactualizada ? fecha.fechaactualizada.slice(0, 10) : "-"}</td>
                                 <td className="border">
-                                    <button className="bg-yellow-500 text-white px-2 py-1 rounded mr-2" onClick={() => handleEditarFechas(idx)}>
-                                        Editar
-                                    </button>
+                                    {fecha.fechainicio
+                                        ? new Date(fecha.fechainicio).toLocaleDateString('es-CL')
+                                        : "-"}
+                                </td>
+                                <td className="border">
+                                    {fecha.fechafin
+                                        ? new Date(fecha.fechafin).toLocaleDateString('es-CL')
+                                        : "-"}
+                                </td>
+                                <td className="border">
+                                    {fecha.aumento}
+                                </td>
+                                <td className="border">
+                                    {fecha.fechaactualizada
+                                        ? new Date(fecha.fechaactualizada).toLocaleDateString('es-CL')
+                                        : "-"}
+                                </td>
+                                <td className="border">
+                                    {/* Acciones */}
                                 </td>
                             </tr>
                         ))}
