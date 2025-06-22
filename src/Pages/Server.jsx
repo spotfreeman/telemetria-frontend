@@ -13,9 +13,14 @@ export const Server = () => {
             });
     }, []);
 
+    const ultimaIpExterna = datos[0].ip_externa;
+
     return (
         <div className="flex flex-col items-center mt-8">
             <h2 className="text-2xl font-bold mb-4">Datos de Raspberry Pi</h2>
+            <h3 className="text-xl mb-2 font-bold">Última IP externa: {ultimaIpExterna}</h3>
+
+            <p className="text-gray-600 mb-4">Últimos datos recibidos desde la Raspberry Pi:</p>
             <table className="min-w-[300px] w-1/2 border border-gray-300 rounded-lg overflow-hidden shadow">
                 <thead>
                     <tr className="bg-blue-700 text-white">
