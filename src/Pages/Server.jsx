@@ -13,7 +13,7 @@ export const Server = () => {
             });
     }, []);
 
-    const ultimaIpExterna = datos[0].ip_externa;
+    const ultimaIpExterna = datos.length > 0 ? datos[0].ip_externa : "No disponible";
 
     return (
         <div className="flex flex-col items-center mt-8">
