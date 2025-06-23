@@ -49,10 +49,6 @@ function Sidebar() {
         { to: "/archivos", icon: <DocumentDuplicateIcon className="h-5 w-5" />, label: "Archivos" },
         { to: "/roles", icon: <UsersIcon className="h-5 w-5" />, label: "Roles" },
 
-
-        //{/* Enlace de testing para la nueva sidebar */ }
-        { to: "/sidebar2", icon: <ServerIcon className="h-5 w-5" />, label: "Test - Sidebar v2" }
-
     ];
 
     const filteredLinks = links.filter(link => {
