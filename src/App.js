@@ -20,7 +20,6 @@ import { Roles } from './Pages/usuarios/Roles';
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
 
-import { Sidebar2 } from './Pages/testing/Sidebar2';
 
 import { Login } from './Pages/Login';
 
@@ -50,11 +49,6 @@ function App() {
             <Route path='/bienvenida' element={<Bienvenida />} />
             <Route path="/usuarioconfig" element={<Usuarioconfig />} />
             <Route path="/roles" element={<Roles />} />
-
-
-            {/* Rutas de testing */}
-            <Route path="/sidebar2" element={<Sidebar2 />} />
-
 
             {/* Rutas de proyectos */}
 
