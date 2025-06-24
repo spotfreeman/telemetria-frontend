@@ -57,7 +57,16 @@ export const Server = () => {
                                 <h3 className="mt-6 text-lg/8 font-semibold text-gray-900">{servidor.name}</h3>
                                 <p className="text-base/7 text-gray-600">{servidor.ip}</p>
                                 <p className="mt-4 text-base/7 text-gray-600">{servidor.bio}</p>
-                                <p className="mt-4 text-base/7 text-gray-600">{servidor.url}</p>
+                                {/*  <p className="mt-4 text-base/7 text-gray-600">{servidor.url}</p> */}
+                                <a
+                                    href={servidor.url}
+                                    className="mt-6 inline-block rounded-md bg-pretty px-3.5 py-2.5 text-base font-semibold text-white shadow-sm hover:bg-pretty/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pretty"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Acceder
+                                </a>
+
                             </li>
                         ))}
                     </ul>
