@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import daysImg from "../Img/7days.jpg";
-import unityImg from "../Img/unitylogo.png";
+import daysImg from "./Img/days.jpg"
+import unityImg from "./Img/unitylogo.png";
 
 export const Server = () => {
     const [datos, setDatos] = useState([]);
@@ -36,7 +36,7 @@ export const Server = () => {
     ]
 
     return (
-        <div className="flex flex-col items-center mt-8">
+        <div className="flex flex-col items-center">
 
             <div className="w-full bg-gray-200 py-3 px-2 flex items-center justify-between shadow mb-8">
 
