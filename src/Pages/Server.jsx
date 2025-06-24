@@ -31,35 +31,12 @@ export const Server = () => {
             ip: ultimaIpExterna,
             image: unityImg,
             bio: 'Servidor dedicado para aplicaciones Unity, ideal para proyectos de desarrollo y pruebas.',
-            url: '#',
+            url: ultimaIpExterna !== "No disponible" ? `http://${ultimaIpExterna}:3000` : "#",
         }
     ]
 
     return (
         <div className="flex flex-col items-center">
-
-            <div className="w-full bg-gray-200 py-3 px-2 flex items-center justify-between shadow mb-8">
-
-                {/* Título a la izquierda */}
-                <h1 className="text-black text-xl font-bold flex-1">Izquerda</h1>
-
-                {/* Botón Agregar Nota al centro */}
-                <div className="flex-1 flex justify-center">
-                    <h3>Centro</h3>
-                </div>
-
-                {/* Botón Exportar a Excel a la derecha */}
-                <div className="flex-1 flex justify-end">
-                    <h3>derecha</h3>
-                </div>
-            </div>
-
-            <div>
-
-                <h2 className="text-2xl font-bold mb-4">Datos de Raspberry Pi </h2>
-                <h3 className="text-xl mb-2 font-bold">IP Servidor 7 Days : {ultimaIpExterna}</h3>
-                <h3 className="text-xl mb-2 font-bold">IP Servidor Unity : {ultimaIpExterna}</h3>
-            </div>
 
             {/* Lista de Servidores */}
             <div className="bg-white py-24 md:py-32 lg:py-40">
