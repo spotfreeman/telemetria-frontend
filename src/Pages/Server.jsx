@@ -17,7 +17,7 @@ export const Server = () => {
 
     const people = [
         {
-            name: 'Emma Dorsey',
+            name: 'Servidor  7 Days',
             role: 'Senior Developer',
             imageUrl:
                 'https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
@@ -26,7 +26,7 @@ export const Server = () => {
             linkedinUrl: '#',
         },
         {
-            name: 'Emma Dorsey',
+            name: 'Servidor Unity',
             role: 'Senior Developer',
             imageUrl:
                 'https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
@@ -34,18 +34,27 @@ export const Server = () => {
             xUrl: '#',
             linkedinUrl: '#',
         },
-        {
-            name: 'Emma Dorsey',
-            role: 'Senior Developer',
-            imageUrl:
-                'https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-            bio: 'Praesentium iure error aliquam voluptas ut libero. Commodi placeat sit iure nulla officiis. Ut ex sit repellat tempora. Qui est accusamus exercitationem natus ut voluptas. Officiis velit eos ducimus.',
-            xUrl: '#',
-            linkedinUrl: '#',
-        },
-        // More people...
     ]
 
+
+    const servidores = [
+        {
+            name: 'Servidor 7 Days',
+            ip: '255.255.255.255',
+            image: 'https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+            bio: 'Servidor dedicado para el juego 7 Days to Die, optimizado para ofrecer la mejor experiencia de juego.',
+            url: '#',
+        },
+        {
+            name: 'Servidor Unity',
+            ip: '255.255.255.255',
+            image: 'https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+            bio: 'Servidor dedicado para aplicaciones Unity, ideal para proyectos de desarrollo y pruebas.',
+            url: '#',
+        }
+
+
+    ]
 
     return (
         <div className="flex flex-col items-center mt-8">
@@ -59,10 +68,9 @@ export const Server = () => {
             <div className="bg-white py-24 md:py-32 lg:py-40">
                 <div className="mx-auto grid max-w-7xl grid-cols-1 gap-20 px-6 lg:px-8 xl:grid-cols-3">
                     <div className="mx-auto max-w-2xl lg:mx-0">
-                        <h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Our team</h2>
+                        <h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Servidores</h2>
                         <p className="mt-6 text-lg/8 text-gray-600">
-                            We’re a dynamic group of individuals who are passionate about what we do and dedicated to delivering the
-                            best results for our clients.
+                            Servidores disponibles para juegos y aplicaciones, optimizados para ofrecer la mejor experiencia de usuario.
                         </p>
                     </div>
                     <ul
@@ -97,6 +105,32 @@ export const Server = () => {
                                         </a>
                                     </li>
                                 </ul>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+
+
+            <div className="bg-white py-24 md:py-32 lg:py-40">
+                <div className="mx-auto grid max-w-7xl grid-cols-1 gap-20 px-6 lg:px-8 xl:grid-cols-3">
+                    <div className="mx-auto max-w-2xl lg:mx-0">
+                        <h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Servidores</h2>
+                        <p className="mt-6 text-lg/8 text-gray-600">
+                            Servidores disponibles para juegos y aplicaciones, optimizados para ofrecer la mejor experiencia de usuario.
+                        </p>
+                    </div>
+                    <ul
+                        role="list"
+                        className="mx-auto grid max-w-2xl grid-cols-1 gap-x-6 gap-y-20 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:gap-x-8 xl:col-span-2"
+                    >
+                        {servidores.map((servidor) => (
+                            <li key={servidor.name}>
+                                <img alt="" src={servidor.image} className="aspect-[3/2] w-full rounded-2xl object-cover" />
+                                <h3 className="mt-6 text-lg/8 font-semibold text-gray-900">{servidor.name}</h3>
+                                <p className="text-base/7 text-gray-600">{servidor.ip}</p>
+                                <p className="mt-4 text-base/7 text-gray-600">{servidor.bio}</p>
+                                <p className="mt-4 text-base/7 text-gray-600">{servidor.url}</p>
                             </li>
                         ))}
                     </ul>
