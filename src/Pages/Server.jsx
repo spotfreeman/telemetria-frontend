@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 
+import daysImg from "../Img/7days.jpg";
+import unityImg from "../Img/unitylogo.png";
+
 export const Server = () => {
     const [datos, setDatos] = useState([]);
 
@@ -18,33 +21,33 @@ export const Server = () => {
     const servidores = [
         {
             name: 'Servidor 7 Days',
-            ip: '255.255.255.255',
-            image: 'https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+            ip: ultimaIpExterna,
+            image: daysImg,
             bio: 'Servidor dedicado para el juego 7 Days to Die, optimizado para ofrecer la mejor experiencia de juego.',
             url: '#',
         },
         {
             name: 'Servidor Unity',
-            ip: '255.255.255.255',
-            image: 'https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+            ip: ultimaIpExterna,
+            image: unityImg,
             bio: 'Servidor dedicado para aplicaciones Unity, ideal para proyectos de desarrollo y pruebas.',
             url: '#',
         }
-
-
     ]
 
     return (
         <div className="flex flex-col items-center mt-8">
 
             <div className="w-full bg-gray-200 py-3 px-2 flex items-center justify-between shadow mb-8">
+
                 {/* Título a la izquierda */}
-                <h1 className="text-black text-xl font-bold flex-1">Notas</h1>
+                <h1 className="text-black text-xl font-bold flex-1">Izquerda</h1>
 
                 {/* Botón Agregar Nota al centro */}
                 <div className="flex-1 flex justify-center">
-                    <h3>centro</h3>
+                    <h3>Centro</h3>
                 </div>
+
                 {/* Botón Exportar a Excel a la derecha */}
                 <div className="flex-1 flex justify-end">
                     <h3>derecha</h3>
