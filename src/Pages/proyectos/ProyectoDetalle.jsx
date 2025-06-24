@@ -444,7 +444,7 @@ export const ProyectoDetalle = () => {
                         {proyecto.fechas?.map((fecha, idx) => (
                             <tr key={idx}>
                                 <h3>{fecha.fechainicio}</h3>
-                                <td className="border"> {fecha.fechainicio}
+                                <td className="border">
                                     {fecha.fechainicio
                                         ? parseFecha(fecha.fechainicio).toLocaleDateString('es-CL')
                                         : "-"}
