@@ -5,6 +5,7 @@ import unityImg from "./Img/unitylogo.png";
 
 export const Server = () => {
     const [datos, setDatos] = useState([]);
+    const [datosServer, setDatosServer] = useState([]);
 
     useEffect(() => {
         fetch('https://telemetria-backend.onrender.com/api/rpis')
@@ -18,6 +19,21 @@ export const Server = () => {
 
     const ultimaIpExterna = datos.length > 0 ? datos[0].ip_externa : "No disponible";
 
+    useEffect(() => {
+        fetch('https://telemetria-backend.onrender.com/api/serverip')
+            .then(res => res.json())
+            .then(data => {
+                // Actualiza la IP externa del servidor si está disponible
+                const datosServerOrdenados = [...data].sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora));
+                setDatosServer(datosServerOrdenados);
+            });
+    }, []);
+
+    const ultimaIpServidor = datosServer.length > 0 ? datosServer[0].ip_externa : "No disponible";
+
+    const ipsTabla = [ultimaIpExterna, ultimaIpServidor];
+
+
     const servidores = [
         {
             name: 'Servidor 7 Days',
@@ -28,10 +44,10 @@ export const Server = () => {
         },
         {
             name: 'Servidor Unity',
-            ip: ultimaIpExterna,
+            ip: ultimaIpServidor,
             image: unityImg,
             bio: 'Servidor dedicado para aplicaciones Unity, ideal para proyectos de desarrollo y pruebas.',
-            url: ultimaIpExterna !== "No disponible" ? `http://${ultimaIpExterna}:3000` : "#",
+            url: ultimaIpServidor !== "No disponible" ? `http://${ultimaIpServidor}:3000` : "#",
         }
     ]
 
