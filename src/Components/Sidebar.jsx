@@ -48,6 +48,7 @@ function Sidebar() {
         { to: "/calendario", icon: <CalendarIcon className="h-5 w-5" />, label: "Calendario" },
         { to: "/archivos", icon: <DocumentDuplicateIcon className="h-5 w-5" />, label: "Archivos" },
         { to: "/roles", icon: <UsersIcon className="h-5 w-5" />, label: "Roles" },
+        { to: "/esp32", icon: <UsersIcon className="h-5 w-5" />, label: "ESP32" },
 
     ];
 
@@ -66,6 +67,7 @@ function Sidebar() {
         if (link.to === "/datos" && !token) return false;
         if (link.to === "/bienvenida" && !token) return false;
         if (link.to === "/roles" && !token) return false;
+        if (link.to === "/esp32" && !token) return false;
 
         return true;
     });

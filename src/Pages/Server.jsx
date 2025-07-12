@@ -31,9 +31,6 @@ export const Server = () => {
 
     const ultimaIpServidor = datosServer.length > 0 ? datosServer[0].ip_externa : "No disponible";
 
-    const ipsTabla = [ultimaIpExterna, ultimaIpServidor];
-
-
     const servidores = [
         {
             name: 'Servidor 7 Days',
