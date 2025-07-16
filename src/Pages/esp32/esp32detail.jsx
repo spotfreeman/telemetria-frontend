@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const Esp32Detail = () => {
+export const Esp32Detail = () => {
     const { deviceId } = useParams();
     const [device, setDevice] = useState(null);
     const [loading, setLoading] = useState(true);
