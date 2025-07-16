@@ -16,7 +16,9 @@ import { Page404 } from './Pages/Page404';
 import { Intro } from './Pages/usuarios/Intro';
 import { Usuarioconfig } from './Pages/usuarios/Usuarioconfig';
 import { Roles } from './Pages/usuarios/Roles';
+
 import { Esp32List } from './Pages/esp32/esp32list';
+import { Esp32Detail } from './Pages/esp32/Esp32Detail';
 
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
@@ -53,6 +55,7 @@ function App() {
 
             {/* Rutas de ESP32 */}
             <Route path="/esp32" element={<PrivateRoute><Esp32List /></PrivateRoute>} />
+            <Route path="/esp32/:deviceId" element={<PrivateRoute><Esp32Detail /></PrivateRoute>} />
 
             {/* Rutas de proyectos */}
 
