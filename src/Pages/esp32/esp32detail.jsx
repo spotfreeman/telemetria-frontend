@@ -87,7 +87,7 @@ export const Esp32Detail = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto mt-10 bg-white rounded-lg shadow-lg p-8">
+        <div className="w-full container mt-10 bg-white rounded-lg shadow-lg p-8 px-4">
             <h2 className="text-2xl font-bold text-blue-800 mb-6 text-center">
                 Detalle de <span className="text-blue-600">{device.deviceId}</span>
             </h2>
