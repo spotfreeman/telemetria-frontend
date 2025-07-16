@@ -23,21 +23,30 @@ export const Esp32Detail = () => {
             .finally(() => setLoading(false));
     }, [deviceId]);
 
-    if (loading) return <div>Cargando...</div>;
-    if (error) return <div>Error: {error}</div>;
-    if (!device) return <div>No se encontró el dispositivo.</div>;
+    if (loading) return <div className="text-center py-8 text-blue-700">Cargando...</div>;
+    if (error) return <div className="text-center py-8 text-red-600">Error: {error}</div>;
+    if (!device) return <div className="text-center py-8 text-gray-600">No se encontró el dispositivo.</div>;
 
     return (
-        <div>
-            <h2>Detalle de {device.deviceId}</h2>
-            <ul>
+        <div className="max-w-2xl mx-auto mt-10 bg-white rounded-lg shadow-lg p-8">
+            <h2 className="text-2xl font-bold text-blue-800 mb-6 text-center">
+                Detalle de <span className="text-blue-600">{device.deviceId}</span>
+            </h2>
+            <ul className="divide-y divide-blue-100">
                 {device.datas.map((d, idx) => (
-                    <li key={idx}>
-                        <strong>Fecha:</strong> {new Date(d.timestamp).toLocaleString("es-CL")}
-                        {" | "}
-                        <strong>Temp:</strong> {d.temperature}°C
-                        {" | "}
-                        <strong>Humedad:</strong> {d.humidity}%
+                    <li key={idx} className="py-4 flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div className="text-gray-700">
+                            <span className="font-semibold text-blue-700">Fecha:</span>{" "}
+                            <span className="text-gray-900">{new Date(d.timestamp).toLocaleString("es-CL")}</span>
+                        </div>
+                        <div className="mt-2 md:mt-0 text-gray-700">
+                            <span className="font-semibold text-green-700">Temp:</span>{" "}
+                            <span className="text-gray-900">{d.temperature}°C</span>
+                        </div>
+                        <div className="mt-2 md:mt-0 text-gray-700">
+                            <span className="font-semibold text-cyan-700">Humedad:</span>{" "}
+                            <span className="text-gray-900">{d.humidity}%</span>
+                        </div>
                     </li>
                 ))}
             </ul>
