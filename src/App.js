@@ -18,7 +18,7 @@ import { Usuarioconfig } from './Pages/usuarios/Usuarioconfig';
 import { Roles } from './Pages/usuarios/Roles';
 
 import { Esp32List } from './Pages/esp32/esp32list';
-import { Esp32Detail } from './Pages/esp32/Esp32Detail';
+import { Esp32Detail } from './Pages/esp32/Esp32detail';
 
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
