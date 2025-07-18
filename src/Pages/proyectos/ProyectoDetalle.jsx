@@ -306,6 +306,16 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
         return `${f[2]}-${f[1]}-${f[0]}`;
     }
 
+    // MODO PRINT: detecta si está en modo impresión por query param
+    const params = new URLSearchParams(window.location.search);
+    const modoPrint = params.get("print") === "1";
+
+    // Abrir en nueva ventana sin sidebar
+    const handleAbrirVentana = () => {
+        const url = `${window.location.origin}/proyectos/${id}?print=1`;
+        window.open(url, "_blank", "noopener,noreferrer");
+    };
+
     if (loading) return <div className="p-8">Cargando...</div>;
     if (error) return <div className="p-8 text-red-600">{error}</div>;
     if (!proyecto) return <div className="p-8">No se encontró el proyecto.</div>;
