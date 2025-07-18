@@ -6,7 +6,7 @@ import htmlDocx from "html-docx-js/dist/html-docx";
 import { HiOutlineAdjustments } from "react-icons/hi";
 import { ArrowLeftIcon, TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 
-export const ProyectoDetalle = () => {
+export const ProyectoDetalle = ({ soloContenido = false }) => {
     const { id } = useParams();
     const [proyecto, setProyecto] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -310,7 +310,7 @@ export const ProyectoDetalle = () => {
     if (error) return <div className="p-8 text-red-600">{error}</div>;
     if (!proyecto) return <div className="p-8">No se encontró el proyecto.</div>;
 
-    return (
+    const contenido = (
         <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-4" ref={contenidoRef}>
             <button
                 className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
@@ -318,7 +318,14 @@ export const ProyectoDetalle = () => {
             >
                 Descargar como Word
             </button>
-
+            {!modoPrint && (
+                <button
+                    className="mb-4 ml-2 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
+                    onClick={handleAbrirVentana}
+                >
+                    Abrir para imprimir
+                </button>
+            )}
             {/* Datos generales */}
             <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-8">
                 <div>
@@ -712,14 +719,19 @@ export const ProyectoDetalle = () => {
             </div>
 
             {/* Footer */}
-            <div className="w-full bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
-                <Link to="/proyectos" className="inline-flex items-center mt-8 text-blue-700 hover:underline">
-                    <ArrowLeftIcon className="h-5 w-5 mr-2" />
-                    Volver a la lista de proyectos
-                </Link>
-            </div>
+            {!modoPrint && (
+                <div className="w-full bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
+                    <Link to="/proyectos" className="inline-flex items-center mt-8 text-blue-700 hover:underline">
+                        <ArrowLeftIcon className="h-5 w-5 mr-2" />
+                        Volver a la lista de proyectos
+                    </Link>
+                </div>
+            )}
         </div>
     );
+
+    // Si está en modo impresión, solo muestra el contenido sin sidebar ni footer
+    return soloContenido || modoPrint ? contenido : contenido;
 };
 
 export default ProyectoDetalle;
