@@ -717,21 +717,9 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
                     </div>
                 )}
             </div>
-
-            {/* Footer */}
-            {!modoPrint && (
-                <div className="w-full bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
-                    <Link to="/proyectos" className="inline-flex items-center mt-8 text-blue-700 hover:underline">
-                        <ArrowLeftIcon className="h-5 w-5 mr-2" />
-                        Volver a la lista de proyectos
-                    </Link>
-                </div>
-            )}
         </div>
     );
 
-    // Si está en modo impresión, solo muestra el contenido sin sidebar ni footer
-    return soloContenido || modoPrint ? contenido : contenido;
 };
 
 export default ProyectoDetalle;
