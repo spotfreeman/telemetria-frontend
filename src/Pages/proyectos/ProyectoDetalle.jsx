@@ -299,6 +299,13 @@ export const ProyectoDetalle = () => {
         return new Date(fechaStr);
     }
 
+    // Utilidad para mostrar fecha en formato DD-MM-YYYY
+    function formatFecha(fechaStr) {
+        if (!fechaStr) return "-";
+        const f = fechaStr.slice(0, 10).split("-");
+        return `${f[2]}-${f[1]}-${f[0]}`;
+    }
+
     if (loading) return <div className="p-8">Cargando...</div>;
     if (error) return <div className="p-8 text-red-600">{error}</div>;
     if (!proyecto) return <div className="p-8">No se encontró el proyecto.</div>;
@@ -444,15 +451,14 @@ export const ProyectoDetalle = () => {
                         {proyecto.fechas?.map((fecha, idx) => (
                             <tr key={idx}>
                                 <td className="border">
-                                    {/* Mostrar solo la fecha en formato YYYY-MM-DD */}
-                                    {fecha.fechainicio ? fecha.fechainicio.slice(0, 10) : "-"}
+                                    {formatFecha(fecha.fechainicio)}
                                 </td>
                                 <td className="border">
-                                    {fecha.fechafin ? fecha.fechafin.slice(0, 10) : "-"}
+                                    {formatFecha(fecha.fechafin)}
                                 </td>
                                 <td className="border">{fecha.aumento}</td>
                                 <td className="border">
-                                    {fecha.fechaactualizada ? fecha.fechaactualizada.slice(0, 10) : "-"}
+                                    {formatFecha(fecha.fechaactualizada)}
                                 </td>
                                 <td className="border">
                                     <button
