@@ -320,14 +320,12 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
             >
                 Descargar como Word
             </button>
-            {!modoPrint && (
-                <button
-                    className="mb-4 ml-2 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
-                    onClick={handleAbrirVentana}
-                >
-                    Abrir para imprimir
-                </button>
-            )}
+            <button
+                className="mb-4 ml-2 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
+                onClick={() => window.print()}
+            >
+                Imprimir
+            </button>
             {/* Datos generales */}
             <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-8">
                 <div>
