@@ -443,22 +443,15 @@ export const ProyectoDetalle = () => {
                     <tbody>
                         {proyecto.fechas?.map((fecha, idx) => (
                             <tr key={idx}>
-                                {/* <h3>{fecha.fechainicio}</h3>  */}
                                 <td className="border">
-                                    {fecha.fechainicio
-                                        ? parseFecha(fecha.fechainicio).toLocaleDateString('es-CL')
-                                        : "-"}
+                                    {fecha.fechainicio || "-"}
                                 </td>
                                 <td className="border">
-                                    {fecha.fechafin
-                                        ? parseFecha(fecha.fechafin).toLocaleDateString('es-CL')
-                                        : "-"}
+                                    {fecha.fechafin || "-"}
                                 </td>
                                 <td className="border">{fecha.aumento}</td>
                                 <td className="border">
-                                    {fecha.fechaactualizada
-                                        ? parseFecha(fecha.fechaactualizada).toLocaleDateString('es-CL')
-                                        : "-"}
+                                    {fecha.fechaactualizada || "-"}
                                 </td>
                                 <td className="border">
                                     <button
