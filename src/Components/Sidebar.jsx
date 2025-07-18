@@ -17,10 +17,22 @@ import {
 import { ValorUF } from './ValorUF'; // Asegúrate de que este componente esté correctamente importado
 
 
+function isTokenValid(token) {
+    if (!token) return false;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        // exp está en segundos
+        return payload.exp * 1000 > Date.now();
+    } catch {
+        return false;
+    }
+}
+
 function Sidebar() {
     const location = useLocation();
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
+    const tokenValido = isTokenValid(token);
     const usuario = localStorage.getItem("usuario");
     const nombre = localStorage.getItem("nombre");
 
@@ -53,21 +65,21 @@ function Sidebar() {
     ];
 
     const filteredLinks = links.filter(link => {
-        // Si no hay token, solo mostrar el login
-        if (link.to === "/login/login2" && token) return false;
-        if (link.to === "/" && token) return false;
+        // Si no hay token válido, solo mostrar el login
+        if (link.to === "/login/login2" && tokenValido) return false;
+        if (link.to === "/" && tokenValido) return false;
 
-        // Si hay token, mostrar todos los enlaces excepto el login
-        if (link.to === "/proyectos" && !token) return false;
-        if (link.to === "/server" && !token) return false;
-        if (link.to === "/notas" && !token) return false;
-        if (link.to === "/calendario" && !token) return false;
-        if (link.to === "/archivos" && !token) return false;
-        if (link.to === "/tempdata" && !token) return false;
-        if (link.to === "/datos" && !token) return false;
-        if (link.to === "/bienvenida" && !token) return false;
-        if (link.to === "/roles" && !token) return false;
-        if (link.to === "/esp32" && !token) return false;
+        // Si hay token válido, mostrar todos los enlaces excepto el login
+        if (link.to === "/proyectos" && !tokenValido) return false;
+        if (link.to === "/server" && !tokenValido) return false;
+        if (link.to === "/notas" && !tokenValido) return false;
+        if (link.to === "/calendario" && !tokenValido) return false;
+        if (link.to === "/archivos" && !tokenValido) return false;
+        if (link.to === "/tempdata" && !tokenValido) return false;
+        if (link.to === "/datos" && !tokenValido) return false;
+        if (link.to === "/bienvenida" && !tokenValido) return false;
+        if (link.to === "/roles" && !tokenValido) return false;
+        if (link.to === "/esp32" && !tokenValido) return false;
 
         return true;
     });
@@ -115,8 +127,8 @@ function Sidebar() {
                     </Link>
                 ))}
             </nav>
-            {/* Botón de cerrar sesión solo si hay token */}
-            {token && (
+            {/* Botón de cerrar sesión solo si hay token válido */}
+            {tokenValido && (
                 <button
                     onClick={handleLogout}
                     className="mt-6 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded w-full transition"
