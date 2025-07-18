@@ -444,14 +444,15 @@ export const ProyectoDetalle = () => {
                         {proyecto.fechas?.map((fecha, idx) => (
                             <tr key={idx}>
                                 <td className="border">
-                                    {fecha.fechainicio || "-"}
+                                    {/* Mostrar solo la fecha en formato YYYY-MM-DD */}
+                                    {fecha.fechainicio ? fecha.fechainicio.slice(0, 10) : "-"}
                                 </td>
                                 <td className="border">
-                                    {fecha.fechafin || "-"}
+                                    {fecha.fechafin ? fecha.fechafin.slice(0, 10) : "-"}
                                 </td>
                                 <td className="border">{fecha.aumento}</td>
                                 <td className="border">
-                                    {fecha.fechaactualizada || "-"}
+                                    {fecha.fechaactualizada ? fecha.fechaactualizada.slice(0, 10) : "-"}
                                 </td>
                                 <td className="border">
                                     <button
