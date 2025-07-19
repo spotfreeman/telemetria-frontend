@@ -41,9 +41,9 @@ export const Esp32Detail = () => {
     if (!device) return <div className="text-center py-8 text-gray-600">No se encontró el dispositivo.</div>;
 
     // Preparar datos para los gráficos
-    const labels = device.datas.map(d => new Date(d.timestamp).toLocaleString("es-CL"));
-    const tempData = device.datas.map(d => d.temperature);
-    const humData = device.datas.map(d => d.humidity);
+    const labels = Array.isArray(device?.datas) ? device.datas.map(d => new Date(d.timestamp).toLocaleString("es-CL")) : [];
+    const tempData = Array.isArray(device?.datas) ? device.datas.map(d => d.temperature) : [];
+    const humData = Array.isArray(device?.datas) ? device.datas.map(d => d.humidity) : [];
 
     const tempChartData = {
         labels,
@@ -102,7 +102,7 @@ export const Esp32Detail = () => {
                 </div>
             </div>
             <ul className="divide-y divide-blue-100">
-                {device.datas.map((d, idx) => (
+                {Array.isArray(device?.datas) && device.datas.map((d, idx) => (
                     <li key={idx} className="py-4 flex flex-col md:flex-row md:items-center md:justify-between">
                         <div className="text-gray-700">
                             <span className="font-semibold text-blue-700">Fecha:</span>{" "}
