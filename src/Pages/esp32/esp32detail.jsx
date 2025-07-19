@@ -38,12 +38,14 @@ export const Esp32Detail = () => {
 
     if (loading) return <div className="text-center py-8 text-blue-700">Cargando...</div>;
     if (error) return <div className="text-center py-8 text-red-600">Error: {error}</div>;
-    if (!device) return <div className="text-center py-8 text-gray-600">No se encontró el dispositivo.</div>;
+    if (!device || !Array.isArray(device) || device.length === 0) return <div className="text-center py-8 text-gray-600">No se encontró el dispositivo.</div>;
 
-    // Preparar datos para los gráficos
-    const labels = Array.isArray(device?.datas) ? device.datas.map(d => new Date(d.timestamp).toLocaleString("es-CL")) : [];
-    const tempData = Array.isArray(device?.datas) ? device.datas.map(d => d.temperature) : [];
-    const humData = Array.isArray(device?.datas) ? device.datas.map(d => d.humidity) : [];
+    // Usar el primer dispositivo del array
+    const datas = Array.isArray(device[0]?.datas) ? device[0].datas : [];
+
+    const labels = datas.map(d => new Date(d.timestamp).toLocaleString("es-CL"));
+    const tempData = datas.map(d => d.temperature);
+    const humData = datas.map(d => d.humidity);
 
     const tempChartData = {
         labels,
@@ -102,7 +104,7 @@ export const Esp32Detail = () => {
                 </div>
             </div>
             <ul className="divide-y divide-blue-100">
-                {Array.isArray(device?.datas) && device.datas.map((d, idx) => (
+                {datas.map((d, idx) => (
                     <li key={idx} className="py-4 flex flex-col md:flex-row md:items-center md:justify-between">
                         <div className="text-gray-700">
                             <span className="font-semibold text-blue-700">Fecha:</span>{" "}
