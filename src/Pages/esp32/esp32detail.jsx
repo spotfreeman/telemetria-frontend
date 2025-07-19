@@ -31,17 +31,25 @@ export const Esp32Detail = () => {
                 if (!res.ok) throw new Error("Error al obtener datos");
                 return res.json();
             })
-            .then(data => setDevice(data))
+            .then(data => {
+                console.log("Respuesta backend ESP32:", data); // <-- revisa la estructura aquí
+                setDevice(data);
+            })
             .catch(err => setError(err.message))
             .finally(() => setLoading(false));
     }, [deviceId]);
 
     if (loading) return <div className="text-center py-8 text-blue-700">Cargando...</div>;
     if (error) return <div className="text-center py-8 text-red-600">Error: {error}</div>;
-    if (!device || !Array.isArray(device) || device.length === 0) return <div className="text-center py-8 text-gray-600">No se encontró el dispositivo.</div>;
 
-    // Usar el primer dispositivo del array
-    const datas = Array.isArray(device[0]?.datas) ? device[0].datas : [];
+    // Ajusta la validación para aceptar array y objeto
+    if (!device || (Array.isArray(device) && device.length === 0)) {
+        return <div className="text-center py-8 text-gray-600">No se encontró el dispositivo.</div>;
+    }
+
+    // Si es array, usa el primer elemento
+    const deviceObj = Array.isArray(device) ? device[0] : device;
+    const datas = Array.isArray(deviceObj?.datas) ? deviceObj.datas : [];
 
     const labels = datas.map(d => new Date(d.timestamp).toLocaleString("es-CL"));
     const tempData = datas.map(d => d.temperature);
