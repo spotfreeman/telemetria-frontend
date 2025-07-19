@@ -54,8 +54,8 @@ function App() {
             <Route path="/roles" element={<Roles />} />
 
             {/* Rutas de ESP32 */}
-            <Route path="/esp32" element={<PrivateRoute><Esp32List /></PrivateRoute>} />
-            <Route path="/esp32/:deviceId" element={<PrivateRoute><Esp32Detail /></PrivateRoute>} />
+            <Route path="/esp32" element={<Esp32List />} />
+            <Route path="/esp32/:deviceId" element={<Esp32Detail />} />
 
             {/* Rutas de proyectos */}
 
