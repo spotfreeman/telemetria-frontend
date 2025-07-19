@@ -19,6 +19,7 @@ export const Esp32Detail = () => {
     const [device, setDevice] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [selectedDay, setSelectedDay] = useState(""); // Día seleccionado
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -32,7 +33,6 @@ export const Esp32Detail = () => {
                 return res.json();
             })
             .then(data => {
-                console.log("Respuesta backend ESP32:", data); // <-- revisa la estructura aquí
                 setDevice(data);
             })
             .catch(err => setError(err.message))
@@ -41,19 +41,31 @@ export const Esp32Detail = () => {
 
     if (loading) return <div className="text-center py-8 text-blue-700">Cargando...</div>;
     if (error) return <div className="text-center py-8 text-red-600">Error: {error}</div>;
-
-    // Ajusta la validación para aceptar array y objeto
     if (!device || (Array.isArray(device) && device.length === 0)) {
         return <div className="text-center py-8 text-gray-600">No se encontró el dispositivo.</div>;
     }
 
-    // Si es array, usa el primer elemento
     const deviceObj = Array.isArray(device) ? device[0] : device;
     const datas = Array.isArray(deviceObj?.datas) ? deviceObj.datas : [];
 
-    const labels = datas.map(d => new Date(d.timestamp).toLocaleString("es-CL"));
-    const tempData = datas.map(d => d.temperature);
-    const humData = datas.map(d => d.humidity);
+    // Agrupar datos por día
+    const datosPorDia = {};
+    datas.forEach(d => {
+        const fecha = new Date(d.timestamp).toLocaleDateString("es-CL");
+        if (!datosPorDia[fecha]) {
+            datosPorDia[fecha] = [];
+        }
+        datosPorDia[fecha].push(d);
+    });
+
+    const diasDisponibles = Object.keys(datosPorDia);
+
+    // Filtrar datos por día seleccionado
+    const datosFiltrados = selectedDay ? datosPorDia[selectedDay] : datas;
+
+    const labels = datosFiltrados.map(d => new Date(d.timestamp).toLocaleTimeString("es-CL"));
+    const tempData = datosFiltrados.map(d => d.temperature);
+    const humData = datosFiltrados.map(d => d.humidity);
 
     const tempChartData = {
         labels,
@@ -85,57 +97,6 @@ export const Esp32Detail = () => {
         ],
     };
 
-    // Agrupar datos por día y calcular promedio
-    const datosPorDia = {};
-    datas.forEach(d => {
-        const fecha = new Date(d.timestamp).toLocaleDateString("es-CL"); // Solo la fecha
-        if (!datosPorDia[fecha]) {
-            datosPorDia[fecha] = { temp: [], hum: [] };
-        }
-        datosPorDia[fecha].temp.push(d.temperature);
-        datosPorDia[fecha].hum.push(d.humidity);
-    });
-
-    const labelsDia = Object.keys(datosPorDia);
-    const tempDataDia = labelsDia.map(fecha => {
-        const arr = datosPorDia[fecha].temp;
-        return arr.reduce((a, b) => a + b, 0) / arr.length; // Promedio
-    });
-    const humDataDia = labelsDia.map(fecha => {
-        const arr = datosPorDia[fecha].hum;
-        return arr.reduce((a, b) => a + b, 0) / arr.length; // Promedio
-    });
-
-    const tempChartDataDia = {
-        labels: labelsDia,
-        datasets: [
-            {
-                label: "Temperatura promedio diaria (°C)",
-                data: tempDataDia,
-                fill: false,
-                borderColor: "rgb(37, 99, 235)",
-                backgroundColor: "rgba(37, 99, 235, 0.2)",
-                tension: 0.2,
-                pointRadius: 2,
-            },
-        ],
-    };
-
-    const humChartDataDia = {
-        labels: labelsDia,
-        datasets: [
-            {
-                label: "Humedad promedio diaria (%)",
-                data: humDataDia,
-                fill: false,
-                borderColor: "rgb(6, 182, 212)",
-                backgroundColor: "rgba(6, 182, 212, 0.2)",
-                tension: 0.2,
-                pointRadius: 2,
-            },
-        ],
-    };
-
     const chartOptions = {
         responsive: true,
         plugins: {
@@ -150,20 +111,33 @@ export const Esp32Detail = () => {
     return (
         <div className="w-full container mt-10 bg-white rounded-lg shadow-lg p-8 px-4">
             <h2 className="text-2xl font-bold text-blue-800 mb-6 text-center">
-                Detalle de <span className="text-blue-600">{device.deviceId}</span>
+                Detalle de <span className="text-blue-600">{deviceObj.deviceId}</span>
             </h2>
+            <div className="mb-6 flex flex-col md:flex-row items-center gap-4">
+                <label className="font-semibold text-blue-700">Selecciona un día:</label>
+                <select
+                    className="border rounded px-2 py-1"
+                    value={selectedDay}
+                    onChange={e => setSelectedDay(e.target.value)}
+                >
+                    <option value="">Todos</option>
+                    {diasDisponibles.map(dia => (
+                        <option key={dia} value={dia}>{dia}</option>
+                    ))}
+                </select>
+            </div>
             <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 rounded-lg p-4 shadow">
-                    <h3 className="text-lg font-semibold text-blue-700 mb-2 text-center">Temperatura diaria</h3>
-                    <Line data={tempChartDataDia} options={chartOptions} />
+                    <h3 className="text-lg font-semibold text-blue-700 mb-2 text-center">Temperatura</h3>
+                    <Line data={tempChartData} options={chartOptions} />
                 </div>
                 <div className="bg-cyan-50 rounded-lg p-4 shadow">
-                    <h3 className="text-lg font-semibold text-cyan-700 mb-2 text-center">Humedad diaria</h3>
-                    <Line data={humChartDataDia} options={chartOptions} />
+                    <h3 className="text-lg font-semibold text-cyan-700 mb-2 text-center">Humedad</h3>
+                    <Line data={humChartData} options={chartOptions} />
                 </div>
             </div>
             <ul className="divide-y divide-blue-100">
-                {datas.map((d, idx) => (
+                {datosFiltrados.map((d, idx) => (
                     <li key={idx} className="py-4 flex flex-col md:flex-row md:items-center md:justify-between">
                         <div className="text-gray-700">
                             <span className="font-semibold text-blue-700">Fecha:</span>{" "}
