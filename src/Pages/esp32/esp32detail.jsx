@@ -77,6 +77,57 @@ export const Esp32Detail = () => {
         ],
     };
 
+    // Agrupar datos por día y calcular promedio
+    const datosPorDia = {};
+    datas.forEach(d => {
+        const fecha = new Date(d.timestamp).toLocaleDateString("es-CL"); // Solo la fecha
+        if (!datosPorDia[fecha]) {
+            datosPorDia[fecha] = { temp: [], hum: [] };
+        }
+        datosPorDia[fecha].temp.push(d.temperature);
+        datosPorDia[fecha].hum.push(d.humidity);
+    });
+
+    const labelsDia = Object.keys(datosPorDia);
+    const tempDataDia = labelsDia.map(fecha => {
+        const arr = datosPorDia[fecha].temp;
+        return arr.reduce((a, b) => a + b, 0) / arr.length; // Promedio
+    });
+    const humDataDia = labelsDia.map(fecha => {
+        const arr = datosPorDia[fecha].hum;
+        return arr.reduce((a, b) => a + b, 0) / arr.length; // Promedio
+    });
+
+    const tempChartDataDia = {
+        labels: labelsDia,
+        datasets: [
+            {
+                label: "Temperatura promedio diaria (°C)",
+                data: tempDataDia,
+                fill: false,
+                borderColor: "rgb(37, 99, 235)",
+                backgroundColor: "rgba(37, 99, 235, 0.2)",
+                tension: 0.2,
+                pointRadius: 2,
+            },
+        ],
+    };
+
+    const humChartDataDia = {
+        labels: labelsDia,
+        datasets: [
+            {
+                label: "Humedad promedio diaria (%)",
+                data: humDataDia,
+                fill: false,
+                borderColor: "rgb(6, 182, 212)",
+                backgroundColor: "rgba(6, 182, 212, 0.2)",
+                tension: 0.2,
+                pointRadius: 2,
+            },
+        ],
+    };
+
     const chartOptions = {
         responsive: true,
         plugins: {
@@ -95,12 +146,12 @@ export const Esp32Detail = () => {
             </h2>
             <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 rounded-lg p-4 shadow">
-                    <h3 className="text-lg font-semibold text-blue-700 mb-2 text-center">Temperatura</h3>
-                    <Line data={tempChartData} options={chartOptions} />
+                    <h3 className="text-lg font-semibold text-blue-700 mb-2 text-center">Temperatura diaria</h3>
+                    <Line data={tempChartDataDia} options={chartOptions} />
                 </div>
                 <div className="bg-cyan-50 rounded-lg p-4 shadow">
-                    <h3 className="text-lg font-semibold text-cyan-700 mb-2 text-center">Humedad</h3>
-                    <Line data={humChartData} options={chartOptions} />
+                    <h3 className="text-lg font-semibold text-cyan-700 mb-2 text-center">Humedad diaria</h3>
+                    <Line data={humChartDataDia} options={chartOptions} />
                 </div>
             </div>
             <ul className="divide-y divide-blue-100">
