@@ -86,9 +86,9 @@ export const Mercado = () => {
                                                     {item.Adjudicacion && item.Adjudicacion.NombreProveedor ? (
                                                         <div>
                                                             <span className="font-semibold">{item.Adjudicacion.NombreProveedor}</span>
-                                                            {item.Adjudicacion.FechaAdjudicacion && (
+                                                            {item.Adjudicacion.MontoUnitario && (
                                                                 <div className="text-xs text-gray-600">
-                                                                    Fecha: {item.Adjudicacion.FechaAdjudicacion}
+                                                                    Monto: {item.Adjudicacion.MontoUnitario}
                                                                 </div>
                                                             )}
                                                         </div>
