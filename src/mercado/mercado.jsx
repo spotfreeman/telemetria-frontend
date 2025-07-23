@@ -7,6 +7,7 @@ export const Mercado = () => {
     const [loading, setLoading] = useState(false);
     const [inputId, setInputId] = useState("");
     const [error, setError] = useState("");
+    const [openIdx, setOpenIdx] = useState(null); // Para controlar el desplegable
 
     const buscarLicitacion = async () => {
         setError("");
@@ -56,8 +57,27 @@ export const Mercado = () => {
             {loading && <p>Cargando...</p>}
             <ul>
                 {licitaciones.map((licit, idx) => (
-                    <li key={licit.CodigoExterno || idx} className="mb-2">
-                        <strong>{licit.Nombre}</strong> - {licit.Estado}
+                    <li key={licit.CodigoExterno || idx} className="mb-2 border rounded">
+                        <button
+                            className="w-full text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded flex justify-between items-center"
+                            onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
+                        >
+                            <span>
+                                <strong>{licit.Nombre}</strong> - {licit.Estado}
+                            </span>
+                            <span>{openIdx === idx ? "▲" : "▼"}</span>
+                        </button>
+                        {openIdx === idx && (
+                            <div className="px-4 py-2 bg-gray-50 border-t text-sm">
+                                <div><strong>Código:</strong> {licit.CodigoExterno}</div>
+                                <div><strong>Organismo:</strong> {licit.NombreOrganismo}</div>
+                                <div><strong>Tipo:</strong> {licit.TipoLicitacion}</div>
+                                <div><strong>Fecha Publicación:</strong> {licit.FechaPublicacion}</div>
+                                <div><strong>Fecha Cierre:</strong> {licit.FechaCierre}</div>
+                                <div><strong>Descripción:</strong> {licit.Descripcion}</div>
+                                {/* Agrega aquí más campos si lo deseas */}
+                            </div>
+                        )}
                     </li>
                 ))}
             </ul>
