@@ -61,6 +61,7 @@ function Sidebar() {
         { to: "/archivos", icon: <DocumentDuplicateIcon className="h-5 w-5" />, label: "Archivos" },
         { to: "/roles", icon: <UsersIcon className="h-5 w-5" />, label: "Roles" },
         { to: "/esp32", icon: <UsersIcon className="h-5 w-5" />, label: "ESP32" },
+        { to: "/mercado", icon: <UsersIcon className="h-5 w-5" />, label: "Mercado Público" },
 
     ];
 
@@ -80,6 +81,7 @@ function Sidebar() {
         if (link.to === "/bienvenida" && !tokenValido) return false;
         if (link.to === "/roles" && !tokenValido) return false;
         if (link.to === "/esp32" && !tokenValido) return false;
+        if (link.to === "/mercado" && !tokenValido) return false;
 
         return true;
     });

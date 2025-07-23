@@ -20,6 +20,8 @@ import { Roles } from './Pages/usuarios/Roles';
 import { Esp32List } from './Pages/esp32/esp32list';
 import { Esp32Detail } from './Pages/esp32/esp32detail';
 
+import { Mercado } from './mercado/mercado';
+
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
 
@@ -57,8 +59,10 @@ function App() {
             <Route path="/esp32" element={<Esp32List />} />
             <Route path="/esp32/:deviceId" element={<Esp32Detail />} />
 
-            {/* Rutas de proyectos */}
+            {/* Ruta para Mercado */}
+            <Route path="/mercado" element={<Mercado />} />
 
+            {/* Rutas de proyectos */}
             <Route path="/proyectos" element={<Lista />} />
             <Route
               path="/proyectos/:id"
