@@ -88,6 +88,7 @@ export const Mercado = () => {
                                             <thead>
                                                 <tr className="bg-gray-200">
                                                     <th className="px-2 py-1 border">Proveedor</th>
+                                                    <th className="px-2 py-1 border">Rut</th>
                                                     <th className="px-2 py-1 border">Monto</th>
                                                 </tr>
                                             </thead>
