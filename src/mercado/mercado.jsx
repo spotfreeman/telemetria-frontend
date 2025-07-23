@@ -83,12 +83,18 @@ export const Mercado = () => {
                                         <ul className="list-disc ml-6">
                                             {licit.Items.Listado.map((item, i) => (
                                                 <li key={i}>
-                                                    {item.Adjudicacion && item.Adjudicacion.NombreProveedor
-                                                        ? item.Adjudicacion.NombreProveedor
-                                                        : "Sin adjudicación"}
-                                                    {item.Adjudicacion && item.Adjudicacion.FechaAdjudicacion
-                                                        ? ` (Fecha: ${item.Adjudicacion.FechaAdjudicacion})`
-                                                        : "Sin Adjudicación"}
+                                                    {item.Adjudicacion && item.Adjudicacion.NombreProveedor ? (
+                                                        <div>
+                                                            <span className="font-semibold">{item.Adjudicacion.NombreProveedor}</span>
+                                                            {item.Adjudicacion.FechaAdjudicacion && (
+                                                                <div className="text-xs text-gray-600">
+                                                                    Fecha: {item.Adjudicacion.FechaAdjudicacion}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        <span>Sin adjudicación</span>
+                                                    )}
                                                 </li>
                                             ))}
                                         </ul>
