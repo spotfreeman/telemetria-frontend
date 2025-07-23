@@ -64,6 +64,10 @@ export const Mercado = () => {
                         >
                             <span>
                                 <strong>{licit.Nombre}</strong> - {licit.Estado}
+                                <span className={`ml-2 px-2 py-1 rounded text-xs font-semibold
+                                    ${licit.Estado === "Adjudicada" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}>
+                                    {licit.Estado}
+                                </span>
                             </span>
                             <span>{openIdx === idx ? "▲" : "▼"}</span>
                         </button>
@@ -80,24 +84,30 @@ export const Mercado = () => {
                                 {licit.Items && licit.Items.Listado && licit.Items.Listado.length > 0 && (
                                     <div className="mt-2">
                                         <strong>Adjudicatarios:</strong>
-                                        <ul className="list-disc ml-6">
-                                            {licit.Items.Listado.map((item, i) => (
-                                                <li key={i}>
-                                                    {item.Adjudicacion && item.Adjudicacion.NombreProveedor ? (
-                                                        <div>
-                                                            <span className="font-semibold">{item.Adjudicacion.NombreProveedor}</span>
-                                                            {item.Adjudicacion.MontoUnitario && (
-                                                                <div className="text-xs text-gray-600">
-                                                                    Monto: {item.Adjudicacion.MontoUnitario}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    ) : (
-                                                        <span>Sin adjudicación</span>
-                                                    )}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        <table className="min-w-full mt-2 text-xs border">
+                                            <thead>
+                                                <tr className="bg-gray-200">
+                                                    <th className="px-2 py-1 border">Proveedor</th>
+                                                    <th className="px-2 py-1 border">Monto</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {licit.Items.Listado.map((item, i) => (
+                                                    <tr key={i} className="border-b">
+                                                        <td className="px-2 py-1 border">
+                                                            {item.Adjudicacion && item.Adjudicacion.NombreProveedor
+                                                                ? item.Adjudicacion.NombreProveedor
+                                                                : <span className="italic text-gray-400">Sin adjudicación</span>}
+                                                        </td>
+                                                        <td className="px-2 py-1 border">
+                                                            {item.Adjudicacion && item.Adjudicacion.MontoUnitario
+                                                                ? item.Adjudicacion.MontoUnitario.toLocaleString('es-CL')
+                                                                : "-"}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 )}
                             </div>
