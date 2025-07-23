@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const API_KEY = "F8537A18-6766-4DEF-9E59-426B4FEE2844";
+const API_KEY = "188425FD-75B8-44E0-9678-9DC2F09CFCD6";
 
 export const Mercado = () => {
     const [licitaciones, setLicitaciones] = useState([]);
