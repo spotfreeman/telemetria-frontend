@@ -76,8 +76,8 @@ export const Mercado = () => {
                                 <div><strong>Código:</strong> {licit.CodigoExterno}</div>
                                 <div><strong>Organismo:</strong> {licit.NombreOrganismo}</div>
                                 <div><strong>Tipo:</strong> {licit.TipoLicitacion}</div>
-                                <div><strong>Fecha Publicación:</strong> {licit.FechaPublicacion}</div>
-                                <div><strong>Fecha Cierre:</strong> {licit.FechaCierre}</div>
+                                <div><strong>Fecha Publicación:</strong> {licit.Fechas.FechaPublicacion}</div>
+                                <div><strong>Fecha Cierre:</strong> {licit.Fechas.FechaCierre}</div>
                                 <div><strong>Descripción:</strong> {licit.Descripcion}</div>
 
                                 {/* Mostrar adjudicatarios si existen */}
@@ -99,6 +99,13 @@ export const Mercado = () => {
                                                                 ? item.Adjudicacion.NombreProveedor
                                                                 : <span className="italic text-gray-400">Sin adjudicación</span>}
                                                         </td>
+
+                                                        <td className="px-2 py-1 border">
+                                                            {item.Adjudicacion && item.Adjudicacion.RutProveedor
+                                                                ? item.Adjudicacion.RutProveedor
+                                                                : "-"}
+                                                        </td>
+
                                                         <td className="px-2 py-1 border">
                                                             {item.Adjudicacion && item.Adjudicacion.MontoUnitario
                                                                 ? item.Adjudicacion.MontoUnitario.toLocaleString('es-CL')
