@@ -75,7 +75,25 @@ export const Mercado = () => {
                                 <div><strong>Fecha Publicación:</strong> {licit.FechaPublicacion}</div>
                                 <div><strong>Fecha Cierre:</strong> {licit.FechaCierre}</div>
                                 <div><strong>Descripción:</strong> {licit.Descripcion}</div>
-                                {/* Agrega aquí más campos si lo deseas */}
+
+                                {/* Mostrar adjudicatarios si existen */}
+                                {licit.Items && licit.Items.Listado && licit.Items.Listado.length > 0 && (
+                                    <div className="mt-2">
+                                        <strong>Adjudicatarios:</strong>
+                                        <ul className="list-disc ml-6">
+                                            {licit.Items.Listado.map((item, i) => (
+                                                <li key={i}>
+                                                    {item.Adjudicacion && item.Adjudicacion.NombreProveedor
+                                                        ? item.Adjudicacion.NombreProveedor
+                                                        : "Sin adjudicación"}
+                                                    {item.Adjudicacion && item.Adjudicacion.FechaAdjudicacion
+                                                        ? ` (Fecha: ${item.Adjudicacion.FechaAdjudicacion})`
+                                                        : "Sin Adjudicación"}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </li>
