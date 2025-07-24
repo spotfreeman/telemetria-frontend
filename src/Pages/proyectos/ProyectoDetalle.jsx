@@ -6,7 +6,7 @@ import htmlDocx from "html-docx-js/dist/html-docx";
 import { HiOutlineAdjustments } from "react-icons/hi";
 import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 
-export const ProyectoDetalle = ({ soloContenido = false }) => {
+export const ProyectoDetalle = () => {
     const { id } = useParams();
     const [proyecto, setProyecto] = useState(null);
     const [loading, setLoading] = useState(true);
