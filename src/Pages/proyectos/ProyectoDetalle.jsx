@@ -447,6 +447,7 @@ export const ProyectoDetalle = () => {
                         Agregar Fechas
                     </button>
                 </div>
+
                 <table className="w-full table-fixed border border-gray-300 border-collapse rounded mb-8">
                     <thead className="bg-blue-100">
                         <tr>
@@ -490,11 +491,16 @@ export const ProyectoDetalle = () => {
                 </table>
 
                 {/* Modulo de Licitacion */}
+
+                <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
+                    <h3 className="text-lg font-bold mb-2">Modulo de Licitacion</h3>
+                </div>
+
                 <table className="w-full table-fixed border border-gray-300 border-collapse rounded mb-8">
-                    <thead className="bg-blue-100"> Modulo de Licitacion : xxxxxxxxxxxx </thead>
+                    <thead className="bg-blue-100"> xxxxxxxxxxxx </thead>
                     <tr>
-                        <th className="px-4 py-2">Fecha Inicio</th>
-                        <th className="px-4 py-2">Fecha Fin</th>
+                        <th className="px-4 py-2">Fecha Publicacion</th>
+                        <th className="px-4 py-2">Fecha Cierre</th>
                     </tr>
                     <tbody>
                         <tr>
