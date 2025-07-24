@@ -275,6 +275,14 @@ export const ProyectoDetalle = () => {
         if (res.ok) fetchProyecto();
     };
 
+    const handleAbrirLicitacionModal = () => {
+        setIdLicitacionInput(
+            proyecto.licitacion && proyecto.licitacion.length > 0
+                ? proyecto.licitacion[0].idlicitacion
+                : ""
+        );
+        setShowLicitacionModal(true);
+    };
     // Guardar licitación
     const handleGuardarLicitacion = async (e) => {
         e.preventDefault();
