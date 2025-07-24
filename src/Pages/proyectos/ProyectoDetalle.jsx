@@ -6,6 +6,11 @@ import htmlDocx from "html-docx-js/dist/html-docx";
 import { HiOutlineAdjustments } from "react-icons/hi";
 import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 
+
+// Importacion de Componentes para Refactorizacion
+import Georeferencia from "../../Components/Proyectos/Georeferencia";
+
+
 export const ProyectoDetalle = () => {
     const { id } = useParams();
     const [proyecto, setProyecto] = useState(null);
@@ -417,6 +422,16 @@ export const ProyectoDetalle = () => {
                 </div>
             </div>
 
+            {/* Componente Georeferencia */}
+            <Georeferencia
+                georeferencia={proyecto.georeferencia}
+                geoForm={geoForm}
+                showGeoModal={showGeoModal}
+                setShowGeoModal={setShowGeoModal}
+                handleGeoChange={handleGeoChange}
+                handleGuardarGeo={handleGuardarGeo}
+            />
+
             {/* Georreferencia */}
             <div className="w-auto">
                 <div className="w-auto bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
@@ -521,7 +536,7 @@ export const ProyectoDetalle = () => {
                 {/* Modulo de Licitacion */}
 
                 <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
-                    <h3 className="text-lg font-bold mb-2">Modulo de Licitacion</h3>
+                    <h3 className="text-lg font-bold mb-2">Modulo de Licitacion : </h3>
                     <button
                         className="bg-green-600 text-white px-3 py-1 rounded"
                         onClick={handleAbrirLicitacionModal}
@@ -529,16 +544,12 @@ export const ProyectoDetalle = () => {
                         {proyecto.licitacion && proyecto.licitacion.length > 0 ? "Modificar" : "Agregar"} Licitación
                     </button>
                 </div>
+
                 <div className="mb-4">
                     <strong>ID Licitación:</strong>{" "}
                     {proyecto.licitacion && proyecto.licitacion.length > 0
                         ? proyecto.licitacion[0].idlicitacion
                         : <span className="text-gray-500">No registrada</span>}
-
-                    <h2>Fecha Publicacion</h2>
-                    <h2>Fecha Apertura Tecnica</h2>
-                    <h2>Fecha Adjudicacion Portal</h2>
-                    <h2>Aprueba Contrato</h2>
                 </div>
 
                 <div>
