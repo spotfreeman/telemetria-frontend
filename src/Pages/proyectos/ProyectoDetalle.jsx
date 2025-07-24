@@ -9,6 +9,7 @@ import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 // Importacion de Componentes para Refactorizacion
 import Georeferencia from "../../Components/Proyectos/Georeferencia";
 import FechasImportantes from "../../Components/Proyectos/FechasImportantes";
+import TablaAvances from "../../Components/Proyectos/TablaAvances";
 
 
 
@@ -363,6 +364,7 @@ export const ProyectoDetalle = () => {
             >
                 Imprimir
             </button>
+
             {/* Datos generales */}
             <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-8">
                 <div>
@@ -614,6 +616,18 @@ export const ProyectoDetalle = () => {
                     </div>
                 )}
             </div>
+
+
+            {/* Componente de Tabla de Avances */}
+            <TablaAvances
+                avance={proyecto.avance}
+                nuevoAvance={nuevoAvance}
+                mostrarEvolucion={mostrarEvolucion}
+                handleAvanceChange={handleAvanceChange}
+                handleAgregarAvance={handleAgregarAvance}
+                setMostrarEvolucion={setMostrarEvolucion}
+                handleBorrarAvance={handleBorrarAvance}
+            />
 
             {/* Tabla de Avances */}
             <div className="mt-10">
