@@ -49,8 +49,10 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
             const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
+            console.log("Respuesta fetch:", res.status); // <-- agrega esto
             if (!res.ok) throw new Error("Error al cargar el proyecto");
             const data = await res.json();
+            console.log("Datos recibidos:", data); // <-- agrega esto
             setProyecto(data);
             setForm({
                 codigo: data.codigo || "",
@@ -65,6 +67,7 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
             setFechas(data.fechas || []);
         } catch (err) {
             setError(err.message);
+            console.error("Error en fetchProyecto:", err); // <-- agrega esto
         }
         setLoading(false);
     };
