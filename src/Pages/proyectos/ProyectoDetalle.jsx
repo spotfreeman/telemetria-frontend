@@ -4,7 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { saveAs } from "file-saver";
 import htmlDocx from "html-docx-js/dist/html-docx";
 import { HiOutlineAdjustments } from "react-icons/hi";
-import { ArrowLeftIcon, TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
+import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 
 export const ProyectoDetalle = ({ soloContenido = false }) => {
     const { id } = useParams();
@@ -306,7 +306,7 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
         return `${f[2]}-${f[1]}-${f[0]}`;
     }
 
-
+    console.log("ID recibido:", id);
 
     if (loading) return <div className="p-8">Cargando...</div>;
     if (error) return <div className="p-8 text-red-600">{error}</div>;

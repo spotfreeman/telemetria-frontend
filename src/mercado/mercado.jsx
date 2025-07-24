@@ -74,10 +74,16 @@ export const Mercado = () => {
                         {openIdx === idx && (
                             <div className="px-4 py-2 bg-gray-50 border-t text-sm">
                                 <div><strong>Código:</strong> {licit.CodigoExterno}</div>
-                                <div><strong>Organismo:</strong> {licit.NombreOrganismo}</div>
-                                <div><strong>Tipo:</strong> {licit.TipoLicitacion}</div>
-                                <div><strong>Fecha Publicación:</strong> {licit.Fechas.FechaPublicacion}</div>
-                                <div><strong>Fecha Cierre:</strong> {licit.Fechas.FechaCierre}</div>
+                                <div><strong>Fecha Publicación:</strong>{" "}
+                                    {licit.Fechas && licit.Fechas.FechaPublicacion
+                                        ? new Date(licit.Fechas.FechaPublicacion).toLocaleDateString('es-CL')
+                                        : "-"}
+                                </div>
+                                <div><strong>Fecha Cierre:</strong>{" "}
+                                    {licit.Fechas && licit.Fechas.FechaCierre
+                                        ? new Date(licit.Fechas.FechaCierre).toLocaleDateString('es-CL')
+                                        : "-"}
+                                </div>
                                 <div><strong>Descripción:</strong> {licit.Descripcion}</div>
 
                                 {/* Mostrar adjudicatarios si existen */}
