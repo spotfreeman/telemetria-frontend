@@ -489,6 +489,21 @@ export const ProyectoDetalle = () => {
                     </tbody>
                 </table>
 
+                <table>
+                    <thead> Modulo de Licitacion : xxxxxxxxxxxx </thead>
+                    <tr>
+                        <th className="px-4 py-2">Fecha Inicio</th>
+                        <th className="px-4 py-2">Fecha Fin</th>
+
+                    </tr>
+                    <tbody>
+                        <tr>
+                            <td className="border px-4 py-2"> Texto 1</td>
+                            <td className="border px-4 py-2"> Texto 2</td>
+                        </tr>
+                    </tbody>
+                </table>
+
                 {/* Modal */}
                 {showFechasModal && (
                     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
