@@ -489,12 +489,12 @@ export const ProyectoDetalle = () => {
                     </tbody>
                 </table>
 
-                <table>
-                    <thead> Modulo de Licitacion : xxxxxxxxxxxx </thead>
+                {/* Modulo de Licitacion */}
+                <table className="w-full table-fixed border border-gray-300 border-collapse rounded mb-8">
+                    <thead className="bg-blue-100"> Modulo de Licitacion : xxxxxxxxxxxx </thead>
                     <tr>
                         <th className="px-4 py-2">Fecha Inicio</th>
                         <th className="px-4 py-2">Fecha Fin</th>
-
                     </tr>
                     <tbody>
                         <tr>
