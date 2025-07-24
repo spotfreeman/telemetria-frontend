@@ -64,14 +64,7 @@ function App() {
 
             {/* Rutas de proyectos */}
             <Route path="/proyectos" element={<Lista />} />
-            <Route
-              path="/proyectos/:id"
-              element={
-                <PrivateRoute>
-                  <ProyectoDetalle />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/proyectos/:id" element={<ProyectoDetalle />} />
 
             {/* Agrega más rutas según sea necesario */}
 
