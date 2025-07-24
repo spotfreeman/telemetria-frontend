@@ -722,7 +722,7 @@ export const ProyectoDetalle = () => {
             </div>
         </div>
     );
-
+    return contenido;
 };
 
 export default ProyectoDetalle;
