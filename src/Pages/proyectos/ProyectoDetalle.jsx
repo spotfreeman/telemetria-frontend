@@ -534,6 +534,38 @@ export const ProyectoDetalle = () => {
                     {proyecto.licitacion && proyecto.licitacion.length > 0
                         ? proyecto.licitacion[0].idlicitacion
                         : <span className="text-gray-500">No registrada</span>}
+
+                    <h2>Fecha Publicacion</h2>
+                    <h2>Fecha Apertura Tecnica</h2>
+                    <h2>Fecha Adjudicacion Portal</h2>
+                    <h2>Aprueba Contrato</h2>
+                </div>
+
+                <div>
+                    <table className="w-full border border-gray-300 rounded mb-8">
+                        <thead>
+                            <tr className="bg-blue-100">
+                                <th className="px-4 py-2">Fecha Publicacion</th>
+                                <th className="px-4 py-2">Fecha Apertura Tecnica</th>
+                                <th className="px-4 py-2">Fecha Adjudicacion Portal</th>
+                                <th className="px-4 py-2">Aprueba Contrato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="border px-4 py-2">Dato fila 1, col 1</td>
+                                <td className="border px-4 py-2">Dato fila 1, col 2</td>
+                                <td className="border px-4 py-2">Dato fila 1, col 3</td>
+                                <td className="border px-4 py-2">Dato fila 1, col 4</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2">Dato fila 2, col 1</td>
+                                <td className="border px-4 py-2">Dato fila 2, col 2</td>
+                                <td className="border px-4 py-2">Dato fila 2, col 3</td>
+                                <td className="border px-4 py-2">Dato fila 2, col 4</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 {/* Modal */}
