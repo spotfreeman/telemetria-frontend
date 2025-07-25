@@ -105,6 +105,13 @@ function Sidebar() {
      * Puedes agregar/quitar grupos y subenlaces según tus necesidades.
      */
     const groupedLinks = [
+        // Grupo solo para Login (si no hay sesión)
+        {
+            label: "Acceso",
+            children: [
+                { to: "/login/login2", icon: <UsersIcon className="h-5 w-5" />, label: "Login" }
+            ]
+        },
         {
             label: "Telemetría",
             icon: <ChartPieIcon className="h-5 w-5" />,
@@ -142,8 +149,9 @@ function Sidebar() {
             .map(group => ({
                 ...group,
                 children: group.children.filter(link => {
-                    // Aquí replica la lógica de filteredLinks:
+                    // Solo oculta el login si ya hay sesión
                     if (link.to === "/login/login2" && tokenValido) return false;
+                    // El resto igual que antes
                     if (link.to === "/" && tokenValido) return false;
                     if (
                         ["/proyectos", "/server", "/notas", "/calendario", "/archivos", "/tempdata", "/datos", "/bienvenida", "/roles", "/esp32", "/mercado"]
@@ -152,7 +160,6 @@ function Sidebar() {
                     return true;
                 })
             }))
-            // Solo muestra grupos que tengan al menos un hijo visible
             .filter(group => group.children.length > 0);
     }
 
