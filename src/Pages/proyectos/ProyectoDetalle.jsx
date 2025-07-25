@@ -1,59 +1,57 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { saveAs } from "file-saver";
 import htmlDocx from "html-docx-js/dist/html-docx";
-import { HiOutlineAdjustments } from "react-icons/hi";
-import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 
-// Importacion de Componentes para Refactorizacion
+// Componentes refactorizados
 import Georeferencia from "../../Components/Proyectos/Georeferencia";
 import FechasImportantes from "../../Components/Proyectos/FechasImportantes";
 import TablaAvances from "../../Components/Proyectos/TablaAvances";
 import DetalleMes from "../../Components/Proyectos/DetalleMes";
 import DetalleMesTabla from "../../Components/Proyectos/DetalleMesTabla";
-
-
+import DatosGenerales from "../../Components/Proyectos/DatosGenerales";
+import Licitacion from "../../Components/Proyectos/Licitacion";
 
 export const ProyectoDetalle = () => {
     const { id } = useParams();
+
+    // --- Estados principales ---
     const [proyecto, setProyecto] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [editando, setEditando] = useState(false);
     const [mensaje, setMensaje] = useState("");
+
+    // --- Estados de edición y formularios ---
+    const [editando, setEditando] = useState(false);
     const [form, setForm] = useState({ codigo: "", nombre: "", estado: "", descripcion: "" });
 
-    // Georreferencia
+    // --- Georreferencia ---
     const [geoForm, setGeoForm] = useState({ latitud: "", longitud: "" });
     const [showGeoModal, setShowGeoModal] = useState(false);
 
-    // Avances
+    // --- Fechas importantes ---
+    const [showFechasModal, setShowFechasModal] = useState(false);
+    const [editFechasIdx, setEditFechasIdx] = useState(null);
+    const [fechasForm, setFechasForm] = useState({ fechainicio: "", fechafin: "", aumento: 0 });
+
+    // --- Avances ---
     const [nuevoAvance, setNuevoAvance] = useState({ mes: "", anio: "", valor: "" });
     const [mostrarEvolucion, setMostrarEvolucion] = useState(true);
 
-    // Detalle del mes
+    // --- Detalle del mes ---
     const [nuevoDetalleMes, setNuevoDetalleMes] = useState({ mes: "", anio: "", descripcion: "" });
     const [editandoDetalleIdx, setEditandoDetalleIdx] = useState(null);
     const [detalleEdit, setDetalleEdit] = useState({ mes: "", anio: "", descripcion: "" });
 
-    // Fechas importantes
-    const [fechas, setFechas] = useState(proyecto?.fechas || []);
-    const [showFechasModal, setShowFechasModal] = useState(false);
-    const [editFechasIdx, setEditFechasIdx] = useState(null);
-    const [fechasForm, setFechasForm] = useState({
-        fechainicio: "",
-        fechafin: "",
-        aumento: 0
-    });
-
-    // Licitacion
+    // --- Licitación ---
     const [showLicitacionModal, setShowLicitacionModal] = useState(false);
     const [idLicitacionInput, setIdLicitacionInput] = useState("");
 
+    // --- Referencia para exportar a Word ---
     const contenidoRef = useRef();
 
-    // Obtener proyecto
+    // --- Fetch de datos del proyecto ---
     const fetchProyecto = async () => {
         setLoading(true);
         setError("");
@@ -62,10 +60,8 @@ export const ProyectoDetalle = () => {
             const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            console.log("Respuesta fetch:", res.status); // <-- agrega esto
             if (!res.ok) throw new Error("Error al cargar el proyecto");
             const data = await res.json();
-            console.log("Datos recibidos:", data); // <-- agrega esto
             setProyecto(data);
             setForm({
                 codigo: data.codigo || "",
@@ -77,26 +73,16 @@ export const ProyectoDetalle = () => {
                 latitud: data.georeferencia?.latitud || "",
                 longitud: data.georeferencia?.longitud || ""
             });
-            setFechas(data.fechas || []);
         } catch (err) {
             setError(err.message);
-            console.error("Error en fetchProyecto:", err); // <-- agrega esto
         }
         setLoading(false);
     };
 
     useEffect(() => { fetchProyecto(); }, [id]);
 
-    // Sincroniza fechas si cambia el proyecto
-    useEffect(() => {
-        setFechas(proyecto?.fechas || []);
-    }, [proyecto]);
-
-    // Handlers generales
+    // --- Handlers de Datos Generales ---
     const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
-    const handleGeoChange = e => setGeoForm({ ...geoForm, [e.target.name]: e.target.value });
-
-    // Guardar datos generales
     const handleGuardar = async e => {
         e.preventDefault();
         setMensaje("");
@@ -115,7 +101,8 @@ export const ProyectoDetalle = () => {
         }
     };
 
-    // Guardar georreferencia
+    // --- Handlers de Georreferencia ---
+    const handleGeoChange = e => setGeoForm({ ...geoForm, [e.target.name]: e.target.value });
     const handleGuardarGeo = async e => {
         e.preventDefault();
         const token = localStorage.getItem("token");
@@ -130,11 +117,8 @@ export const ProyectoDetalle = () => {
         }
     };
 
-    // Fechas importantes (INTEGRACIÓN SEGURA)
-    const handleFechasChange = e => {
-        setFechasForm({ ...fechasForm, [e.target.name]: e.target.value });
-    };
-
+    // --- Handlers de Fechas Importantes ---
+    const handleFechasChange = e => setFechasForm({ ...fechasForm, [e.target.name]: e.target.value });
     const guardarFechasEnBackend = async (nuevasFechas) => {
         const token = localStorage.getItem("token");
         const proyectoActualizado = { ...proyecto, fechas: nuevasFechas };
@@ -146,21 +130,18 @@ export const ProyectoDetalle = () => {
             },
             body: JSON.stringify(proyectoActualizado)
         });
-        // Refresca el proyecto
         await fetchProyecto();
     };
-
     const handleAgregarFechas = async e => {
         e.preventDefault();
         const nuevasFechas = [
             ...(proyecto.fechas || []),
-            { ...fechasForm, aumento: Number(fechasForm.aumento) } // <-- conversión aquí
+            { ...fechasForm, aumento: Number(fechasForm.aumento) }
         ];
         await guardarFechasEnBackend(nuevasFechas);
         setShowFechasModal(false);
         setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
     };
-
     const handleEditarFechas = idx => {
         const f = proyecto.fechas[idx];
         setFechasForm({
@@ -171,7 +152,6 @@ export const ProyectoDetalle = () => {
         setEditFechasIdx(idx);
         setShowFechasModal(true);
     };
-
     const handleGuardarFechas = async e => {
         e.preventDefault();
         const nuevasFechas = [...proyecto.fechas];
@@ -181,7 +161,6 @@ export const ProyectoDetalle = () => {
         setEditFechasIdx(null);
         setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
     };
-
     const handleBorrarFechas = async idx => {
         if (window.confirm("¿Seguro que deseas borrar esta fila?")) {
             const nuevasFechas = proyecto.fechas.filter((_, i) => i !== idx);
@@ -189,9 +168,8 @@ export const ProyectoDetalle = () => {
         }
     };
 
-    // Avances
+    // --- Handlers de Avances ---
     const handleAvanceChange = e => setNuevoAvance({ ...nuevoAvance, [e.target.name]: e.target.value });
-
     const handleAgregarAvance = async e => {
         e.preventDefault();
         const avanceActualizado = [...(proyecto.avance || []), {
@@ -210,7 +188,6 @@ export const ProyectoDetalle = () => {
             fetchProyecto();
         }
     };
-
     const handleBorrarAvance = async idx => {
         if (!window.confirm("¿Seguro que deseas eliminar este avance?")) return;
         const avanceActualizado = proyecto.avance.filter((_, i) => i !== idx);
@@ -223,9 +200,8 @@ export const ProyectoDetalle = () => {
         if (res.ok) fetchProyecto();
     };
 
-    // Detalle del mes
+    // --- Handlers de Detalle del Mes ---
     const handleDetalleMesChange = e => setNuevoDetalleMes({ ...nuevoDetalleMes, [e.target.name]: e.target.value });
-
     const handleAgregarDetalleMes = async e => {
         e.preventDefault();
         const proyectoActualizado = { ...proyecto };
@@ -244,7 +220,6 @@ export const ProyectoDetalle = () => {
             fetchProyecto();
         }
     };
-
     const handleEditarDetalleMes = idx => {
         const detalle = proyecto.detalledelmes[idx];
         setDetalleEdit({
@@ -254,7 +229,6 @@ export const ProyectoDetalle = () => {
         });
         setEditandoDetalleIdx(idx);
     };
-
     const handleGuardarDetalleMes = async e => {
         e.preventDefault();
         const proyectoActualizado = { ...proyecto };
@@ -270,7 +244,6 @@ export const ProyectoDetalle = () => {
             fetchProyecto();
         }
     };
-
     const handleBorrarDetalleMes = async idx => {
         if (!window.confirm("¿Seguro que deseas borrar este detalle?")) return;
         const proyectoActualizado = { ...proyecto };
@@ -284,6 +257,7 @@ export const ProyectoDetalle = () => {
         if (res.ok) fetchProyecto();
     };
 
+    // --- Handlers de Licitación ---
     const handleAbrirLicitacionModal = () => {
         setIdLicitacionInput(
             proyecto.licitacion && proyecto.licitacion.length > 0
@@ -292,7 +266,6 @@ export const ProyectoDetalle = () => {
         );
         setShowLicitacionModal(true);
     };
-    // Guardar licitación
     const handleGuardarLicitacion = async (e) => {
         e.preventDefault();
         const nuevaLicitacion = [{ idlicitacion: idLicitacionInput }];
@@ -308,7 +281,7 @@ export const ProyectoDetalle = () => {
         }
     };
 
-    // Exportar a Word
+    // --- Utilidades ---
     const exportarAWord = () => {
         const estilos = `
             <style>
@@ -328,42 +301,24 @@ export const ProyectoDetalle = () => {
         saveAs(docx, `${proyecto.nombre || "proyecto"}.docx`);
     };
 
-    // Función para parsear fechas tipo 'YYYY-MM-DD' a objeto Date seguro
-    function parseFecha(fechaStr) {
-        if (!fechaStr) return null;
-        if (fechaStr instanceof Date) return fechaStr;
-        if (typeof fechaStr === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
-            const [anio, mes, dia] = fechaStr.split('-').map(Number);
-            return new Date(anio, mes - 1, dia);
-        }
-        return new Date(fechaStr);
-    }
-
-    // Utilidad para mostrar fecha en formato DD-MM-YYYY
     function formatFecha(fechaStr) {
         if (!fechaStr) return "-";
         const f = fechaStr.slice(0, 10).split("-");
         return `${f[2]}-${f[1]}-${f[0]}`;
     }
 
-    console.log("ID recibido:", id);
-
+    // --- Renderizado principal ---
     if (loading) return <div className="p-8">Cargando...</div>;
     if (error) return <div className="p-8 text-red-600">{error}</div>;
     if (!proyecto) return <div className="p-8">No se encontró el proyecto.</div>;
 
-    const contenido = (
+    return (
         <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-4" ref={contenidoRef}>
-            <button
-                className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
-                onClick={exportarAWord}
-            >
+            {/* Botones principales */}
+            <button className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800" onClick={exportarAWord}>
                 Descargar como Word
             </button>
-            <button
-                className="mb-4 ml-2 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
-                onClick={() => window.print()}
-            >
+            <button className="mb-4 ml-2 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800" onClick={() => window.print()}>
                 Imprimir
             </button>
 
@@ -379,7 +334,7 @@ export const ProyectoDetalle = () => {
                 setForm={setForm}
             />
 
-            {/* Componente Georeferencia */}
+            {/* Georeferencia */}
             <Georeferencia
                 georeferencia={proyecto.georeferencia}
                 geoForm={geoForm}
@@ -389,7 +344,7 @@ export const ProyectoDetalle = () => {
                 handleGuardarGeo={handleGuardarGeo}
             />
 
-            {/* Componente Fechas Importantes */}
+            {/* Fechas importantes */}
             <FechasImportantes
                 fechas={proyecto.fechas}
                 formatFecha={formatFecha}
@@ -406,119 +361,18 @@ export const ProyectoDetalle = () => {
                 setEditFechasIdx={setEditFechasIdx}
             />
 
+            {/* Licitación */}
+            <Licitacion
+                licitacion={proyecto.licitacion}
+                showLicitacionModal={showLicitacionModal}
+                handleAbrirLicitacionModal={handleAbrirLicitacionModal}
+                idLicitacionInput={idLicitacionInput}
+                setIdLicitacionInput={setIdLicitacionInput}
+                handleGuardarLicitacion={handleGuardarLicitacion}
+                setShowLicitacionModal={setShowLicitacionModal}
+            />
 
-            {/* Modulo de Licitacion */}
-
-            <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
-                <h3 className="text-lg font-bold mb-2">Modulo de Licitacion : </h3>
-                <button
-                    className="bg-green-600 text-white px-3 py-1 rounded"
-                    onClick={handleAbrirLicitacionModal}
-                >
-                    {proyecto.licitacion && proyecto.licitacion.length > 0 ? "Modificar" : "Agregar"} Licitación
-                </button>
-            </div>
-
-            <div className="mb-4">
-                <strong>ID Licitación:</strong>{" "}
-                {proyecto.licitacion && proyecto.licitacion.length > 0
-                    ? proyecto.licitacion[0].idlicitacion
-                    : <span className="text-gray-500">No registrada</span>}
-            </div>
-
-            <div>
-                <table className="w-full border border-gray-300 rounded mb-8">
-                    <thead>
-                        <tr className="bg-blue-100">
-                            <th className="px-4 py-2">Fecha Publicacion</th>
-                            <th className="px-4 py-2">Fecha Apertura Tecnica</th>
-                            <th className="px-4 py-2">Fecha Adjudicacion Portal</th>
-                            <th className="px-4 py-2">Aprueba Contrato</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="border px-4 py-2">Dato fila 1, col 1</td>
-                            <td className="border px-4 py-2">Dato fila 1, col 2</td>
-                            <td className="border px-4 py-2">Dato fila 1, col 3</td>
-                            <td className="border px-4 py-2">Dato fila 1, col 4</td>
-                        </tr>
-                        <tr>
-                            <td className="border px-4 py-2">Dato fila 2, col 1</td>
-                            <td className="border px-4 py-2">Dato fila 2, col 2</td>
-                            <td className="border px-4 py-2">Dato fila 2, col 3</td>
-                            <td className="border px-4 py-2">Dato fila 2, col 4</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Modal */}
-            {showFechasModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-                        <h2 className="text-xl font-semibold mb-4">
-                            {editFechasIdx !== null ? "Editar Fechas" : "Agregar Fechas"}
-                        </h2>
-                        <form
-                            onSubmit={editFechasIdx !== null ? handleGuardarFechas : handleAgregarFechas}
-                            className="flex flex-col gap-4"
-                        >
-                            <div>
-                                <label className="block mb-1">Fecha Inicio</label>
-                                <input
-                                    type="date"
-                                    name="fechainicio"
-                                    value={fechasForm.fechainicio}
-                                    onChange={handleFechasChange}
-                                    className="w-full border px-2 py-1 rounded"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-1">Fecha Fin</label>
-                                <input
-                                    type="date"
-                                    name="fechafin"
-                                    value={fechasForm.fechafin}
-                                    onChange={handleFechasChange}
-                                    className="w-full border px-2 py-1 rounded"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-1">Aumento (días)</label>
-                                <input
-                                    type="number"
-                                    name="aumento"
-                                    value={fechasForm.aumento}
-                                    onChange={handleFechasChange}
-                                    className="w-full border px-2 py-1 rounded"
-                                    required
-                                />
-                            </div>
-                            <div className="flex justify-end gap-2">
-                                <button
-                                    type="button"
-                                    className="bg-gray-400 text-white px-3 py-1 rounded"
-                                    onClick={() => setShowFechasModal(false)}
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="bg-blue-600 text-white px-3 py-1 rounded"
-                                >
-                                    Guardar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-
-            {/* Componente de Tabla de Avances */}
+            {/* Tabla de avances */}
             <TablaAvances
                 avance={proyecto.avance}
                 nuevoAvance={nuevoAvance}
@@ -529,33 +383,30 @@ export const ProyectoDetalle = () => {
                 handleBorrarAvance={handleBorrarAvance}
             />
 
-
             {/* Gráfico de avance */}
-            {
-                proyecto.avance && proyecto.avance.length > 0 && (
-                    <div className="mt-10">
-                        <h3 className="text-lg font-bold mb-2">Gráfico de avance</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={proyecto.avance}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="mes" />
-                                <YAxis domain={[0, 100]} />
-                                <Tooltip />
-                                <Line type="monotone" dataKey="valor" stroke="#2563eb" />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                )
-            }
+            {proyecto.avance && proyecto.avance.length > 0 && (
+                <div className="mt-10">
+                    <h3 className="text-lg font-bold mb-2">Gráfico de avance</h3>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <LineChart data={proyecto.avance}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="mes" />
+                            <YAxis domain={[0, 100]} />
+                            <Tooltip />
+                            <Line type="monotone" dataKey="valor" stroke="#2563eb" />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
+            )}
 
-            {/* Componente Detalle del Mes */}
+            {/* Detalle del mes */}
             <DetalleMes
                 detalles={proyecto.detalledelmes}
                 onEditar={handleEditarDetalleMes}
                 onBorrar={handleBorrarDetalleMes}
             />
 
-            {/* Detalle del Mes Actualizado */}
+            {/* Detalle del mes actualizado */}
             <DetalleMesTabla
                 detalles={proyecto.detalledelmes}
                 onEditar={handleEditarDetalleMes}
@@ -566,50 +417,8 @@ export const ProyectoDetalle = () => {
                 setEditandoDetalleIdx={setEditandoDetalleIdx}
                 handleGuardarDetalleMes={handleGuardarDetalleMes}
             />
-
-            {/* Modal de Licitación */}
-            {
-                showLicitacionModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-                            <h2 className="text-xl font-semibold mb-4">
-                                {proyecto.licitacion && proyecto.licitacion.length > 0 ? "Modificar" : "Agregar"} Licitación
-                            </h2>
-                            <form onSubmit={handleGuardarLicitacion} className="flex flex-col gap-4">
-                                <div>
-                                    <label className="block mb-1">ID Licitación</label>
-                                    <input
-                                        type="text"
-                                        value={idLicitacionInput}
-                                        onChange={e => setIdLicitacionInput(e.target.value)}
-                                        className="w-full border px-2 py-1 rounded"
-                                        required
-                                    />
-                                </div>
-                                <div className="flex justify-end gap-2">
-                                    <button
-                                        type="button"
-                                        className="bg-gray-400 text-white px-3 py-1 rounded"
-                                        onClick={() => setShowLicitacionModal(false)}
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="bg-blue-600 text-white px-3 py-1 rounded"
-                                    >
-                                        Guardar
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )
-            }
         </div>
-    )
-
-    return contenido;
+    );
 };
 
 export default ProyectoDetalle;
