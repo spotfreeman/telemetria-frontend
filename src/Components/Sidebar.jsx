@@ -136,6 +136,28 @@ function Sidebar() {
         }
     ];
 
+    // Función para filtrar los links según autenticación
+    function filtrarLinksPorAuth(links, tokenValido) {
+        return links
+            .map(group => ({
+                ...group,
+                children: group.children.filter(link => {
+                    // Aquí replica la lógica de filteredLinks:
+                    if (link.to === "/login/login2" && tokenValido) return false;
+                    if (link.to === "/" && tokenValido) return false;
+                    if (
+                        ["/proyectos", "/server", "/notas", "/calendario", "/archivos", "/tempdata", "/datos", "/bienvenida", "/roles", "/esp32", "/mercado"]
+                            .includes(link.to) && !tokenValido
+                    ) return false;
+                    return true;
+                })
+            }))
+            // Solo muestra grupos que tengan al menos un hijo visible
+            .filter(group => group.children.length > 0);
+    }
+
+    const groupedLinksFiltrados = filtrarLinksPorAuth(groupedLinks, tokenValido);
+
     /**
      * Cierra la sesión del usuario, elimina el token y redirige al login.
      */
@@ -170,7 +192,7 @@ function Sidebar() {
             </div>
             {/* Navegación principal con menús agrupados y desplegables */}
             <nav className="flex flex-col gap-1">
-                {groupedLinks.map((group, idx) => (
+                {groupedLinksFiltrados.map((group, idx) => (
                     <div key={group.label}>
                         {/* Si el grupo tiene más de un hijo, muestra como menú desplegable */}
                         {group.children.length > 1 ? (
