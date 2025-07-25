@@ -8,10 +8,11 @@ import htmlDocx from "html-docx-js/dist/html-docx";
 import Georeferencia from "../../Components/Proyectos/Georeferencia";
 import FechasImportantes from "../../Components/Proyectos/FechasImportantes";
 import TablaAvances from "../../Components/Proyectos/TablaAvances";
-import DetalleMes from "../../Components/Proyectos/DetalleMes";
 import DetalleMesTabla from "../../Components/Proyectos/DetalleMesTabla";
 import DatosGenerales from "../../Components/Proyectos/DatosGenerales";
 import Licitacion from "../../Components/Proyectos/Licitacion";
+
+import DetalleMes from "../../Components/Proyectos/DetalleMes";
 
 export const ProyectoDetalle = () => {
     const { id } = useParams();
@@ -399,12 +400,13 @@ export const ProyectoDetalle = () => {
                 </div>
             )}
 
-            {/* Detalle del mes */}
+            {/* Detalle del mes 
             <DetalleMes
                 detalles={proyecto.detalledelmes}
                 onEditar={handleEditarDetalleMes}
                 onBorrar={handleBorrarDetalleMes}
             />
+            */}
 
             {/* Detalle del mes actualizado */}
             <DetalleMesTabla

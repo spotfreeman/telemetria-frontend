@@ -38,6 +38,9 @@ export const Bienvenida = () => {
         { id: 4, name: 'Usuarios activos', value: '+10' },
     ];
 
+    // Funciones para redirigir según el rol
+    const rol = localStorage.getItem("rol");
+
     return (
         <div className="relative bg-white">
             <img
@@ -54,6 +57,14 @@ export const Bienvenida = () => {
                         </p>
                         <p className="mt-6 text-lg/8 text-gray-600">
                             Plataforma para la gestión de telemetría de equipos, que permite a los usuarios monitorear y analizar datos en tiempo real, optimizando el rendimiento y la seguridad.
+                        </p>
+                        <p>
+                            {rol === "Administrador" && (
+                                <h2>Administrador</h2>
+                            )}
+                            {rol === "Usuario" && (
+                                <h2>Usuario</h2>
+                            )}
                         </p>
                         <dl className="mt-16 grid max-w-xl grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 xl:mt-16">
                             {stats.map((stat) => (

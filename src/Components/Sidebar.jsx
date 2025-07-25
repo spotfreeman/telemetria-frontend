@@ -14,7 +14,7 @@ import {
 } from '@heroicons/react/24/outline'
 
 // Importa el componente ValorUF
-import { ValorUF } from './ValorUF'; // Asegúrate de que este componente esté correctamente importado
+import { ValorUF } from './ValorUF';
 
 
 function isTokenValid(token) {

@@ -1,14 +1,6 @@
 export const Page404 = () => {
     return (
         <>
-            {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full">
-        <body class="h-full">
-        ```
-      */}
             <main className="relative isolate min-h-full">
                 <img
                     alt=""
