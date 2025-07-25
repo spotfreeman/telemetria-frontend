@@ -723,17 +723,8 @@ export const ProyectoDetalle = () => {
                     </div>
                 )
             }
-
-
         </div>
     )
-
-
-
-
-
-
-
 
     return contenido;
 };
