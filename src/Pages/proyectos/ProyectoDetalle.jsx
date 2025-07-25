@@ -562,163 +562,178 @@ export const ProyectoDetalle = () => {
                     </div>
                 </div>
             )}
-        </div>
-    )
-    {/* Componente de Tabla de Avances */ }
-
-    <TablaAvances
-        avance={proyecto.avance}
-        nuevoAvance={nuevoAvance}
-        mostrarEvolucion={mostrarEvolucion}
-        handleAvanceChange={handleAvanceChange}
-        handleAgregarAvance={handleAgregarAvance}
-        setMostrarEvolucion={setMostrarEvolucion}
-        handleBorrarAvance={handleBorrarAvance}
-    />
 
 
-    {/* Gráfico de avance */ }
-    {
-        proyecto.avance && proyecto.avance.length > 0 && (
+            {/* Componente de Tabla de Avances */}
+
+            <TablaAvances
+                avance={proyecto.avance}
+                nuevoAvance={nuevoAvance}
+                mostrarEvolucion={mostrarEvolucion}
+                handleAvanceChange={handleAvanceChange}
+                handleAgregarAvance={handleAgregarAvance}
+                setMostrarEvolucion={setMostrarEvolucion}
+                handleBorrarAvance={handleBorrarAvance}
+            />
+
+
+            {/* Gráfico de avance */}
+            {
+                proyecto.avance && proyecto.avance.length > 0 && (
+                    <div className="mt-10">
+                        <h3 className="text-lg font-bold mb-2">Gráfico de avance</h3>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <LineChart data={proyecto.avance}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="mes" />
+                                <YAxis domain={[0, 100]} />
+                                <Tooltip />
+                                <Line type="monotone" dataKey="valor" stroke="#2563eb" />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                )
+            }
+
+
+
+            {/* Detalle del Mes */}
             <div className="mt-10">
-                <h3 className="text-lg font-bold mb-2">Gráfico de avance</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={proyecto.avance}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="mes" />
-                        <YAxis domain={[0, 100]} />
-                        <Tooltip />
-                        <Line type="monotone" dataKey="valor" stroke="#2563eb" />
-                    </LineChart>
-                </ResponsiveContainer>
+                <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
+                <table className="w-full border border-gray-300 rounded mb-8">
+                    <thead>
+                        <tr className="bg-blue-100">
+                            <th className="px-4 py-2">Detalle del Mes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="px-4 py-2 text-center">
+                                <div className="mt-10 mb-6">
+                                    <h3 className="text-lg font-bold mb-2">Agregar detalle del mes</h3>
+                                    <form onSubmit={handleAgregarDetalleMes} className="flex gap-2 mt-4">
+                                        <input type="text" placeholder="Mes" value={nuevoDetalleMes.mes} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, mes: e.target.value })} className="border px-2 py-1 rounded" required />
+                                        <input type="text" placeholder="Año" value={nuevoDetalleMes.anio} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, anio: e.target.value })} className="border px-2 py-1 rounded" required />
+                                        <input type="text" placeholder="Descripción" value={nuevoDetalleMes.descripcion} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, descripcion: e.target.value })} className="border px-2 py-1 rounded" required />
+                                        <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded">Agregar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        )
-    }
 
-    {/* Detalle del Mes */ }
-    <div className="mt-10">
-        <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
-        <table className="w-full border border-gray-300 rounded mb-8">
-            <thead>
-                <tr className="bg-blue-100">
-                    <th className="px-4 py-2">Detalle del Mes</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td className="px-4 py-2 text-center">
-                        <div className="mt-10 mb-6">
-                            <h3 className="text-lg font-bold mb-2">Agregar detalle del mes</h3>
-                            <form onSubmit={handleAgregarDetalleMes} className="flex gap-2 mt-4">
-                                <input type="text" placeholder="Mes" value={nuevoDetalleMes.mes} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, mes: e.target.value })} className="border px-2 py-1 rounded" required />
-                                <input type="text" placeholder="Año" value={nuevoDetalleMes.anio} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, anio: e.target.value })} className="border px-2 py-1 rounded" required />
-                                <input type="text" placeholder="Descripción" value={nuevoDetalleMes.descripcion} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, descripcion: e.target.value })} className="border px-2 py-1 rounded" required />
-                                <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded">Agregar</button>
+
+
+            {/* Detalle del Mes Actualizado */}
+            <div className="mt-10">
+                <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
+                <table className="min-w-full border mt-2">
+                    <thead>
+                        <tr className="bg-blue-700 text-white">
+                            <th className="px-4 py-2 border">Mes</th>
+                            <th className="px-4 py-2 border">Año</th>
+                            <th className="px-4 py-2 border">Descripción</th>
+                            <th className="px-4 py-2 border">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {proyecto.detalledelmes?.map((detalle, idx) => (
+                            <tr key={idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                                <td className="px-4 py-2 border">{detalle.mes}</td>
+                                <td className="px-4 py-2 border">{detalle.anio}</td>
+                                <td className="px-4 py-2 border">{detalle.descripcion}</td>
+                                <td className="px-4 py-2 border text-center">
+                                    <button className="bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded mr-2" onClick={() => handleEditarDetalleMes(idx)} title="Editar">
+                                        <PencilSquareIcon className="h-5 w-5" />
+                                    </button>
+                                    <button className="bg-red-600 hover:bg-red-700 text-white p-1 rounded" onClick={() => handleBorrarDetalleMes(idx)} title="Borrar">
+                                        <TrashIcon className="h-5 w-5" />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                {/* Modal de edición */}
+                {editandoDetalleIdx !== null && (
+                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                        <div className="bg-white rounded shadow-lg p-6 w-full max-w-md">
+                            <h4 className="text-lg font-bold mb-4">Editar Detalle del Mes</h4>
+                            <form onSubmit={handleGuardarDetalleMes} className="flex flex-col gap-3">
+                                <div>
+                                    <label className="block mb-1">Mes</label>
+                                    <input type="text" name="mes" value={detalleEdit.mes} onChange={e => setDetalleEdit({ ...detalleEdit, mes: e.target.value })} className="w-full border px-2 py-1 rounded" required />
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Año</label>
+                                    <input type="text" name="anio" value={detalleEdit.anio} onChange={e => setDetalleEdit({ ...detalleEdit, anio: e.target.value })} className="w-full border px-2 py-1 rounded" required />
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Descripción</label>
+                                    <textarea name="descripcion" value={detalleEdit.descripcion} onChange={e => setDetalleEdit({ ...detalleEdit, descripcion: e.target.value })} className="w-full border px-2 py-1 rounded" required />
+                                </div>
+                                <div className="flex justify-end gap-2 mt-2">
+                                    <button type="button" className="bg-gray-400 text-white px-3 py-1 rounded" onClick={() => setEditandoDetalleIdx(null)}>Cancelar</button>
+                                    <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">Guardar</button>
+                                </div>
                             </form>
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    {/* Detalle del Mes Actualizado */ }
-    <div className="mt-10">
-        <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
-        <table className="min-w-full border mt-2">
-            <thead>
-                <tr className="bg-blue-700 text-white">
-                    <th className="px-4 py-2 border">Mes</th>
-                    <th className="px-4 py-2 border">Año</th>
-                    <th className="px-4 py-2 border">Descripción</th>
-                    <th className="px-4 py-2 border">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {proyecto.detalledelmes?.map((detalle, idx) => (
-                    <tr key={idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                        <td className="px-4 py-2 border">{detalle.mes}</td>
-                        <td className="px-4 py-2 border">{detalle.anio}</td>
-                        <td className="px-4 py-2 border">{detalle.descripcion}</td>
-                        <td className="px-4 py-2 border text-center">
-                            <button className="bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded mr-2" onClick={() => handleEditarDetalleMes(idx)} title="Editar">
-                                <PencilSquareIcon className="h-5 w-5" />
-                            </button>
-                            <button className="bg-red-600 hover:bg-red-700 text-white p-1 rounded" onClick={() => handleBorrarDetalleMes(idx)} title="Borrar">
-                                <TrashIcon className="h-5 w-5" />
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-        {/* Modal de edición */}
-        {editandoDetalleIdx !== null && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                <div className="bg-white rounded shadow-lg p-6 w-full max-w-md">
-                    <h4 className="text-lg font-bold mb-4">Editar Detalle del Mes</h4>
-                    <form onSubmit={handleGuardarDetalleMes} className="flex flex-col gap-3">
-                        <div>
-                            <label className="block mb-1">Mes</label>
-                            <input type="text" name="mes" value={detalleEdit.mes} onChange={e => setDetalleEdit({ ...detalleEdit, mes: e.target.value })} className="w-full border px-2 py-1 rounded" required />
-                        </div>
-                        <div>
-                            <label className="block mb-1">Año</label>
-                            <input type="text" name="anio" value={detalleEdit.anio} onChange={e => setDetalleEdit({ ...detalleEdit, anio: e.target.value })} className="w-full border px-2 py-1 rounded" required />
-                        </div>
-                        <div>
-                            <label className="block mb-1">Descripción</label>
-                            <textarea name="descripcion" value={detalleEdit.descripcion} onChange={e => setDetalleEdit({ ...detalleEdit, descripcion: e.target.value })} className="w-full border px-2 py-1 rounded" required />
-                        </div>
-                        <div className="flex justify-end gap-2 mt-2">
-                            <button type="button" className="bg-gray-400 text-white px-3 py-1 rounded" onClick={() => setEditandoDetalleIdx(null)}>Cancelar</button>
-                            <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">Guardar</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                )}
             </div>
-        )}
-    </div>
 
-    {/* Modal de Licitación */ }
-    {
-        showLicitacionModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-                    <h2 className="text-xl font-semibold mb-4">
-                        {proyecto.licitacion && proyecto.licitacion.length > 0 ? "Modificar" : "Agregar"} Licitación
-                    </h2>
-                    <form onSubmit={handleGuardarLicitacion} className="flex flex-col gap-4">
-                        <div>
-                            <label className="block mb-1">ID Licitación</label>
-                            <input
-                                type="text"
-                                value={idLicitacionInput}
-                                onChange={e => setIdLicitacionInput(e.target.value)}
-                                className="w-full border px-2 py-1 rounded"
-                                required
-                            />
+            {/* Modal de Licitación */}
+            {
+                showLicitacionModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                            <h2 className="text-xl font-semibold mb-4">
+                                {proyecto.licitacion && proyecto.licitacion.length > 0 ? "Modificar" : "Agregar"} Licitación
+                            </h2>
+                            <form onSubmit={handleGuardarLicitacion} className="flex flex-col gap-4">
+                                <div>
+                                    <label className="block mb-1">ID Licitación</label>
+                                    <input
+                                        type="text"
+                                        value={idLicitacionInput}
+                                        onChange={e => setIdLicitacionInput(e.target.value)}
+                                        className="w-full border px-2 py-1 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div className="flex justify-end gap-2">
+                                    <button
+                                        type="button"
+                                        className="bg-gray-400 text-white px-3 py-1 rounded"
+                                        onClick={() => setShowLicitacionModal(false)}
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-600 text-white px-3 py-1 rounded"
+                                    >
+                                        Guardar
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div className="flex justify-end gap-2">
-                            <button
-                                type="button"
-                                className="bg-gray-400 text-white px-3 py-1 rounded"
-                                onClick={() => setShowLicitacionModal(false)}
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                type="submit"
-                                className="bg-blue-600 text-white px-3 py-1 rounded"
-                            >
-                                Guardar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        )
-    }
+                    </div>
+                )
+            }
+
+
+        </div>
+    )
+
+
+
+
+
+
+
 
     return contenido;
 };
