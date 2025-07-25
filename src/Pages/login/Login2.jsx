@@ -13,7 +13,6 @@ export const Login2 = () => {
     const [error, setError] = useState("");
     // Estado para mostrar un loader durante la petición
     const [loading, setLoading] = useState(false);
-
     // Hook de navegación de React Router
     const navigate = useNavigate();
 
@@ -40,27 +39,30 @@ export const Login2 = () => {
         }
 
         setLoading(true);
-        console.log("Informacion enviada ", form);
+        //console.log("Informacion enviada ", form);
 
         // Petición al backend para autenticar usuario
-        const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form),
-        });
-        const data = await res.json();
-        console.log(data);
+        try {
+            const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form),
+            });
+            const data = await res.json();
+            //console.log(data);
 
-        if (res.ok && data.token) {
-            // Guarda datos relevantes en localStorage
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("usuario", data.usuario);
-            localStorage.setItem("nombre", data.nombre);
-            localStorage.setItem("rol", data.rol);
-            // Redirige a la página principal
-            navigate("/bienvenida");
-        } else {
-            setError(data.message || "Usuario o contraseña incorrectos");
+            if (res.ok && data.token) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("usuario", data.usuario);
+                localStorage.setItem("nombre", data.nombre);
+                localStorage.setItem("rol", data.rol);
+                // Redirige a la página principal
+                navigate("/bienvenida");
+            } else {
+                setError(data.message || "Usuario o contraseña incorrectos");
+            }
+        } catch (err) {
+            setError("No se pudo conectar con el servidor.");
         }
         setLoading(false);
     };

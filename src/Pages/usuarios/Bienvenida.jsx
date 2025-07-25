@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 export const Bienvenida = () => {
     const [totalProyectos, setTotalProyectos] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
             // Si no hay token, no hace la petición
             setTotalProyectos(0);
-            // window.location.href = '/login/login2'; // Redirige al login si no hay token
+            navigate('/login/login2'); // Redirige al login si no hay token
             return;
         }
         fetch('https://telemetria-backend.onrender.com/api/proyectos', {
