@@ -452,364 +452,93 @@ export const ProyectoDetalle = () => {
                 setEditFechasIdx={setEditFechasIdx}
             />
 
-            {/* Fechas importantes */}
-            <div className="w-full mt-10 text-center">
-                <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
-                    <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
-                    <button
-                        className="bg-green-600 text-white px-3 py-1 rounded"
-                        onClick={() => { setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 }); setEditFechasIdx(null); setShowFechasModal(true); }}
-                    >
-                        Agregar Fechas
-                    </button>
-                </div>
 
-                <table className="w-full table-fixed border border-gray-300 border-collapse rounded mb-8">
-                    <thead className="bg-blue-100">
-                        <tr>
-                            <th className="w-1/5 border">Fecha Inicio</th>
-                            <th className="w-1/5 border">Fecha Fin</th>
-                            <th className="w-1/5 border">Aumento</th>
-                            <th className="w-1/5 border">Fecha Actualizada</th>
-                            <th className="w-1/5 border">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {proyecto.fechas?.map((fecha, idx) => (
-                            <tr key={idx}>
-                                <td className="border">
-                                    {formatFecha(fecha.fechainicio)}
-                                </td>
-                                <td className="border">
-                                    {formatFecha(fecha.fechafin)}
-                                </td>
-                                <td className="border">{fecha.aumento}</td>
-                                <td className="border">
-                                    {formatFecha(fecha.fechaactualizada)}
-                                </td>
-                                <td className="border">
-                                    <button
-                                        className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                                        onClick={() => handleEditarFechas(idx)}
-                                    >
-                                        Editar
-                                    </button>
-                                    <button
-                                        className="bg-red-600 text-white px-2 py-1 rounded"
-                                        onClick={() => handleBorrarFechas(idx)}
-                                    >
-                                        Borrar
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            {/* Modulo de Licitacion */}
 
-                {/* Modulo de Licitacion */}
-
-                <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
-                    <h3 className="text-lg font-bold mb-2">Modulo de Licitacion : </h3>
-                    <button
-                        className="bg-green-600 text-white px-3 py-1 rounded"
-                        onClick={handleAbrirLicitacionModal}
-                    >
-                        {proyecto.licitacion && proyecto.licitacion.length > 0 ? "Modificar" : "Agregar"} Licitación
-                    </button>
-                </div>
-
-                <div className="mb-4">
-                    <strong>ID Licitación:</strong>{" "}
-                    {proyecto.licitacion && proyecto.licitacion.length > 0
-                        ? proyecto.licitacion[0].idlicitacion
-                        : <span className="text-gray-500">No registrada</span>}
-                </div>
-
-                <div>
-                    <table className="w-full border border-gray-300 rounded mb-8">
-                        <thead>
-                            <tr className="bg-blue-100">
-                                <th className="px-4 py-2">Fecha Publicacion</th>
-                                <th className="px-4 py-2">Fecha Apertura Tecnica</th>
-                                <th className="px-4 py-2">Fecha Adjudicacion Portal</th>
-                                <th className="px-4 py-2">Aprueba Contrato</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td className="border px-4 py-2">Dato fila 1, col 1</td>
-                                <td className="border px-4 py-2">Dato fila 1, col 2</td>
-                                <td className="border px-4 py-2">Dato fila 1, col 3</td>
-                                <td className="border px-4 py-2">Dato fila 1, col 4</td>
-                            </tr>
-                            <tr>
-                                <td className="border px-4 py-2">Dato fila 2, col 1</td>
-                                <td className="border px-4 py-2">Dato fila 2, col 2</td>
-                                <td className="border px-4 py-2">Dato fila 2, col 3</td>
-                                <td className="border px-4 py-2">Dato fila 2, col 4</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Modal */}
-                {showFechasModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-                            <h2 className="text-xl font-semibold mb-4">
-                                {editFechasIdx !== null ? "Editar Fechas" : "Agregar Fechas"}
-                            </h2>
-                            <form
-                                onSubmit={editFechasIdx !== null ? handleGuardarFechas : handleAgregarFechas}
-                                className="flex flex-col gap-4"
-                            >
-                                <div>
-                                    <label className="block mb-1">Fecha Inicio</label>
-                                    <input
-                                        type="date"
-                                        name="fechainicio"
-                                        value={fechasForm.fechainicio}
-                                        onChange={handleFechasChange}
-                                        className="w-full border px-2 py-1 rounded"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block mb-1">Fecha Fin</label>
-                                    <input
-                                        type="date"
-                                        name="fechafin"
-                                        value={fechasForm.fechafin}
-                                        onChange={handleFechasChange}
-                                        className="w-full border px-2 py-1 rounded"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block mb-1">Aumento (días)</label>
-                                    <input
-                                        type="number"
-                                        name="aumento"
-                                        value={fechasForm.aumento}
-                                        onChange={handleFechasChange}
-                                        className="w-full border px-2 py-1 rounded"
-                                        required
-                                    />
-                                </div>
-                                <div className="flex justify-end gap-2">
-                                    <button
-                                        type="button"
-                                        className="bg-gray-400 text-white px-3 py-1 rounded"
-                                        onClick={() => setShowFechasModal(false)}
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="bg-blue-600 text-white px-3 py-1 rounded"
-                                    >
-                                        Guardar
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
+            <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
+                <h3 className="text-lg font-bold mb-2">Modulo de Licitacion : </h3>
+                <button
+                    className="bg-green-600 text-white px-3 py-1 rounded"
+                    onClick={handleAbrirLicitacionModal}
+                >
+                    {proyecto.licitacion && proyecto.licitacion.length > 0 ? "Modificar" : "Agregar"} Licitación
+                </button>
             </div>
 
+            <div className="mb-4">
+                <strong>ID Licitación:</strong>{" "}
+                {proyecto.licitacion && proyecto.licitacion.length > 0
+                    ? proyecto.licitacion[0].idlicitacion
+                    : <span className="text-gray-500">No registrada</span>}
+            </div>
 
-            {/* Componente de Tabla de Avances */}
-            <TablaAvances
-                avance={proyecto.avance}
-                nuevoAvance={nuevoAvance}
-                mostrarEvolucion={mostrarEvolucion}
-                handleAvanceChange={handleAvanceChange}
-                handleAgregarAvance={handleAgregarAvance}
-                setMostrarEvolucion={setMostrarEvolucion}
-                handleBorrarAvance={handleBorrarAvance}
-            />
-
-            {/* Tabla de Avances */}
-            <div className="mt-10">
-                <h3 className="text-lg font-bold mb-2">Tabla de Avances Fisicos</h3>
+            <div>
                 <table className="w-full border border-gray-300 rounded mb-8">
                     <thead>
                         <tr className="bg-blue-100">
-                            <th className="px-4 py-2">Ingresar avance</th>
-                            <th className="px-4 py-2">Detalle de avance</th>
+                            <th className="px-4 py-2">Fecha Publicacion</th>
+                            <th className="px-4 py-2">Fecha Apertura Tecnica</th>
+                            <th className="px-4 py-2">Fecha Adjudicacion Portal</th>
+                            <th className="px-4 py-2">Aprueba Contrato</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td className="px-4 py-2 text-center">
-                                <div className="mt-10 mb-6">
-                                    <h3 className="text-lg font-bold mb-2">Agregar avance mensual</h3>
-                                    <form onSubmit={handleAgregarAvance} className="flex flex-wrap gap-2 items-end">
-                                        <input className="border rounded px-2 py-1" name="mes" type="number" min="1" max="12" placeholder="Mes (1-12)" value={nuevoAvance.mes} onChange={handleAvanceChange} required />
-                                        <input className="border rounded px-2 py-1" name="anio" type="number" min="2000" max="2100" placeholder="Año" value={nuevoAvance.anio} onChange={handleAvanceChange} required />
-                                        <input className="border rounded px-2 py-1" name="valor" type="number" min="0" max="100" step="0.1" placeholder="Avance (%)" value={nuevoAvance.valor} onChange={handleAvanceChange} required />
-                                        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="submit">Agregar</button>
-                                    </form>
-                                </div>
-                            </td>
-                            <td className="px-4 py-2 text-center">
-                                {proyecto.avance && proyecto.avance.length > 0 && (
-                                    <div className="mt-6">
-                                        <button className="mb-4 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded" onClick={() => setMostrarEvolucion(v => !v)}>
-                                            {mostrarEvolucion ? "Ocultar evolución del avance" : "Mostrar evolución del avance"}
-                                        </button>
-                                        {mostrarEvolucion && (
-                                            <>
-                                                <h3 className="text-lg font-bold mb-2">Evolución del avance</h3>
-                                                <table className="w-full border border-gray-300 rounded mb-8">
-                                                    <thead>
-                                                        <tr className="bg-blue-100">
-                                                            <th className="px-4 py-2">Mes</th>
-                                                            <th className="px-4 py-2">Año</th>
-                                                            <th className="px-4 py-2">Avance (%)</th>
-                                                            <th className="px-4 py-2">Acciones</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {proyecto.avance.map((a, idx) => (
-                                                            <tr key={idx}>
-                                                                <td className=" text-center">{a.mes}</td>
-                                                                <td className=" text-center">{a.anio}</td>
-                                                                <td className=" text-center">{a.valor}%</td>
-                                                                <td className=" text-center">
-                                                                    <button className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onClick={() => handleBorrarAvance(idx)} title="Eliminar avance">
-                                                                        Eliminar
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </>
-                                        )}
-                                    </div>
-                                )}
-                            </td>
+                            <td className="border px-4 py-2">Dato fila 1, col 1</td>
+                            <td className="border px-4 py-2">Dato fila 1, col 2</td>
+                            <td className="border px-4 py-2">Dato fila 1, col 3</td>
+                            <td className="border px-4 py-2">Dato fila 1, col 4</td>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Gráfico de avance */}
-            {proyecto.avance && proyecto.avance.length > 0 && (
-                <div className="mt-10">
-                    <h3 className="text-lg font-bold mb-2">Gráfico de avance</h3>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={proyecto.avance}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="mes" />
-                            <YAxis domain={[0, 100]} />
-                            <Tooltip />
-                            <Line type="monotone" dataKey="valor" stroke="#2563eb" />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
-            )}
-
-            {/* Detalle del Mes */}
-            <div className="mt-10">
-                <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
-                <table className="w-full border border-gray-300 rounded mb-8">
-                    <thead>
-                        <tr className="bg-blue-100">
-                            <th className="px-4 py-2">Detalle del Mes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
                         <tr>
-                            <td className="px-4 py-2 text-center">
-                                <div className="mt-10 mb-6">
-                                    <h3 className="text-lg font-bold mb-2">Agregar detalle del mes</h3>
-                                    <form onSubmit={handleAgregarDetalleMes} className="flex gap-2 mt-4">
-                                        <input type="text" placeholder="Mes" value={nuevoDetalleMes.mes} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, mes: e.target.value })} className="border px-2 py-1 rounded" required />
-                                        <input type="text" placeholder="Año" value={nuevoDetalleMes.anio} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, anio: e.target.value })} className="border px-2 py-1 rounded" required />
-                                        <input type="text" placeholder="Descripción" value={nuevoDetalleMes.descripcion} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, descripcion: e.target.value })} className="border px-2 py-1 rounded" required />
-                                        <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded">Agregar</button>
-                                    </form>
-                                </div>
-                            </td>
+                            <td className="border px-4 py-2">Dato fila 2, col 1</td>
+                            <td className="border px-4 py-2">Dato fila 2, col 2</td>
+                            <td className="border px-4 py-2">Dato fila 2, col 3</td>
+                            <td className="border px-4 py-2">Dato fila 2, col 4</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            {/* Detalle del Mes Actualizado */}
-            <div className="mt-10">
-                <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
-                <table className="min-w-full border mt-2">
-                    <thead>
-                        <tr className="bg-blue-700 text-white">
-                            <th className="px-4 py-2 border">Mes</th>
-                            <th className="px-4 py-2 border">Año</th>
-                            <th className="px-4 py-2 border">Descripción</th>
-                            <th className="px-4 py-2 border">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {proyecto.detalledelmes?.map((detalle, idx) => (
-                            <tr key={idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                                <td className="px-4 py-2 border">{detalle.mes}</td>
-                                <td className="px-4 py-2 border">{detalle.anio}</td>
-                                <td className="px-4 py-2 border">{detalle.descripcion}</td>
-                                <td className="px-4 py-2 border text-center">
-                                    <button className="bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded mr-2" onClick={() => handleEditarDetalleMes(idx)} title="Editar">
-                                        <PencilSquareIcon className="h-5 w-5" />
-                                    </button>
-                                    <button className="bg-red-600 hover:bg-red-700 text-white p-1 rounded" onClick={() => handleBorrarDetalleMes(idx)} title="Borrar">
-                                        <TrashIcon className="h-5 w-5" />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {/* Modal de edición */}
-                {editandoDetalleIdx !== null && (
-                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-white rounded shadow-lg p-6 w-full max-w-md">
-                            <h4 className="text-lg font-bold mb-4">Editar Detalle del Mes</h4>
-                            <form onSubmit={handleGuardarDetalleMes} className="flex flex-col gap-3">
-                                <div>
-                                    <label className="block mb-1">Mes</label>
-                                    <input type="text" name="mes" value={detalleEdit.mes} onChange={e => setDetalleEdit({ ...detalleEdit, mes: e.target.value })} className="w-full border px-2 py-1 rounded" required />
-                                </div>
-                                <div>
-                                    <label className="block mb-1">Año</label>
-                                    <input type="text" name="anio" value={detalleEdit.anio} onChange={e => setDetalleEdit({ ...detalleEdit, anio: e.target.value })} className="w-full border px-2 py-1 rounded" required />
-                                </div>
-                                <div>
-                                    <label className="block mb-1">Descripción</label>
-                                    <textarea name="descripcion" value={detalleEdit.descripcion} onChange={e => setDetalleEdit({ ...detalleEdit, descripcion: e.target.value })} className="w-full border px-2 py-1 rounded" required />
-                                </div>
-                                <div className="flex justify-end gap-2 mt-2">
-                                    <button type="button" className="bg-gray-400 text-white px-3 py-1 rounded" onClick={() => setEditandoDetalleIdx(null)}>Cancelar</button>
-                                    <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">Guardar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            {/* Modal de Licitación */}
-            {showLicitacionModal && (
+            {/* Modal */}
+            {showFechasModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
                         <h2 className="text-xl font-semibold mb-4">
-                            {proyecto.licitacion && proyecto.licitacion.length > 0 ? "Modificar" : "Agregar"} Licitación
+                            {editFechasIdx !== null ? "Editar Fechas" : "Agregar Fechas"}
                         </h2>
-                        <form onSubmit={handleGuardarLicitacion} className="flex flex-col gap-4">
+                        <form
+                            onSubmit={editFechasIdx !== null ? handleGuardarFechas : handleAgregarFechas}
+                            className="flex flex-col gap-4"
+                        >
                             <div>
-                                <label className="block mb-1">ID Licitación</label>
+                                <label className="block mb-1">Fecha Inicio</label>
                                 <input
-                                    type="text"
-                                    value={idLicitacionInput}
-                                    onChange={e => setIdLicitacionInput(e.target.value)}
+                                    type="date"
+                                    name="fechainicio"
+                                    value={fechasForm.fechainicio}
+                                    onChange={handleFechasChange}
+                                    className="w-full border px-2 py-1 rounded"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block mb-1">Fecha Fin</label>
+                                <input
+                                    type="date"
+                                    name="fechafin"
+                                    value={fechasForm.fechafin}
+                                    onChange={handleFechasChange}
+                                    className="w-full border px-2 py-1 rounded"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block mb-1">Aumento (días)</label>
+                                <input
+                                    type="number"
+                                    name="aumento"
+                                    value={fechasForm.aumento}
+                                    onChange={handleFechasChange}
                                     className="w-full border px-2 py-1 rounded"
                                     required
                                 />
@@ -818,7 +547,7 @@ export const ProyectoDetalle = () => {
                                 <button
                                     type="button"
                                     className="bg-gray-400 text-white px-3 py-1 rounded"
-                                    onClick={() => setShowLicitacionModal(false)}
+                                    onClick={() => setShowFechasModal(false)}
                                 >
                                     Cancelar
                                 </button>
@@ -834,7 +563,163 @@ export const ProyectoDetalle = () => {
                 </div>
             )}
         </div>
-    );
+    )
+    {/* Componente de Tabla de Avances */ }
+
+    <TablaAvances
+        avance={proyecto.avance}
+        nuevoAvance={nuevoAvance}
+        mostrarEvolucion={mostrarEvolucion}
+        handleAvanceChange={handleAvanceChange}
+        handleAgregarAvance={handleAgregarAvance}
+        setMostrarEvolucion={setMostrarEvolucion}
+        handleBorrarAvance={handleBorrarAvance}
+    />
+
+
+    {/* Gráfico de avance */ }
+    {
+        proyecto.avance && proyecto.avance.length > 0 && (
+            <div className="mt-10">
+                <h3 className="text-lg font-bold mb-2">Gráfico de avance</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={proyecto.avance}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="mes" />
+                        <YAxis domain={[0, 100]} />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="valor" stroke="#2563eb" />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+        )
+    }
+
+    {/* Detalle del Mes */ }
+    <div className="mt-10">
+        <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
+        <table className="w-full border border-gray-300 rounded mb-8">
+            <thead>
+                <tr className="bg-blue-100">
+                    <th className="px-4 py-2">Detalle del Mes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td className="px-4 py-2 text-center">
+                        <div className="mt-10 mb-6">
+                            <h3 className="text-lg font-bold mb-2">Agregar detalle del mes</h3>
+                            <form onSubmit={handleAgregarDetalleMes} className="flex gap-2 mt-4">
+                                <input type="text" placeholder="Mes" value={nuevoDetalleMes.mes} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, mes: e.target.value })} className="border px-2 py-1 rounded" required />
+                                <input type="text" placeholder="Año" value={nuevoDetalleMes.anio} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, anio: e.target.value })} className="border px-2 py-1 rounded" required />
+                                <input type="text" placeholder="Descripción" value={nuevoDetalleMes.descripcion} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, descripcion: e.target.value })} className="border px-2 py-1 rounded" required />
+                                <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded">Agregar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    {/* Detalle del Mes Actualizado */ }
+    <div className="mt-10">
+        <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
+        <table className="min-w-full border mt-2">
+            <thead>
+                <tr className="bg-blue-700 text-white">
+                    <th className="px-4 py-2 border">Mes</th>
+                    <th className="px-4 py-2 border">Año</th>
+                    <th className="px-4 py-2 border">Descripción</th>
+                    <th className="px-4 py-2 border">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {proyecto.detalledelmes?.map((detalle, idx) => (
+                    <tr key={idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                        <td className="px-4 py-2 border">{detalle.mes}</td>
+                        <td className="px-4 py-2 border">{detalle.anio}</td>
+                        <td className="px-4 py-2 border">{detalle.descripcion}</td>
+                        <td className="px-4 py-2 border text-center">
+                            <button className="bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded mr-2" onClick={() => handleEditarDetalleMes(idx)} title="Editar">
+                                <PencilSquareIcon className="h-5 w-5" />
+                            </button>
+                            <button className="bg-red-600 hover:bg-red-700 text-white p-1 rounded" onClick={() => handleBorrarDetalleMes(idx)} title="Borrar">
+                                <TrashIcon className="h-5 w-5" />
+                            </button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+        {/* Modal de edición */}
+        {editandoDetalleIdx !== null && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                <div className="bg-white rounded shadow-lg p-6 w-full max-w-md">
+                    <h4 className="text-lg font-bold mb-4">Editar Detalle del Mes</h4>
+                    <form onSubmit={handleGuardarDetalleMes} className="flex flex-col gap-3">
+                        <div>
+                            <label className="block mb-1">Mes</label>
+                            <input type="text" name="mes" value={detalleEdit.mes} onChange={e => setDetalleEdit({ ...detalleEdit, mes: e.target.value })} className="w-full border px-2 py-1 rounded" required />
+                        </div>
+                        <div>
+                            <label className="block mb-1">Año</label>
+                            <input type="text" name="anio" value={detalleEdit.anio} onChange={e => setDetalleEdit({ ...detalleEdit, anio: e.target.value })} className="w-full border px-2 py-1 rounded" required />
+                        </div>
+                        <div>
+                            <label className="block mb-1">Descripción</label>
+                            <textarea name="descripcion" value={detalleEdit.descripcion} onChange={e => setDetalleEdit({ ...detalleEdit, descripcion: e.target.value })} className="w-full border px-2 py-1 rounded" required />
+                        </div>
+                        <div className="flex justify-end gap-2 mt-2">
+                            <button type="button" className="bg-gray-400 text-white px-3 py-1 rounded" onClick={() => setEditandoDetalleIdx(null)}>Cancelar</button>
+                            <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        )}
+    </div>
+
+    {/* Modal de Licitación */ }
+    {
+        showLicitacionModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                    <h2 className="text-xl font-semibold mb-4">
+                        {proyecto.licitacion && proyecto.licitacion.length > 0 ? "Modificar" : "Agregar"} Licitación
+                    </h2>
+                    <form onSubmit={handleGuardarLicitacion} className="flex flex-col gap-4">
+                        <div>
+                            <label className="block mb-1">ID Licitación</label>
+                            <input
+                                type="text"
+                                value={idLicitacionInput}
+                                onChange={e => setIdLicitacionInput(e.target.value)}
+                                className="w-full border px-2 py-1 rounded"
+                                required
+                            />
+                        </div>
+                        <div className="flex justify-end gap-2">
+                            <button
+                                type="button"
+                                className="bg-gray-400 text-white px-3 py-1 rounded"
+                                onClick={() => setShowLicitacionModal(false)}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="submit"
+                                className="bg-blue-600 text-white px-3 py-1 rounded"
+                            >
+                                Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        )
+    }
+
     return contenido;
 };
 
