@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { saveAs } from "file-saver";
 import htmlDocx from "html-docx-js/dist/html-docx";
 
@@ -11,8 +10,6 @@ import TablaAvances from "../../Components/Proyectos/TablaAvances";
 import DetalleMesTabla from "../../Components/Proyectos/DetalleMesTabla";
 import DatosGenerales from "../../Components/Proyectos/DatosGenerales";
 import Licitacion from "../../Components/Proyectos/Licitacion";
-
-import DetalleMes from "../../Components/Proyectos/DetalleMes";
 
 export const ProyectoDetalle = () => {
     const { id } = useParams();
@@ -383,30 +380,6 @@ export const ProyectoDetalle = () => {
                 setMostrarEvolucion={setMostrarEvolucion}
                 handleBorrarAvance={handleBorrarAvance}
             />
-
-            {/* Gráfico de avance */}
-            {proyecto.avance && proyecto.avance.length > 0 && (
-                <div className="mt-10">
-                    <h3 className="text-lg font-bold mb-2">Gráfico de avance</h3>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={proyecto.avance}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="mes" />
-                            <YAxis domain={[0, 100]} />
-                            <Tooltip />
-                            <Line type="monotone" dataKey="valor" stroke="#2563eb" />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
-            )}
-
-            {/* Detalle del mes 
-            <DetalleMes
-                detalles={proyecto.detalledelmes}
-                onEditar={handleEditarDetalleMes}
-                onBorrar={handleBorrarDetalleMes}
-            />
-            */}
 
             {/* Detalle del mes actualizado */}
             <DetalleMesTabla

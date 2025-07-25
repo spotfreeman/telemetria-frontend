@@ -1,4 +1,7 @@
 import React from "react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const porcentaje = 65; // Ejemplo: 65%
 
 const TablaAvances = ({
     avance,
@@ -11,6 +14,23 @@ const TablaAvances = ({
 }) => (
     <div className="mt-10">
         <h3 className="text-lg font-bold mb-2">Tabla de Avances Fisicos</h3>
+
+
+
+
+        <div>
+            <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
+                <div
+                    className="bg-blue-600 h-6 rounded-full transition-all duration-500 flex items-center justify-center text-white font-bold"
+                    style={{ width: `${porcentaje}%` }}
+                >
+                    {porcentaje}%
+                </div>
+            </div>
+        </div>
+
+
+
         <table className="w-full border border-gray-300 rounded mb-8">
             <thead>
                 <tr className="bg-blue-100">
@@ -72,6 +92,22 @@ const TablaAvances = ({
                 </tr>
             </tbody>
         </table>
+
+        {/* Gráfico de avance */}
+        {avance && avance.length > 0 && (
+            <div className="mt-10">
+                <h3 className="text-lg font-bold mb-2">Gráfico de avance</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={avance}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="mes" />
+                        <YAxis domain={[0, 100]} />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="valor" stroke="#2563eb" />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+        )}
     </div>
 );
 
