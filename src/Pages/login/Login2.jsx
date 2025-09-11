@@ -120,6 +120,16 @@ export const Login2 = () => {
                                         </button>
                                     </div>
                                 </form>
+                                {/* Botón para ir a la página de registro */}
+                                <div className="mt-6 text-center">
+                                    <button
+                                        type="button"
+                                        className="text-indigo-600 hover:underline font-semibold"
+                                        onClick={() => navigate("/registrar")}
+                                    >
+                                        ¿No tienes cuenta? Regístrate aquí
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
