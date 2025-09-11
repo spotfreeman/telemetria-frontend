@@ -39,7 +39,7 @@ export const Registrar = () => {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <input
                     type="text"
-                    name="nombre"
+                    name="username"
                     placeholder="Nombre"
                     value={form.nombre}
                     onChange={handleChange}
