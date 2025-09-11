@@ -1,46 +1,55 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useParams } from "react-router-dom";
 import { saveAs } from "file-saver";
 import htmlDocx from "html-docx-js/dist/html-docx";
-import { HiOutlineAdjustments } from "react-icons/hi";
-import { ArrowLeftIcon, TrashIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 
-export const ProyectoDetalle = ({ soloContenido = false }) => {
+// Componentes refactorizados
+import Georeferencia from "../../Components/Proyectos/Georeferencia";
+import FechasImportantes from "../../Components/Proyectos/FechasImportantes";
+import TablaAvances from "../../Components/Proyectos/TablaAvances";
+import DetalleMesTabla from "../../Components/Proyectos/DetalleMesTabla";
+import DatosGenerales from "../../Components/Proyectos/DatosGenerales";
+import Licitacion from "../../Components/Proyectos/Licitacion";
+
+export const ProyectoDetalle = () => {
     const { id } = useParams();
+
+    // --- Estados principales ---
     const [proyecto, setProyecto] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [editando, setEditando] = useState(false);
     const [mensaje, setMensaje] = useState("");
+
+    // --- Estados de edición y formularios ---
+    const [editando, setEditando] = useState(false);
     const [form, setForm] = useState({ codigo: "", nombre: "", estado: "", descripcion: "" });
 
-    // Georreferencia
+    // --- Georreferencia ---
     const [geoForm, setGeoForm] = useState({ latitud: "", longitud: "" });
     const [showGeoModal, setShowGeoModal] = useState(false);
 
-    // Avances
+    // --- Fechas importantes ---
+    const [showFechasModal, setShowFechasModal] = useState(false);
+    const [editFechasIdx, setEditFechasIdx] = useState(null);
+    const [fechasForm, setFechasForm] = useState({ fechainicio: "", fechafin: "", aumento: 0 });
+
+    // --- Avances ---
     const [nuevoAvance, setNuevoAvance] = useState({ mes: "", anio: "", valor: "" });
     const [mostrarEvolucion, setMostrarEvolucion] = useState(true);
 
-    // Detalle del mes
+    // --- Detalle del mes ---
     const [nuevoDetalleMes, setNuevoDetalleMes] = useState({ mes: "", anio: "", descripcion: "" });
     const [editandoDetalleIdx, setEditandoDetalleIdx] = useState(null);
     const [detalleEdit, setDetalleEdit] = useState({ mes: "", anio: "", descripcion: "" });
 
-    // Fechas importantes
-    const [fechas, setFechas] = useState(proyecto?.fechas || []);
-    const [showFechasModal, setShowFechasModal] = useState(false);
-    const [editFechasIdx, setEditFechasIdx] = useState(null);
-    const [fechasForm, setFechasForm] = useState({
-        fechainicio: "",
-        fechafin: "",
-        aumento: 0
-    });
+    // --- Licitación ---
+    const [showLicitacionModal, setShowLicitacionModal] = useState(false);
+    const [idLicitacionInput, setIdLicitacionInput] = useState("");
 
+    // --- Referencia para exportar a Word ---
     const contenidoRef = useRef();
 
-    // Obtener proyecto
+    // --- Fetch de datos del proyecto ---
     const fetchProyecto = async () => {
         setLoading(true);
         setError("");
@@ -62,7 +71,6 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
                 latitud: data.georeferencia?.latitud || "",
                 longitud: data.georeferencia?.longitud || ""
             });
-            setFechas(data.fechas || []);
         } catch (err) {
             setError(err.message);
         }
@@ -71,16 +79,8 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
 
     useEffect(() => { fetchProyecto(); }, [id]);
 
-    // Sincroniza fechas si cambia el proyecto
-    useEffect(() => {
-        setFechas(proyecto?.fechas || []);
-    }, [proyecto]);
-
-    // Handlers generales
+    // --- Handlers de Datos Generales ---
     const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
-    const handleGeoChange = e => setGeoForm({ ...geoForm, [e.target.name]: e.target.value });
-
-    // Guardar datos generales
     const handleGuardar = async e => {
         e.preventDefault();
         setMensaje("");
@@ -99,7 +99,8 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
         }
     };
 
-    // Guardar georreferencia
+    // --- Handlers de Georreferencia ---
+    const handleGeoChange = e => setGeoForm({ ...geoForm, [e.target.name]: e.target.value });
     const handleGuardarGeo = async e => {
         e.preventDefault();
         const token = localStorage.getItem("token");
@@ -114,11 +115,8 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
         }
     };
 
-    // Fechas importantes (INTEGRACIÓN SEGURA)
-    const handleFechasChange = e => {
-        setFechasForm({ ...fechasForm, [e.target.name]: e.target.value });
-    };
-
+    // --- Handlers de Fechas Importantes ---
+    const handleFechasChange = e => setFechasForm({ ...fechasForm, [e.target.name]: e.target.value });
     const guardarFechasEnBackend = async (nuevasFechas) => {
         const token = localStorage.getItem("token");
         const proyectoActualizado = { ...proyecto, fechas: nuevasFechas };
@@ -130,21 +128,18 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
             },
             body: JSON.stringify(proyectoActualizado)
         });
-        // Refresca el proyecto
         await fetchProyecto();
     };
-
     const handleAgregarFechas = async e => {
         e.preventDefault();
         const nuevasFechas = [
             ...(proyecto.fechas || []),
-            { ...fechasForm, aumento: Number(fechasForm.aumento) } // <-- conversión aquí
+            { ...fechasForm, aumento: Number(fechasForm.aumento) }
         ];
         await guardarFechasEnBackend(nuevasFechas);
         setShowFechasModal(false);
         setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
     };
-
     const handleEditarFechas = idx => {
         const f = proyecto.fechas[idx];
         setFechasForm({
@@ -155,17 +150,15 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
         setEditFechasIdx(idx);
         setShowFechasModal(true);
     };
-
     const handleGuardarFechas = async e => {
         e.preventDefault();
         const nuevasFechas = [...proyecto.fechas];
-        nuevasFechas[editFechasIdx] = { ...fechasForm, aumento: Number(fechasForm.aumento) }; // <-- conversión aquí
+        nuevasFechas[editFechasIdx] = { ...fechasForm, aumento: Number(fechasForm.aumento) };
         await guardarFechasEnBackend(nuevasFechas);
         setShowFechasModal(false);
         setEditFechasIdx(null);
         setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 });
     };
-
     const handleBorrarFechas = async idx => {
         if (window.confirm("¿Seguro que deseas borrar esta fila?")) {
             const nuevasFechas = proyecto.fechas.filter((_, i) => i !== idx);
@@ -173,9 +166,8 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
         }
     };
 
-    // Avances
+    // --- Handlers de Avances ---
     const handleAvanceChange = e => setNuevoAvance({ ...nuevoAvance, [e.target.name]: e.target.value });
-
     const handleAgregarAvance = async e => {
         e.preventDefault();
         const avanceActualizado = [...(proyecto.avance || []), {
@@ -194,7 +186,6 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
             fetchProyecto();
         }
     };
-
     const handleBorrarAvance = async idx => {
         if (!window.confirm("¿Seguro que deseas eliminar este avance?")) return;
         const avanceActualizado = proyecto.avance.filter((_, i) => i !== idx);
@@ -207,9 +198,8 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
         if (res.ok) fetchProyecto();
     };
 
-    // Detalle del mes
+    // --- Handlers de Detalle del Mes ---
     const handleDetalleMesChange = e => setNuevoDetalleMes({ ...nuevoDetalleMes, [e.target.name]: e.target.value });
-
     const handleAgregarDetalleMes = async e => {
         e.preventDefault();
         const proyectoActualizado = { ...proyecto };
@@ -228,7 +218,6 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
             fetchProyecto();
         }
     };
-
     const handleEditarDetalleMes = idx => {
         const detalle = proyecto.detalledelmes[idx];
         setDetalleEdit({
@@ -238,7 +227,6 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
         });
         setEditandoDetalleIdx(idx);
     };
-
     const handleGuardarDetalleMes = async e => {
         e.preventDefault();
         const proyectoActualizado = { ...proyecto };
@@ -254,7 +242,6 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
             fetchProyecto();
         }
     };
-
     const handleBorrarDetalleMes = async idx => {
         if (!window.confirm("¿Seguro que deseas borrar este detalle?")) return;
         const proyectoActualizado = { ...proyecto };
@@ -268,7 +255,31 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
         if (res.ok) fetchProyecto();
     };
 
-    // Exportar a Word
+    // --- Handlers de Licitación ---
+    const handleAbrirLicitacionModal = () => {
+        setIdLicitacionInput(
+            proyecto.licitacion && proyecto.licitacion.length > 0
+                ? proyecto.licitacion[0].idlicitacion
+                : ""
+        );
+        setShowLicitacionModal(true);
+    };
+    const handleGuardarLicitacion = async (e) => {
+        e.preventDefault();
+        const nuevaLicitacion = [{ idlicitacion: idLicitacionInput }];
+        const token = localStorage.getItem("token");
+        const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+            body: JSON.stringify({ ...proyecto, licitacion: nuevaLicitacion })
+        });
+        if (res.ok) {
+            setShowLicitacionModal(false);
+            fetchProyecto();
+        }
+    };
+
+    // --- Utilidades ---
     const exportarAWord = () => {
         const estilos = `
             <style>
@@ -288,438 +299,101 @@ export const ProyectoDetalle = ({ soloContenido = false }) => {
         saveAs(docx, `${proyecto.nombre || "proyecto"}.docx`);
     };
 
-    // Función para parsear fechas tipo 'YYYY-MM-DD' a objeto Date seguro
-    function parseFecha(fechaStr) {
-        if (!fechaStr) return null;
-        if (fechaStr instanceof Date) return fechaStr;
-        if (typeof fechaStr === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
-            const [anio, mes, dia] = fechaStr.split('-').map(Number);
-            return new Date(anio, mes - 1, dia);
-        }
-        return new Date(fechaStr);
-    }
-
-    // Utilidad para mostrar fecha en formato DD-MM-YYYY
     function formatFecha(fechaStr) {
         if (!fechaStr) return "-";
         const f = fechaStr.slice(0, 10).split("-");
         return `${f[2]}-${f[1]}-${f[0]}`;
     }
 
-
-
+    // --- Renderizado principal ---
     if (loading) return <div className="p-8">Cargando...</div>;
     if (error) return <div className="p-8 text-red-600">{error}</div>;
     if (!proyecto) return <div className="p-8">No se encontró el proyecto.</div>;
 
-    const contenido = (
+    return (
         <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-4" ref={contenidoRef}>
-            <button
-                className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
-                onClick={exportarAWord}
-            >
+            {/* Botones principales */}
+            <button className="mb-4 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800" onClick={exportarAWord}>
                 Descargar como Word
             </button>
-            <button
-                className="mb-4 ml-2 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
-                onClick={() => window.print()}
-            >
+            <button className="mb-4 ml-2 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800" onClick={() => window.print()}>
                 Imprimir
             </button>
-            {/* Datos generales */}
-            <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-8">
-                <div>
-                    <div className="w-full bg-blue-100 rounded">
-                        <h2 className="text-2xl font-bold mb-4 px-2 py-2 text-black">{proyecto.nombre}</h2>
-                    </div>
-                    {mensaje && <div className="mb-4 text-green-700 font-semibold">{mensaje}</div>}
-                    {editando ? (
-                        <form onSubmit={handleGuardar} className="flex flex-col gap-4 mb-8">
-                            <label>
-                                <span className="font-semibold">Código:</span>
-                                <input className="border rounded px-2 py-1 w-full" name="codigo" value={form.codigo} onChange={handleChange} />
-                            </label>
-                            <label>
-                                <span className="font-semibold">Nombre:</span>
-                                <input className="border rounded px-2 py-1 w-full" name="nombre" value={form.nombre} onChange={handleChange} />
-                            </label>
-                            <label>
-                                <span className="font-semibold">Estado:</span>
-                                <input className="border rounded px-2 py-1 w-full" name="estado" value={form.estado} onChange={handleChange} />
-                            </label>
-                            <label>
-                                <span className="font-semibold">Detalle:</span>
-                                <textarea className="border rounded px-2 py-1 w-full" name="descripcion" value={form.descripcion} onChange={handleChange} />
-                            </label>
-                            <div className="flex gap-2">
-                                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Guardar</button>
-                                <button type="button" className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400" onClick={() => { setEditando(false); setForm(proyecto); }}>Cancelar</button>
-                            </div>
-                        </form>
-                    ) : (
-                        <div className="relative">
-                            <table className="mb-8 w-full border border-gray-300 rounded">
-                                <tbody>
-                                    <tr>
-                                        <th className="bg-blue-100 px-4 py-2 text-left w-1/4">Nombre</th>
-                                        <td className="px-4 py-2">{proyecto.nombre}</td>
-                                    </tr>
-                                    <tr>
-                                        <th className="bg-blue-100 px-4 py-2 text-left">Código</th>
-                                        <td className="px-4 py-2">{proyecto.codigo}</td>
-                                    </tr>
-                                    <tr>
-                                        <th className="bg-blue-100 px-4 py-2 text-left">Estado</th>
-                                        <td className="px-4 py-2">{proyecto.estado}</td>
-                                    </tr>
-                                    <tr>
-                                        <th className="bg-blue-100 px-4 py-2 text-left">Descripcion</th>
-                                        <td className="px-4 py-2">{proyecto.descripcion}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <button className="absolute top-2 right-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={() => setEditando(true)}>
-                                <HiOutlineAdjustments />
-                            </button>
-                        </div>
-                    )}
-                </div>
-            </div>
 
-            {/* Georreferencia */}
-            <div className="w-auto">
-                <div className="w-auto bg-blue-100 flex items-center justify-between px-4 py-2 rounded-t">
-                    <h3 className="text-lg font-bold text-center flex-1">Georreferencia</h3>
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ml-4" onClick={() => setShowGeoModal(true)} type="button">
-                        <HiOutlineAdjustments />
-                    </button>
-                </div>
-                <div className="w-full">
-                    {proyecto.georeferencia && proyecto.georeferencia.latitud && proyecto.georeferencia.longitud ? (
-                        <iframe
-                            title="mapa-georeferencia"
-                            width="100%"
-                            height="400"
-                            style={{ border: 0 }}
-                            loading="lazy"
-                            allowFullScreen
-                            referrerPolicy="no-referrer-when-downgrade"
-                            src={`https://www.google.com/maps?q=${proyecto.georeferencia.latitud},${proyecto.georeferencia.longitud}&output=embed`}
-                        />
-                    ) : (
-                        <div className="px-4 py-2 text-center">No hay georreferencia registrada</div>
-                    )}
-                </div>
-                {showGeoModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                        <div className="bg-white rounded shadow-lg p-8 w-full max-w-sm">
-                            <h3 className="text-lg font-bold mb-4 text-center">Ingresar Georreferencia</h3>
-                            <form
-                                onSubmit={e => {
-                                    handleGuardarGeo(e);
-                                    setShowGeoModal(false);
-                                }}
-                                className="flex flex-col gap-4"
-                            >
-                                <input className="border rounded px-2 py-1" name="latitud" type="number" step="any" placeholder="Latitud" value={geoForm.latitud} onChange={handleGeoChange} required />
-                                <input className="border rounded px-2 py-1" name="longitud" type="number" step="any" placeholder="Longitud" value={geoForm.longitud} onChange={handleGeoChange} required />
-                                <div className="flex gap-2 justify-end">
-                                    <button type="button" className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowGeoModal(false)}>Cancelar</button>
-                                    <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="submit">Guardar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
-            </div>
+            {/* Datos generales */}
+            <DatosGenerales
+                proyecto={proyecto}
+                mensaje={mensaje}
+                editando={editando}
+                form={form}
+                handleChange={handleChange}
+                handleGuardar={handleGuardar}
+                setEditando={setEditando}
+                setForm={setForm}
+            />
+
+            {/* Georeferencia */}
+            <Georeferencia
+                georeferencia={proyecto.georeferencia}
+                geoForm={geoForm}
+                showGeoModal={showGeoModal}
+                setShowGeoModal={setShowGeoModal}
+                handleGeoChange={handleGeoChange}
+                handleGuardarGeo={handleGuardarGeo}
+            />
 
             {/* Fechas importantes */}
-            <div className="w-full mt-10 text-center">
-                <div className="w-full bg-blue-200 flex items-center justify-between px-4 py-2 rounded-t text-center">
-                    <h3 className="text-lg font-bold mb-2">Fechas importantes</h3>
-                    <button
-                        className="bg-green-600 text-white px-3 py-1 rounded"
-                        onClick={() => { setFechasForm({ fechainicio: "", fechafin: "", aumento: 0 }); setEditFechasIdx(null); setShowFechasModal(true); }}
-                    >
-                        Agregar Fechas
-                    </button>
-                </div>
-                <table className="w-full table-fixed border border-gray-300 border-collapse rounded mb-8">
-                    <thead className="bg-blue-100">
-                        <tr>
-                            <th className="w-1/5 border">Fecha Inicio</th>
-                            <th className="w-1/5 border">Fecha Fin</th>
-                            <th className="w-1/5 border">Aumento</th>
-                            <th className="w-1/5 border">Fecha Actualizada</th>
-                            <th className="w-1/5 border">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {proyecto.fechas?.map((fecha, idx) => (
-                            <tr key={idx}>
-                                <td className="border">
-                                    {formatFecha(fecha.fechainicio)}
-                                </td>
-                                <td className="border">
-                                    {formatFecha(fecha.fechafin)}
-                                </td>
-                                <td className="border">{fecha.aumento}</td>
-                                <td className="border">
-                                    {formatFecha(fecha.fechaactualizada)}
-                                </td>
-                                <td className="border">
-                                    <button
-                                        className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                                        onClick={() => handleEditarFechas(idx)}
-                                    >
-                                        Editar
-                                    </button>
-                                    <button
-                                        className="bg-red-600 text-white px-2 py-1 rounded"
-                                        onClick={() => handleBorrarFechas(idx)}
-                                    >
-                                        Borrar
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <FechasImportantes
+                fechas={proyecto.fechas}
+                formatFecha={formatFecha}
+                handleEditarFechas={handleEditarFechas}
+                handleBorrarFechas={handleBorrarFechas}
+                showFechasModal={showFechasModal}
+                setShowFechasModal={setShowFechasModal}
+                editFechasIdx={editFechasIdx}
+                fechasForm={fechasForm}
+                handleFechasChange={handleFechasChange}
+                handleGuardarFechas={handleGuardarFechas}
+                handleAgregarFechas={handleAgregarFechas}
+                setFechasForm={setFechasForm}
+                setEditFechasIdx={setEditFechasIdx}
+            />
 
-                {/* Modal */}
-                {showFechasModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-                            <h2 className="text-xl font-semibold mb-4">
-                                {editFechasIdx !== null ? "Editar Fechas" : "Agregar Fechas"}
-                            </h2>
-                            <form
-                                onSubmit={editFechasIdx !== null ? handleGuardarFechas : handleAgregarFechas}
-                                className="flex flex-col gap-4"
-                            >
-                                <div>
-                                    <label className="block mb-1">Fecha Inicio</label>
-                                    <input
-                                        type="date"
-                                        name="fechainicio"
-                                        value={fechasForm.fechainicio}
-                                        onChange={handleFechasChange}
-                                        className="w-full border px-2 py-1 rounded"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block mb-1">Fecha Fin</label>
-                                    <input
-                                        type="date"
-                                        name="fechafin"
-                                        value={fechasForm.fechafin}
-                                        onChange={handleFechasChange}
-                                        className="w-full border px-2 py-1 rounded"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block mb-1">Aumento (días)</label>
-                                    <input
-                                        type="number"
-                                        name="aumento"
-                                        value={fechasForm.aumento}
-                                        onChange={handleFechasChange}
-                                        className="w-full border px-2 py-1 rounded"
-                                        required
-                                    />
-                                </div>
-                                <div className="flex justify-end gap-2">
-                                    <button
-                                        type="button"
-                                        className="bg-gray-400 text-white px-3 py-1 rounded"
-                                        onClick={() => setShowFechasModal(false)}
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="bg-blue-600 text-white px-3 py-1 rounded"
-                                    >
-                                        Guardar
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
-            </div>
+            {/* Licitación */}
+            <Licitacion
+                licitacion={proyecto.licitacion}
+                showLicitacionModal={showLicitacionModal}
+                handleAbrirLicitacionModal={handleAbrirLicitacionModal}
+                idLicitacionInput={idLicitacionInput}
+                setIdLicitacionInput={setIdLicitacionInput}
+                handleGuardarLicitacion={handleGuardarLicitacion}
+                setShowLicitacionModal={setShowLicitacionModal}
+            />
 
-            {/* Tabla de Avances */}
-            <div className="mt-10">
-                <h3 className="text-lg font-bold mb-2">Tabla de Avances Fisicos</h3>
-                <table className="w-full border border-gray-300 rounded mb-8">
-                    <thead>
-                        <tr className="bg-blue-100">
-                            <th className="px-4 py-2">Ingresar avance</th>
-                            <th className="px-4 py-2">Detalle de avance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="px-4 py-2 text-center">
-                                <div className="mt-10 mb-6">
-                                    <h3 className="text-lg font-bold mb-2">Agregar avance mensual</h3>
-                                    <form onSubmit={handleAgregarAvance} className="flex flex-wrap gap-2 items-end">
-                                        <input className="border rounded px-2 py-1" name="mes" type="number" min="1" max="12" placeholder="Mes (1-12)" value={nuevoAvance.mes} onChange={handleAvanceChange} required />
-                                        <input className="border rounded px-2 py-1" name="anio" type="number" min="2000" max="2100" placeholder="Año" value={nuevoAvance.anio} onChange={handleAvanceChange} required />
-                                        <input className="border rounded px-2 py-1" name="valor" type="number" min="0" max="100" step="0.1" placeholder="Avance (%)" value={nuevoAvance.valor} onChange={handleAvanceChange} required />
-                                        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="submit">Agregar</button>
-                                    </form>
-                                </div>
-                            </td>
-                            <td className="px-4 py-2 text-center">
-                                {proyecto.avance && proyecto.avance.length > 0 && (
-                                    <div className="mt-6">
-                                        <button className="mb-4 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded" onClick={() => setMostrarEvolucion(v => !v)}>
-                                            {mostrarEvolucion ? "Ocultar evolución del avance" : "Mostrar evolución del avance"}
-                                        </button>
-                                        {mostrarEvolucion && (
-                                            <>
-                                                <h3 className="text-lg font-bold mb-2">Evolución del avance</h3>
-                                                <table className="w-full border border-gray-300 rounded mb-8">
-                                                    <thead>
-                                                        <tr className="bg-blue-100">
-                                                            <th className="px-4 py-2">Mes</th>
-                                                            <th className="px-4 py-2">Año</th>
-                                                            <th className="px-4 py-2">Avance (%)</th>
-                                                            <th className="px-4 py-2">Acciones</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {proyecto.avance.map((a, idx) => (
-                                                            <tr key={idx}>
-                                                                <td className=" text-center">{a.mes}</td>
-                                                                <td className=" text-center">{a.anio}</td>
-                                                                <td className=" text-center">{a.valor}%</td>
-                                                                <td className=" text-center">
-                                                                    <button className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onClick={() => handleBorrarAvance(idx)} title="Eliminar avance">
-                                                                        Eliminar
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </>
-                                        )}
-                                    </div>
-                                )}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            {/* Tabla de avances */}
+            <TablaAvances
+                avance={proyecto.avance}
+                nuevoAvance={nuevoAvance}
+                mostrarEvolucion={mostrarEvolucion}
+                handleAvanceChange={handleAvanceChange}
+                handleAgregarAvance={handleAgregarAvance}
+                setMostrarEvolucion={setMostrarEvolucion}
+                handleBorrarAvance={handleBorrarAvance}
+            />
 
-            {/* Gráfico de avance */}
-            {proyecto.avance && proyecto.avance.length > 0 && (
-                <div className="mt-10">
-                    <h3 className="text-lg font-bold mb-2">Gráfico de avance</h3>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={proyecto.avance}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="mes" />
-                            <YAxis domain={[0, 100]} />
-                            <Tooltip />
-                            <Line type="monotone" dataKey="valor" stroke="#2563eb" />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
-            )}
-
-            {/* Detalle del Mes */}
-            <div className="mt-10">
-                <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
-                <table className="w-full border border-gray-300 rounded mb-8">
-                    <thead>
-                        <tr className="bg-blue-100">
-                            <th className="px-4 py-2">Detalle del Mes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="px-4 py-2 text-center">
-                                <div className="mt-10 mb-6">
-                                    <h3 className="text-lg font-bold mb-2">Agregar detalle del mes</h3>
-                                    <form onSubmit={handleAgregarDetalleMes} className="flex gap-2 mt-4">
-                                        <input type="text" placeholder="Mes" value={nuevoDetalleMes.mes} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, mes: e.target.value })} className="border px-2 py-1 rounded" required />
-                                        <input type="text" placeholder="Año" value={nuevoDetalleMes.anio} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, anio: e.target.value })} className="border px-2 py-1 rounded" required />
-                                        <input type="text" placeholder="Descripción" value={nuevoDetalleMes.descripcion} onChange={e => setNuevoDetalleMes({ ...nuevoDetalleMes, descripcion: e.target.value })} className="border px-2 py-1 rounded" required />
-                                        <button type="submit" className="bg-green-600 text-white px-3 py-1 rounded">Agregar</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Detalle del Mes Actualizado */}
-            <div className="mt-10">
-                <h3 className="text-lg font-bold mb-2">Detalle del Mes</h3>
-                <table className="min-w-full border mt-2">
-                    <thead>
-                        <tr className="bg-blue-700 text-white">
-                            <th className="px-4 py-2 border">Mes</th>
-                            <th className="px-4 py-2 border">Año</th>
-                            <th className="px-4 py-2 border">Descripción</th>
-                            <th className="px-4 py-2 border">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {proyecto.detalledelmes?.map((detalle, idx) => (
-                            <tr key={idx} className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                                <td className="px-4 py-2 border">{detalle.mes}</td>
-                                <td className="px-4 py-2 border">{detalle.anio}</td>
-                                <td className="px-4 py-2 border">{detalle.descripcion}</td>
-                                <td className="px-4 py-2 border text-center">
-                                    <button className="bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded mr-2" onClick={() => handleEditarDetalleMes(idx)} title="Editar">
-                                        <PencilSquareIcon className="h-5 w-5" />
-                                    </button>
-                                    <button className="bg-red-600 hover:bg-red-700 text-white p-1 rounded" onClick={() => handleBorrarDetalleMes(idx)} title="Borrar">
-                                        <TrashIcon className="h-5 w-5" />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {/* Modal de edición */}
-                {editandoDetalleIdx !== null && (
-                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-white rounded shadow-lg p-6 w-full max-w-md">
-                            <h4 className="text-lg font-bold mb-4">Editar Detalle del Mes</h4>
-                            <form onSubmit={handleGuardarDetalleMes} className="flex flex-col gap-3">
-                                <div>
-                                    <label className="block mb-1">Mes</label>
-                                    <input type="text" name="mes" value={detalleEdit.mes} onChange={e => setDetalleEdit({ ...detalleEdit, mes: e.target.value })} className="w-full border px-2 py-1 rounded" required />
-                                </div>
-                                <div>
-                                    <label className="block mb-1">Año</label>
-                                    <input type="text" name="anio" value={detalleEdit.anio} onChange={e => setDetalleEdit({ ...detalleEdit, anio: e.target.value })} className="w-full border px-2 py-1 rounded" required />
-                                </div>
-                                <div>
-                                    <label className="block mb-1">Descripción</label>
-                                    <textarea name="descripcion" value={detalleEdit.descripcion} onChange={e => setDetalleEdit({ ...detalleEdit, descripcion: e.target.value })} className="w-full border px-2 py-1 rounded" required />
-                                </div>
-                                <div className="flex justify-end gap-2 mt-2">
-                                    <button type="button" className="bg-gray-400 text-white px-3 py-1 rounded" onClick={() => setEditandoDetalleIdx(null)}>Cancelar</button>
-                                    <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">Guardar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
-            </div>
+            {/* Detalle del mes actualizado */}
+            <DetalleMesTabla
+                detalles={proyecto.detalledelmes}
+                onEditar={handleEditarDetalleMes}
+                onBorrar={handleBorrarDetalleMes}
+                editandoDetalleIdx={editandoDetalleIdx}
+                detalleEdit={detalleEdit}
+                setDetalleEdit={setDetalleEdit}
+                setEditandoDetalleIdx={setEditandoDetalleIdx}
+                handleGuardarDetalleMes={handleGuardarDetalleMes}
+            />
         </div>
     );
-
 };
 
 export default ProyectoDetalle;

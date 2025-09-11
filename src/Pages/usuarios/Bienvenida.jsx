@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 export const Bienvenida = () => {
     const [totalProyectos, setTotalProyectos] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
             // Si no hay token, no hace la petición
             setTotalProyectos(0);
-            // window.location.href = '/login/login2'; // Redirige al login si no hay token
+            navigate('/login/login2'); // Redirige al login si no hay token
             return;
         }
         fetch('https://telemetria-backend.onrender.com/api/proyectos', {
@@ -18,9 +20,8 @@ export const Bienvenida = () => {
         })
             .then(res => {
                 if (res.status === 401) {
-                    // Token inválido o vencido
-                    // localStorage.removeItem('token');
-                    // window.location.href = '/login/login2';
+                    localStorage.removeItem('token');
+                    navigate('/login/login2');
                     throw new Error('No autorizado');
                 }
                 if (!res.ok) throw new Error('Error en la petición');
@@ -37,6 +38,13 @@ export const Bienvenida = () => {
         { id: 3, name: 'Gasto Ejecutado', value: '35%' },
         { id: 4, name: 'Usuarios activos', value: '+10' },
     ];
+
+    // Funciones para redirigir según el rol
+    const rol = localStorage.getItem("rol");
+    const rolesText = {
+        Administrador: "Bienvenido, Administrador",
+        Usuario: "Bienvenido, Usuario"
+    };
 
     return (
         <div className="relative bg-white">
@@ -55,6 +63,7 @@ export const Bienvenida = () => {
                         <p className="mt-6 text-lg/8 text-gray-600">
                             Plataforma para la gestión de telemetría de equipos, que permite a los usuarios monitorear y analizar datos en tiempo real, optimizando el rendimiento y la seguridad.
                         </p>
+                        <p>{rolesText[rol]}</p>
                         <dl className="mt-16 grid max-w-xl grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 xl:mt-16">
                             {stats.map((stat) => (
                                 <div key={stat.id} className="flex flex-col gap-y-3 border-l border-gray-900/10 pl-6">

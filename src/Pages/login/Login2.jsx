@@ -1,53 +1,77 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Componente de Login para la plataforma de Telemetría.
+ * Permite a los usuarios autenticarse y guarda el token y datos del usuario en localStorage.
+ * Redirige a la página de bienvenida tras un login exitoso.
+ */
 export const Login2 = () => {
-
-    const [form, setForm] = useState({ email: "", password: "" });
+    // Estado para el formulario de login
+    const [form, setForm] = useState({ username: "", password: "" });
+    // Estado para mostrar errores de autenticación
     const [error, setError] = useState("");
+    // Estado para mostrar un loader durante la petición
     const [loading, setLoading] = useState(false);
+    // Hook de navegación de React Router
     const navigate = useNavigate();
 
+    /**
+     * Maneja los cambios en los campos del formulario.
+     * @param {object} e - Evento de cambio de input
+     */
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
+
+    /**
+     * Maneja el envío del formulario de login.
+     * Realiza la petición al backend, guarda los datos en localStorage y redirige si es exitoso.
+     * @param {object} e - Evento de submit
+     */
     const handleSubmit = async e => {
         e.preventDefault();
         setError("");
+
+        if (!form.username || !form.password) {
+            setError("Completa todos los campos.");
+            return;
+        }
+
         setLoading(true);
-        console.log("Informacion enviada ", form);
+        //console.log("Informacion enviada ", form);
 
-        const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form),
-        });
-        const data = await res.json();
-        console.log(data);
+        // Petición al backend para autenticar usuario
+        try {
+            const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form),
+            });
+            const data = await res.json();
+            //console.log(data);
 
-        if (res.ok && data.token) {
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("usuario", data.usuario);
-            localStorage.setItem("nombre", data.nombre);
-            localStorage.setItem("rol", data.rol);
-            navigate("/bienvenida"); // Redirige a la página principal
-        } else {
-            setError(data.message || "Usuario o contraseña incorrectos");
+            if (res.ok && data.token) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("usuario", data.usuario);
+                localStorage.setItem("nombre", data.nombre);
+                localStorage.setItem("rol", data.rol);
+                // Redirige a la página principal
+                navigate("/bienvenida");
+            } else {
+                setError(data.message || "Usuario o contraseña incorrectos");
+            }
+        } catch (err) {
+            setError("No se pudo conectar con el servidor.");
         }
         setLoading(false);
     };
 
     return (
         <>
-            {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
+            {/* Contenedor principal del login */}
             <div className="flex min-h-full flex-1">
+                {/* Sección del formulario */}
                 <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
                     <div className="mx-auto w-full max-w-sm lg:w-96">
                         <div>
@@ -57,19 +81,18 @@ export const Login2 = () => {
                                 className="h-10 w-auto"
                             />
                             <h2 className="mt-8 text-2xl font-bold tracking-tight text-gray-900">Inicio de Sesion</h2>
-
                         </div>
 
                         <div className="mt-10">
                             <div>
-                                <form onSubmit={handleSubmit} action="#" method="POST" className="space-y-6">
+                                {/* Formulario de login */}
+                                <form onSubmit={handleSubmit} className="space-y-6">
                                     <div>
-                                        <label htmlFor="text" className="block text-sm font-medium text-gray-900">
+                                        <label htmlFor="username" className="block text-sm font-medium text-gray-900">
                                             Nombre de usuario
                                         </label>
-
+                                        {/* Mensaje de error */}
                                         {error && <div className="mb-4 text-red-600">{error}</div>}
-
                                         <div className="mt-2">
                                             <input
                                                 id="username"
@@ -105,6 +128,7 @@ export const Login2 = () => {
                                     </div>
 
                                     <div>
+                                        {/* Botón de login con loader */}
                                         <button
                                             type="submit"
                                             className="flex w-full justify-center items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -134,6 +158,7 @@ export const Login2 = () => {
                         </div>
                     </div>
                 </div>
+                {/* Imagen lateral para pantallas grandes */}
                 <div className="relative hidden w-0 flex-1 lg:block">
                     <img
                         alt=""
