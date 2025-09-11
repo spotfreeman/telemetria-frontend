@@ -17,7 +17,11 @@ export const Page404 = () => {
                     Sorry, we couldn’t find the page you’re looking for.
                 </p>
                 <div className="mt-10 flex justify-center">
-                    <Link to="/" className="text-sm/7 font-semibold text-white hover:underline">
+                    <Link
+                        to="/"
+                        className="text-sm/7 font-semibold text-white hover:underline"
+                        aria-label="Navigate back to home page"
+                    >
                         <span aria-hidden="true">&larr;</span> Back to home
                     </Link>
                 </div>
