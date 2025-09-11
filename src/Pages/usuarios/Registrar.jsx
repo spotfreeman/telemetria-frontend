@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Registrar = () => {
+export const Registrar = () => {
     const [form, setForm] = useState({ nombre: "", email: "", password: "", rol: "usuario" });
     const [mensaje, setMensaje] = useState("");
     const [error, setError] = useState("");

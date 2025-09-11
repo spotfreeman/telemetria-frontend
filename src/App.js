@@ -25,7 +25,7 @@ import { Mercado } from './mercado/mercado';
 import Sidebar from './Components/Sidebar';
 import PrivateRoute from './Components/PrivateRoute';
 
-import { Register } from './Pages/usuarios/Registrar';
+import { Registrar } from './Pages/usuarios/Registrar';
 import { Login } from './Pages/Login';
 
 function App() {
@@ -56,7 +56,7 @@ function App() {
             <Route path="/roles" element={<Roles />} />
 
 
-            <Route path="/register" element={<Register />} />
+            <Route path="/register" element={<Registrar />} />
 
             {/* Rutas de ESP32 */}
             <Route path="/esp32" element={<Esp32List />} />
