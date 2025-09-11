@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export const Registrar = () => {
-    const [form, setForm] = useState({ nombre: "", email: "", password: "", rol: "usuario" });
+    const [form, setForm] = useState({ username: "", email: "", password: "", rol: "usuario" });
     const [mensaje, setMensaje] = useState("");
     const [error, setError] = useState("");
 
@@ -22,7 +22,7 @@ export const Registrar = () => {
             const data = await res.json();
             if (res.ok) {
                 setMensaje("Usuario registrado correctamente");
-                setForm({ nombre: "", email: "", password: "", rol: "usuario" });
+                setForm({ username: "", email: "", password: "", rol: "usuario" });
             } else {
                 setError(data.error || "Error al registrar usuario");
             }
