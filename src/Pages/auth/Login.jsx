@@ -72,106 +72,131 @@ export const Login2 = () => {
     };
 
     return (
-        <>
-            {/* Contenedor principal del login */}
-            <div className="flex min-h-full flex-1">
-                {/* Sección del formulario */}
-                <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-                    <div className="mx-auto w-full max-w-sm lg:w-96">
-                        <div>
-                            <img
-                                alt="ROB Studios"
-                                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                                className="h-10 w-auto"
-                            />
-                            <h2 className="mt-8 text-2xl font-bold tracking-tight text-gray-900">Inicio de Sesion</h2>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+            <div className="max-w-md w-full">
+                {/* Card principal */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8">
+                    {/* Header */}
+                    <div className="text-center mb-8">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full mb-4">
+                            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
                         </div>
+                        <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                            Bienvenido
+                        </h1>
+                        <p className="text-gray-600 mt-2">Inicia sesión en tu cuenta</p>
+                    </div>
 
-                        <div className="mt-10">
-                            <div>
-                                {/* Formulario de login */}
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    <div>
-                                        <label htmlFor="username" className="block text-sm font-medium text-gray-900">
-                                            Nombre de usuario
-                                        </label>
-                                        {/* Mensaje de error */}
-                                        {error && <div className="mb-4 text-red-600">{error}</div>}
-                                        <div className="mt-2">
-                                            <input
-                                                id="username"
-                                                name="username"
-                                                placeholder="Usuario"
-                                                type="text"
-                                                value={form.username}
-                                                onChange={handleChange}
-                                                required
-                                                autoComplete="text"
-                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
-                                            />
-                                        </div>
-                                    </div>
+                    {/* Formulario */}
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {/* Mensaje de error */}
+                        {error && (
+                            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center">
+                                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                                {error}
+                            </div>
+                        )}
 
-                                    <div>
-                                        <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
-                                            Password
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                id="password"
-                                                name="password"
-                                                type="password"
-                                                placeholder="Contraseña"
-                                                value={form.password}
-                                                onChange={handleChange}
-                                                required
-                                                autoComplete="current-password"
-                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        {/* Botón de login con loader */}
-                                        <button
-                                            type="submit"
-                                            className="flex w-full justify-center items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                            disabled={loading}
-                                        >
-                                            {loading && (
-                                                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                                                </svg>
-                                            )}
-                                            {loading ? "Ingresando..." : "Sign in"}
-                                        </button>
-                                    </div>
-                                </form>
-                                {/* Botón para ir a la página de registro */}
-                                <div className="mt-6 text-center">
-                                    <button
-                                        type="button"
-                                        className="text-indigo-600 hover:underline font-semibold"
-                                        onClick={() => navigate("/register")}
-                                    >
-                                        ¿No tienes cuenta? Regístrate aquí
-                                    </button>
+                        {/* Campo Usuario */}
+                        <div className="space-y-2">
+                            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                                Usuario
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
                                 </div>
+                                <input
+                                    id="username"
+                                    name="username"
+                                    type="text"
+                                    placeholder="Ingresa tu usuario"
+                                    value={form.username}
+                                    onChange={handleChange}
+                                    required
+                                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200 bg-white/50 backdrop-blur-sm"
+                                />
                             </div>
                         </div>
+
+                        {/* Campo Contraseña */}
+                        <div className="space-y-2">
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                Contraseña
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                </div>
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Ingresa tu contraseña"
+                                    value={form.password}
+                                    onChange={handleChange}
+                                    required
+                                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200 bg-white/50 backdrop-blur-sm"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Botón de Login */}
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02]"
+                        >
+                            {loading ? (
+                                <>
+                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Iniciando sesión...
+                                </>
+                            ) : (
+                                <>
+                                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                    </svg>
+                                    Iniciar Sesión
+                                </>
+                            )}
+                        </button>
+                    </form>
+
+                    {/* Footer */}
+                    <div className="mt-6 text-center">
+                        <p className="text-sm text-gray-600">
+                            ¿No tienes cuenta?{" "}
+                            <button
+                                type="button"
+                                onClick={() => navigate("/register")}
+                                className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-200"
+                            >
+                                Regístrate aquí
+                            </button>
+                        </p>
                     </div>
                 </div>
-                {/* Imagen lateral para pantallas grandes */}
-                <div className="relative hidden w-0 flex-1 lg:block">
-                    <img
-                        alt=""
-                        src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-                        className="absolute inset-0 size-full object-cover"
-                    />
+
+                {/* Información adicional */}
+                <div className="text-center mt-6">
+                    <p className="text-sm text-gray-500">
+                        Sistema de Telemetría - Plataforma de Seguimiento de Proyectos
+                    </p>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
