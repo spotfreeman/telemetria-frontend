@@ -55,13 +55,13 @@ export const Login2 = () => {
                 // El backend devuelve los datos anidados en 'data'
                 const userData = data.data;
                 const user = userData.usuario;
-                
+
                 localStorage.setItem("token", userData.token);
                 localStorage.setItem("usuario", user.username);
                 localStorage.setItem("nombre", user.nombre || user.username); // Usar username como fallback si no hay nombre
                 localStorage.setItem("rol", user.rol);
                 localStorage.setItem("email", user.email);
-                
+
                 // Redirige a la página principal
                 navigate("/bienvenida");
             } else {

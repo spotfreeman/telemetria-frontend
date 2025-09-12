@@ -40,16 +40,17 @@ export const Usuarioconfig = () => {
 
                 if (response.ok) {
                     const data = await response.json();
+                    const userData = data.data; // El backend devuelve los datos en data.data
                     setForm(f => ({
                         ...f,
-                        username: data.username || "",
-                        email: data.email || "",
-                        nombre: data.nombre || "",
-                        apellido: data.apellido || "",
-                        departamento: data.departamento || "",
-                        rol: data.rol || "",
-                        fechaCreacion: data.creadoEn ? new Date(data.creadoEn).toLocaleString() : new Date().toLocaleString(),
-                        activo: data.activo !== undefined ? data.activo : true
+                        username: userData.username || "",
+                        email: userData.email || "",
+                        nombre: userData.nombre || "",
+                        apellido: userData.apellido || "",
+                        departamento: userData.departamento || "",
+                        rol: userData.rol || "",
+                        fechaCreacion: userData.createdAt ? new Date(userData.createdAt).toLocaleString() : new Date().toLocaleString(),
+                        activo: userData.activo !== undefined ? userData.activo : true
                     }));
                 } else if (response.status === 401) {
                     // Token expirado o inválido

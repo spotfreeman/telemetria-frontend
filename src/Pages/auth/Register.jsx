@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 
 export const Registrar = () => {
-    const [form, setForm] = useState({ username: "", email: "", password: "", rol: "usuario" });
+    const [form, setForm] = useState({ 
+        username: "", 
+        email: "", 
+        password: "", 
+        rol: "usuario",
+        nombre: "",
+        apellido: "",
+        departamento: ""
+    });
     const [mensaje, setMensaje] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -16,8 +24,8 @@ export const Registrar = () => {
         setError("");
 
         // Validar campos vacíos
-        if (!form.username || !form.email || !form.password) {
-            setError("Por favor, completa todos los campos");
+        if (!form.username || !form.email || !form.password || !form.nombre) {
+            setError("Por favor, completa todos los campos obligatorios");
             return;
         }
 
@@ -37,7 +45,15 @@ export const Registrar = () => {
             const data = await res.json();
             if (res.ok) {
                 setMensaje(data.message || "Usuario registrado correctamente");
-                setForm({ username: "", email: "", password: "", rol: "usuario" });
+                setForm({ 
+                    username: "", 
+                    email: "", 
+                    password: "", 
+                    rol: "usuario",
+                    nombre: "",
+                    apellido: "",
+                    departamento: ""
+                });
             } else {
                 setError(data.error || data.message || "Error al registrar usuario");
             }
@@ -74,6 +90,31 @@ export const Registrar = () => {
                     required
                 />
                 <input
+                    type="text"
+                    name="nombre"
+                    placeholder="Nombre"
+                    value={form.nombre}
+                    onChange={handleChange}
+                    className="border rounded px-3 py-2"
+                    required
+                />
+                <input
+                    type="text"
+                    name="apellido"
+                    placeholder="Apellido"
+                    value={form.apellido}
+                    onChange={handleChange}
+                    className="border rounded px-3 py-2"
+                />
+                <input
+                    type="text"
+                    name="departamento"
+                    placeholder="Departamento"
+                    value={form.departamento}
+                    onChange={handleChange}
+                    className="border rounded px-3 py-2"
+                />
+                <input
                     type="password"
                     name="password"
                     placeholder="Contraseña"
@@ -91,8 +132,8 @@ export const Registrar = () => {
                     <option value="usuario">Usuario</option>
                     <option value="admin">Administrador</option>
                 </select>
-                <button 
-                    className="bg-blue-700 text-white py-2 rounded hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2" 
+                <button
+                    className="bg-blue-700 text-white py-2 rounded hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     type="submit"
                     disabled={loading}
                 >
