@@ -23,10 +23,7 @@ import { Esp32Detail } from './Pages/esp32/esp32detail';
 import { Mercado } from './mercado/mercado';
 
 import Sidebar from './Components/Sidebar';
-// import PrivateRoute from './Components/PrivateRoute';
-
 import { Registrar } from './Pages/usuarios/Registrar';
-// import { Login } from './Pages/Login';
 
 function App() {
   useEffect(() => {
@@ -43,7 +40,6 @@ function App() {
             <Route path="/" element={<Intro />} />
 
             <Route path="/login" element={<Login2 />} />
-            {/* <Route path="/login/old" element={<Login />} /> */}
 
             <Route path="/datos" element={<DatosPage />} />
             <Route path="/tempdata" element={<TempData />} />
