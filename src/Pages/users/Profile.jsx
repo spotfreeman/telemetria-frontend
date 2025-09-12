@@ -27,21 +27,74 @@ export const Usuarioconfig = () => {
             return;
         }
 
-        // Cargar datos del localStorage (datos disponibles del login)
-        const usuario = localStorage.getItem("usuario");
-        const nombre = localStorage.getItem("nombre");
-        const rol = localStorage.getItem("rol");
-        
-        setForm(f => ({
-            ...f,
-            username: usuario || "",
-            nombre: nombre || "",
-            rol: rol || "",
-            fechaCreacion: new Date().toLocaleString(), // Fecha actual como placeholder
-            activo: true // Asumir que está activo si tiene token
-        }));
-        
-        setLoadingData(false);
+        // Cargar datos del usuario desde el backend
+        const loadUserProfile = async () => {
+            try {
+                const response = await fetch("https://telemetria-backend.onrender.com/api/auth/profile", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setForm(f => ({
+                        ...f,
+                        username: data.username || "",
+                        email: data.email || "",
+                        nombre: data.nombre || "",
+                        apellido: data.apellido || "",
+                        departamento: data.departamento || "",
+                        rol: data.rol || "",
+                        fechaCreacion: data.creadoEn ? new Date(data.creadoEn).toLocaleString() : new Date().toLocaleString(),
+                        activo: data.activo !== undefined ? data.activo : true
+                    }));
+                } else if (response.status === 401) {
+                    // Token expirado o inválido
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("usuario");
+                    localStorage.removeItem("nombre");
+                    localStorage.removeItem("rol");
+                    navigate("/login");
+                    return;
+                } else {
+                    // Error del servidor, cargar datos del localStorage como fallback
+                    const usuario = localStorage.getItem("usuario");
+                    const nombre = localStorage.getItem("nombre");
+                    const rol = localStorage.getItem("rol");
+
+                    setForm(f => ({
+                        ...f,
+                        username: usuario || "",
+                        nombre: nombre || "",
+                        rol: rol || "",
+                        fechaCreacion: new Date().toLocaleString(),
+                        activo: true
+                    }));
+                }
+            } catch (error) {
+                console.error("Error al cargar perfil:", error);
+                // Fallback a datos del localStorage
+                const usuario = localStorage.getItem("usuario");
+                const nombre = localStorage.getItem("nombre");
+                const rol = localStorage.getItem("rol");
+
+                setForm(f => ({
+                    ...f,
+                    username: usuario || "",
+                    nombre: nombre || "",
+                    rol: rol || "",
+                    fechaCreacion: new Date().toLocaleString(),
+                    activo: true
+                }));
+            } finally {
+                setLoadingData(false);
+            }
+        };
+
+        loadUserProfile();
     }, [navigate]);
 
     const handleChange = e => {
@@ -66,7 +119,7 @@ export const Usuarioconfig = () => {
 
         setLoading(true);
         const token = localStorage.getItem("token");
-        
+
         if (!token) {
             setError("No hay token de autenticación. Por favor, inicia sesión nuevamente.");
             setLoading(false);
@@ -74,25 +127,58 @@ export const Usuarioconfig = () => {
         }
 
         try {
-            // Simular actualización (ya que el endpoint no existe en el backend)
-            // En una implementación real, aquí harías la petición al backend
-            
-            // Actualizar localStorage con los nuevos datos
-            if (form.nombre) {
-                localStorage.setItem("nombre", form.nombre);
+            // Preparar datos para enviar al backend
+            const updateData = {
+                nombre: form.nombre,
+                apellido: form.apellido,
+                email: form.email,
+                departamento: form.departamento,
+                rol: form.rol
+            };
+
+            // Si se proporciona una nueva contraseña, incluirla
+            if (form.password) {
+                updateData.password = form.password;
             }
-            if (form.rol) {
-                localStorage.setItem("rol", form.rol);
+
+            const response = await fetch("https://telemetria-backend.onrender.com/api/auth/profile", {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(updateData)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Actualizar localStorage con los nuevos datos
+                if (form.nombre) {
+                    localStorage.setItem("nombre", form.nombre);
+                }
+                if (form.rol) {
+                    localStorage.setItem("rol", form.rol);
+                }
+
+                setMensaje("¡Datos actualizados correctamente!");
+                setForm({ ...form, password: "", confirmarPassword: "" });
+            } else if (response.status === 401) {
+                // Token expirado
+                localStorage.removeItem("token");
+                localStorage.removeItem("usuario");
+                localStorage.removeItem("nombre");
+                localStorage.removeItem("rol");
+                navigate("/login");
+                return;
+            } else {
+                const errorData = await response.json();
+                setError(errorData.error || errorData.message || "Error al actualizar los datos");
             }
-            
-            // Simular delay de red
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            setMensaje("¡Datos actualizados correctamente! (Nota: Los cambios se guardan localmente)");
-            setForm({ ...form, password: "", confirmarPassword: "" });
-            
+
         } catch (err) {
-            setError("Error al actualizar los datos.");
+            console.error("Error al actualizar perfil:", err);
+            setError("Error de conexión. Verifica tu conexión a internet.");
         } finally {
             setLoading(false);
         }
@@ -112,11 +198,10 @@ export const Usuarioconfig = () => {
     return (
         <div className="max-w-lg mx-auto mt-10 bg-white rounded shadow p-6">
             <h2 className="text-2xl font-bold mb-4">Configuración de Usuario</h2>
-            
+
             {/* Nota informativa */}
-            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 text-blue-700 rounded text-sm">
-                <strong>Nota:</strong> Los datos se cargan desde la sesión actual y los cambios se guardan localmente. 
-                Para una funcionalidad completa, el backend necesita implementar el endpoint de perfil de usuario.
+            <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded text-sm">
+                <strong>✅ Funcionalidad Completa:</strong> Los datos se cargan desde el backend y los cambios se guardan en la base de datos.
             </div>
 
             {/* Mostrar errores */}

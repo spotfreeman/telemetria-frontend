@@ -43,7 +43,7 @@ export const Login2 = () => {
 
         // Petición al backend para autenticar usuario
         try {
-            const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/login", {
+            const res = await fetch("https://telemetria-backend.onrender.com/api/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),

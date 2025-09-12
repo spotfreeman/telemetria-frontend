@@ -14,7 +14,7 @@ export const Registrar = () => {
         setMensaje("");
         setError("");
         try {
-            const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/register", {
+            const res = await fetch("https://telemetria-backend.onrender.com/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
