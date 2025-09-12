@@ -49,22 +49,7 @@ function Sidebar() {
         day: '2-digit',
     });
 
-    // Lista de enlaces del sidebar (puedes modificar según tus necesidades)
-    const links = [
-        { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
-        { to: "/login", icon: <UsersIcon className="h-5 w-5" />, label: "Login" },
-        { to: "/bienvenida", icon: <HomeIcon className="h-5 w-5" />, label: "Bienvenida" },
-        { to: "/proyectos", icon: <FolderIcon className="h-5 w-5" />, label: "Proyectos" },
-        { to: "/datos", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Historico" },
-        { to: "/tempdata", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Resumen" },
-        { to: "/server", icon: <FolderIcon className="h-5 w-5" />, label: "IP Server" },
-        { to: "/notas", icon: <FolderIcon className="h-5 w-5" />, label: "Notas" },
-        { to: "/calendario", icon: <CalendarIcon className="h-5 w-5" />, label: "Calendario" },
-        { to: "/archivos", icon: <DocumentDuplicateIcon className="h-5 w-5" />, label: "Archivos" },
-        { to: "/roles", icon: <UsersIcon className="h-5 w-5" />, label: "Roles" },
-        { to: "/esp32", icon: <UsersIcon className="h-5 w-5" />, label: "ESP32" },
-        { to: "/mercado", icon: <UsersIcon className="h-5 w-5" />, label: "Mercado Público" },
-    ];
+    // Nota: Los enlaces se manejan directamente en el renderizado con groupedLinks
 
     // Nota: La lógica de filtrado se maneja directamente en el renderizado
 
