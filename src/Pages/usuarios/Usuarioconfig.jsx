@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Usuarioconfig = () => {
     const [form, setForm] = useState({
@@ -14,14 +15,34 @@ export const Usuarioconfig = () => {
         confirmarPassword: ""
     });
     const [mensaje, setMensaje] = useState("");
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [loadingData, setLoadingData] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+
+        setLoadingData(true);
         fetch("https://telemetria-backend.onrender.com/api/usuarios/me", {
             headers: { Authorization: `Bearer ${token}` }
         })
-            .then(res => res.json())
+            .then(res => {
+                if (res.status === 401) {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("usuario");
+                    localStorage.removeItem("nombre");
+                    localStorage.removeItem("rol");
+                    navigate("/login");
+                    throw new Error("Token expirado");
+                }
+                if (!res.ok) throw new Error("Error al cargar datos del usuario");
+                return res.json();
+            })
             .then(data => {
                 setForm(f => ({
                     ...f,
@@ -34,8 +55,15 @@ export const Usuarioconfig = () => {
                     fechaCreacion: data.fechaCreacion ? new Date(data.fechaCreacion).toLocaleString() : "",
                     activo: data.activo
                 }));
+                setError("");
+            })
+            .catch(err => {
+                setError("Error al cargar los datos del usuario: " + err.message);
+            })
+            .finally(() => {
+                setLoadingData(false);
             });
-    }, []);
+    }, [navigate]);
 
     const handleChange = e => {
         const { name, value, type, checked } = e.target;
@@ -45,12 +73,27 @@ export const Usuarioconfig = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         setMensaje("");
+        setError("");
+
         if (form.password && form.password !== form.confirmarPassword) {
-            setMensaje("Las contraseñas no coinciden.");
+            setError("Las contraseñas no coinciden.");
             return;
         }
+
+        if (form.password && form.password.length < 6) {
+            setError("La contraseña debe tener al menos 6 caracteres.");
+            return;
+        }
+
         setLoading(true);
         const token = localStorage.getItem("token");
+        
+        if (!token) {
+            setError("No hay token de autenticación. Por favor, inicia sesión nuevamente.");
+            setLoading(false);
+            return;
+        }
+
         const body = {
             email: form.email,
             nombre: form.nombre,
@@ -60,27 +103,77 @@ export const Usuarioconfig = () => {
         };
         if (form.password) body.password = form.password;
 
-        const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/me", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(body)
-        });
-        setLoading(false);
-        if (res.ok) {
-            setMensaje("¡Datos actualizados correctamente!");
-            setForm({ ...form, password: "", confirmarPassword: "" });
-        } else {
-            setMensaje("Error al actualizar los datos.");
+        try {
+            const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/me", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (res.status === 401) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("usuario");
+                localStorage.removeItem("nombre");
+                localStorage.removeItem("rol");
+                navigate("/login");
+                return;
+            }
+
+            if (res.ok) {
+                setMensaje("¡Datos actualizados correctamente!");
+                setForm({ ...form, password: "", confirmarPassword: "" });
+                
+                // Actualizar localStorage con los nuevos datos
+                if (form.nombre) {
+                    localStorage.setItem("nombre", form.nombre);
+                }
+                if (form.rol) {
+                    localStorage.setItem("rol", form.rol);
+                }
+            } else {
+                const errorData = await res.json();
+                setError(errorData.message || "Error al actualizar los datos.");
+            }
+        } catch (err) {
+            setError("Error de conexión. Verifica tu conexión a internet.");
+        } finally {
+            setLoading(false);
         }
     };
+
+    if (loadingData) {
+        return (
+            <div className="max-w-lg mx-auto mt-10 bg-white rounded shadow p-6">
+                <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    <span className="ml-2">Cargando datos del usuario...</span>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-lg mx-auto mt-10 bg-white rounded shadow p-6">
             <h2 className="text-2xl font-bold mb-4">Configuración de Usuario</h2>
-            <div className="mb-6">
+            
+            {/* Mostrar errores */}
+            {error && (
+                <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                    {error}
+                </div>
+            )}
+            
+            {/* Mostrar mensajes de éxito */}
+            {mensaje && (
+                <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+                    {mensaje}
+                </div>
+            )}
+            
+            <div className="mb-6 p-4 bg-gray-50 rounded">
                 <div className="mb-2"><span className="font-semibold">Usuario:</span> {form.username}</div>
                 <div className="mb-2"><span className="font-semibold">Fecha de creación:</span> {form.fechaCreacion}</div>
                 <div className="mb-2"><span className="font-semibold">Activo:</span> {form.activo ? "Sí" : "No"}</div>
@@ -166,16 +259,14 @@ export const Usuarioconfig = () => {
                 </div>
                 <button
                     type="submit"
-                    className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                    className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     disabled={loading}
                 >
+                    {loading && (
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    )}
                     {loading ? "Guardando..." : "Actualizar"}
                 </button>
-                {mensaje && (
-                    <div className={`mt-2 text-center ${mensaje.startsWith("¡") ? "text-green-600" : "text-red-600"}`}>
-                        {mensaje}
-                    </div>
-                )}
             </form>
         </div>
     );
