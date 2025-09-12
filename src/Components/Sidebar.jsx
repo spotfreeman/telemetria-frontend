@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 // Importa los íconos de Heroicons
-import { ServerIcon } from '@heroicons/react/16/solid';
 import {
     CalendarIcon,
     ChartPieIcon,
@@ -53,7 +52,7 @@ function Sidebar() {
     // Lista de enlaces del sidebar (puedes modificar según tus necesidades)
     const links = [
         { to: "/", icon: <HomeIcon className="h-5 w-5" />, label: "Inicio" },
-        { to: "/login/login2", icon: <UsersIcon className="h-5 w-5" />, label: "Login" },
+        { to: "/login", icon: <UsersIcon className="h-5 w-5" />, label: "Login" },
         { to: "/bienvenida", icon: <HomeIcon className="h-5 w-5" />, label: "Bienvenida" },
         { to: "/proyectos", icon: <FolderIcon className="h-5 w-5" />, label: "Proyectos" },
         { to: "/datos", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Historico" },
@@ -67,27 +66,7 @@ function Sidebar() {
         { to: "/mercado", icon: <UsersIcon className="h-5 w-5" />, label: "Mercado Público" },
     ];
 
-    /**
-     * Filtra los enlaces según si el usuario está autenticado (token válido).
-     * - Si no hay token válido, solo muestra el login.
-     * - Si hay token válido, oculta el login y muestra el resto.
-     */
-    const filteredLinks = links.filter(link => {
-        if (link.to === "/login/login2" && tokenValido) return false;
-        if (link.to === "/" && tokenValido) return false;
-        if (link.to === "/proyectos" && !tokenValido) return false;
-        if (link.to === "/server" && !tokenValido) return false;
-        if (link.to === "/notas" && !tokenValido) return false;
-        if (link.to === "/calendario" && !tokenValido) return false;
-        if (link.to === "/archivos" && !tokenValido) return false;
-        if (link.to === "/tempdata" && !tokenValido) return false;
-        if (link.to === "/datos" && !tokenValido) return false;
-        if (link.to === "/bienvenida" && !tokenValido) return false;
-        if (link.to === "/roles" && !tokenValido) return false;
-        if (link.to === "/esp32" && !tokenValido) return false;
-        if (link.to === "/mercado" && !tokenValido) return false;
-        return true;
-    });
+    // Nota: La lógica de filtrado se maneja directamente en el renderizado
 
     // Estado para controlar qué menús desplegables están abiertos
     const [openMenus, setOpenMenus] = useState({});
@@ -109,7 +88,7 @@ function Sidebar() {
         {
             label: "Acceso",
             children: [
-                { to: "/login/login2", icon: <UsersIcon className="h-5 w-5" />, label: "Login" }
+                { to: "/login", icon: <UsersIcon className="h-5 w-5" />, label: "Login" }
             ]
         },
         {
@@ -150,7 +129,7 @@ function Sidebar() {
                 ...group,
                 children: group.children.filter(link => {
                     // Solo oculta el login si ya hay sesión
-                    if (link.to === "/login/login2" && tokenValido) return false;
+                    if (link.to === "/login" && tokenValido) return false;
                     // El resto igual que antes
                     if (link.to === "/" && tokenValido) return false;
                     if (
@@ -173,7 +152,7 @@ function Sidebar() {
         localStorage.removeItem("usuario");
         localStorage.removeItem("nombre");
         localStorage.removeItem("rol");
-        navigate("/login/login2");
+        navigate("/login");
     };
 
     return (

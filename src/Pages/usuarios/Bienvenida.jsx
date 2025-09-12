@@ -10,7 +10,7 @@ export const Bienvenida = () => {
         if (!token) {
             // Si no hay token, no hace la petición
             setTotalProyectos(0);
-            navigate('/login/login2'); // Redirige al login si no hay token
+            navigate('/login'); // Redirige al login si no hay token
             return;
         }
         fetch('https://telemetria-backend.onrender.com/api/proyectos', {
@@ -21,7 +21,7 @@ export const Bienvenida = () => {
             .then(res => {
                 if (res.status === 401) {
                     localStorage.removeItem('token');
-                    navigate('/login/login2');
+                    navigate('/login');
                     throw new Error('No autorizado');
                 }
                 if (!res.ok) throw new Error('Error en la petición');

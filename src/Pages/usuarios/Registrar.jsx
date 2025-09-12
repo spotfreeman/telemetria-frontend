@@ -24,7 +24,7 @@ export const Registrar = () => {
                 setMensaje("Usuario registrado correctamente");
                 setForm({ username: "", email: "", password: "", rol: "usuario" });
             } else {
-                setError(data.error || "Error al registrar usuario");
+                setError(data.error || data.message || "Error al registrar usuario");
             }
         } catch (err) {
             setError("Error de red");
@@ -40,8 +40,8 @@ export const Registrar = () => {
                 <input
                     type="text"
                     name="username"
-                    placeholder="Nombre"
-                    value={form.nombre}
+                    placeholder="Nombre de usuario"
+                    value={form.username}
                     onChange={handleChange}
                     className="border rounded px-3 py-2"
                     required

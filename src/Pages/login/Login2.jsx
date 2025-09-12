@@ -54,7 +54,7 @@ export const Login2 = () => {
             if (res.ok && data.token) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("usuario", data.usuario);
-                localStorage.setItem("nombre", data.nombre);
+                localStorage.setItem("nombre", data.nombre || data.usuario); // Usar usuario como fallback si no hay nombre
                 localStorage.setItem("rol", data.rol);
                 // Redirige a la página principal
                 navigate("/bienvenida");
