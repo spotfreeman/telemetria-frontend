@@ -222,7 +222,7 @@ export const Usuarioconfig = () => {
                                 </svg>
                                 Información
                             </h3>
-                            
+
                             <div className="space-y-4">
                                 <div className="flex items-center p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
                                     <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
@@ -257,11 +257,10 @@ export const Usuarioconfig = () => {
                                     <div>
                                         <p className="text-sm text-gray-500">Estado</p>
                                         <p className="font-semibold text-gray-800">
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                                form.activo 
-                                                    ? 'bg-green-100 text-green-800' 
+                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${form.activo
+                                                    ? 'bg-green-100 text-green-800'
                                                     : 'bg-red-100 text-red-800'
-                                            }`}>
+                                                }`}>
                                                 {form.activo ? "Activo" : "Inactivo"}
                                             </span>
                                         </p>
@@ -441,7 +440,7 @@ export const Usuarioconfig = () => {
                                         </svg>
                                         Cambiar Contraseña
                                     </h4>
-                                    
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {/* Nueva contraseña */}
                                         <div className="space-y-2">
