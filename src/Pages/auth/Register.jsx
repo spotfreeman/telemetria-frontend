@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
 export const Registrar = () => {
-    const [form, setForm] = useState({ 
-        username: "", 
-        email: "", 
-        password: "", 
+    const [form, setForm] = useState({
+        username: "",
+        email: "",
+        password: "",
         rol: "usuario",
         nombre: "",
         apellido: "",
@@ -37,7 +37,7 @@ export const Registrar = () => {
 
         setLoading(true);
         try {
-            const res = await fetch("https://telemetria-backend.onrender.com/api/auth/register", {
+            const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
@@ -45,10 +45,10 @@ export const Registrar = () => {
             const data = await res.json();
             if (res.ok) {
                 setMensaje(data.message || "Usuario registrado correctamente");
-                setForm({ 
-                    username: "", 
-                    email: "", 
-                    password: "", 
+                setForm({
+                    username: "",
+                    email: "",
+                    password: "",
                     rol: "usuario",
                     nombre: "",
                     apellido: "",

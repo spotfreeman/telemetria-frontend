@@ -43,7 +43,7 @@ export const Login2 = () => {
 
         // Petición al backend para autenticar usuario
         try {
-            const res = await fetch("https://telemetria-backend.onrender.com/api/auth/login", {
+            const res = await fetch("https://telemetria-backend.onrender.com/api/usuarios/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
@@ -51,16 +51,13 @@ export const Login2 = () => {
             const data = await res.json();
             //console.log(data);
 
-            if (res.ok && data.data && data.data.token) {
-                // El backend devuelve los datos anidados en 'data'
-                const userData = data.data;
-                const user = userData.usuario;
-
-                localStorage.setItem("token", userData.token);
-                localStorage.setItem("usuario", user.username);
-                localStorage.setItem("nombre", user.nombre || user.username); // Usar username como fallback si no hay nombre
-                localStorage.setItem("rol", user.rol);
-                localStorage.setItem("email", user.email);
+            if (res.ok && data.token) {
+                // El backend devuelve los datos directamente
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("usuario", data.usuario);
+                localStorage.setItem("nombre", data.nombre || data.usuario); // Usar usuario como fallback si no hay nombre
+                localStorage.setItem("rol", data.rol);
+                localStorage.setItem("email", data.email);
 
                 // Redirige a la página principal
                 navigate("/bienvenida");
