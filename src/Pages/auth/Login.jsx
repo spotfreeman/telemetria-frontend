@@ -39,7 +39,7 @@ export const Login2 = () => {
         }
 
         setLoading(true);
-        //console.log("Informacion enviada ", form);
+        console.log("Informacion enviada ", form);
 
         // Petición al backend para autenticar usuario
         try {
@@ -48,8 +48,10 @@ export const Login2 = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
             });
+            console.log("Response status:", res.status);
+            console.log("Response headers:", res.headers);
             const data = await res.json();
-            //console.log(data);
+            console.log("Response data:", data);
 
             if (res.ok && data.token) {
                 // El backend devuelve los datos directamente
