@@ -4,6 +4,7 @@ export const Registrar = () => {
     const [form, setForm] = useState({ username: "", email: "", password: "", rol: "usuario" });
     const [mensaje, setMensaje] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -13,6 +14,20 @@ export const Registrar = () => {
         e.preventDefault();
         setMensaje("");
         setError("");
+
+        // Validar campos vacíos
+        if (!form.username || !form.email || !form.password) {
+            setError("Por favor, completa todos los campos");
+            return;
+        }
+
+        // Validar longitud de contraseña
+        if (form.password.length < 6) {
+            setError("La contraseña debe tener al menos 6 caracteres");
+            return;
+        }
+
+        setLoading(true);
         try {
             const res = await fetch("https://telemetria-backend.onrender.com/api/auth/register", {
                 method: "POST",
@@ -21,13 +36,16 @@ export const Registrar = () => {
             });
             const data = await res.json();
             if (res.ok) {
-                setMensaje("Usuario registrado correctamente");
+                setMensaje(data.message || "Usuario registrado correctamente");
                 setForm({ username: "", email: "", password: "", rol: "usuario" });
             } else {
                 setError(data.error || data.message || "Error al registrar usuario");
             }
         } catch (err) {
-            setError("Error de red");
+            console.error("Error de conexión:", err);
+            setError("Error de conexión. Verifica tu conexión a internet.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -73,8 +91,15 @@ export const Registrar = () => {
                     <option value="usuario">Usuario</option>
                     <option value="admin">Administrador</option>
                 </select>
-                <button className="bg-blue-700 text-white py-2 rounded hover:bg-blue-800" type="submit">
-                    Registrar
+                <button 
+                    className="bg-blue-700 text-white py-2 rounded hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2" 
+                    type="submit"
+                    disabled={loading}
+                >
+                    {loading && (
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    )}
+                    {loading ? "Registrando..." : "Registrar"}
                 </button>
             </form>
         </div>

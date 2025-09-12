@@ -51,18 +51,25 @@ export const Login2 = () => {
             const data = await res.json();
             //console.log(data);
 
-            if (res.ok && data.token) {
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("usuario", data.usuario);
-                localStorage.setItem("nombre", data.nombre || data.usuario); // Usar usuario como fallback si no hay nombre
-                localStorage.setItem("rol", data.rol);
+            if (res.ok && data.data && data.data.token) {
+                // El backend devuelve los datos anidados en 'data'
+                const userData = data.data;
+                const user = userData.usuario;
+                
+                localStorage.setItem("token", userData.token);
+                localStorage.setItem("usuario", user.username);
+                localStorage.setItem("nombre", user.nombre || user.username); // Usar username como fallback si no hay nombre
+                localStorage.setItem("rol", user.rol);
+                localStorage.setItem("email", user.email);
+                
                 // Redirige a la página principal
                 navigate("/bienvenida");
             } else {
-                setError(data.message || "Usuario o contraseña incorrectos");
+                setError(data.message || data.error || "Usuario o contraseña incorrectos");
             }
         } catch (err) {
-            setError("No se pudo conectar con el servidor.");
+            console.error("Error de conexión:", err);
+            setError("No se pudo conectar con el servidor. Verifica tu conexión a internet.");
         }
         setLoading(false);
     };
