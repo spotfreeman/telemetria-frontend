@@ -10,12 +10,10 @@ import { Lista } from './Pages/proyectos/Lista';
 import { ProyectoDetalle } from './Pages/proyectos/ProyectoDetalle';
 import { Calendario } from './Pages/calendario/Calendario';
 import { Archivos } from './Pages/archivos/Archivos';
-import { Bienvenida } from './Pages/usuarios/Bienvenida';
-import { Login2 } from './Pages/login/Login2';
+import { Welcome } from './Pages/users';
+import { Login } from './Pages/auth';
 import { Page404 } from './Pages/Page404';
-import { Intro } from './Pages/usuarios/Intro';
-import { Usuarioconfig } from './Pages/usuarios/Usuarioconfig';
-import { Roles } from './Pages/usuarios/Roles';
+import { Intro, Profile, Roles } from './Pages/users';
 
 import { Esp32List } from './Pages/esp32/esp32list';
 import { Esp32Detail } from './Pages/esp32/esp32detail';
@@ -23,7 +21,7 @@ import { Esp32Detail } from './Pages/esp32/esp32detail';
 import { Mercado } from './mercado/mercado';
 
 import Sidebar from './Components/Sidebar';
-import { Registrar } from './Pages/usuarios/Registrar';
+import { Register } from './Pages/auth';
 
 function App() {
   useEffect(() => {
@@ -39,7 +37,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Intro />} />
 
-            <Route path="/login" element={<Login2 />} />
+            <Route path="/login" element={<Login />} />
 
             <Route path="/datos" element={<DatosPage />} />
             <Route path="/tempdata" element={<TempData />} />
@@ -47,12 +45,11 @@ function App() {
             <Route path="/notas" element={<Notas />} />
             <Route path='/calendario' element={<Calendario />} />
             <Route path="/archivos" element={<Archivos />} />
-            <Route path='/bienvenida' element={<Bienvenida />} />
-            <Route path="/usuarioconfig" element={<Usuarioconfig />} />
+            <Route path='/bienvenida' element={<Welcome />} />
+            <Route path="/usuarioconfig" element={<Profile />} />
             <Route path="/roles" element={<Roles />} />
 
-
-            <Route path="/register" element={<Registrar />} />
+            <Route path="/register" element={<Register />} />
 
             {/* Rutas de ESP32 */}
             <Route path="/esp32" element={<Esp32List />} />
