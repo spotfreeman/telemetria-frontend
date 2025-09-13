@@ -16,28 +16,59 @@ export const Esp32List = () => {
     const [error, setError] = useState("");
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            setError("No hay token de autenticación.");
-            setLoading(false);
-            return;
-        }
-        fetch("https://telemetria-backend.onrender.com/api/esp32", {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(res => {
-                if (!res.ok) throw new Error("Error al obtener datos");
-                return res.json();
-            })
-            .then(data => {
+        const fetchDevices = async () => {
+            try {
+                setLoading(true);
+                setError("");
+                
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    setError("No hay token de autenticación. Por favor, inicia sesión.");
+                    setLoading(false);
+                    return;
+                }
+
+                console.log('Token encontrado:', token ? 'Sí' : 'No');
+                console.log('Haciendo request a:', 'https://telemetria-backend.onrender.com/api/esp32');
+
+                const response = await fetch("https://telemetria-backend.onrender.com/api/esp32", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        throw new Error("Sesión expirada. Por favor, inicia sesión nuevamente.");
+                    }
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Data recibida:', data);
+                
                 // Asegurar que data sea un array
                 const devicesArray = Array.isArray(data) ? data : (data?.devices || []);
                 setDevices(devicesArray);
-            })
-            .catch(err => setError(err.message))
-            .finally(() => setLoading(false));
+            } catch (err) {
+                setError(err.message);
+                console.error('Error fetching ESP32 devices:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDevices();
     }, []);
 
     if (loading) return <MainLoading message="Cargando dispositivos ESP32..." />;

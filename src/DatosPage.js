@@ -6,15 +6,45 @@ function DatosPage() {
     const datosPorPagina = 15;
 
     useEffect(() => {
-        fetch('https://telemetria-backend.onrender.com/api/temperaturas')
-            .then(res => res.json())
-            .then(data => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    console.error('No hay token de autenticación');
+                    return;
+                }
+
+                const response = await fetch('https://telemetria-backend.onrender.com/api/temperaturas', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.error('Sesión expirada');
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        return;
+                    }
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
                 // Ordenar por fecha_hora descendente (más nuevo primero)
                 const ordenados = Array.isArray(data)
                     ? data.sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora))
                     : [];
                 setDatos(ordenados);
-            });
+            } catch (error) {
+                console.error('Error fetching temperature data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
 
     // Calcular los datos a mostrar en la página actual

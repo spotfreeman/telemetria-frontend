@@ -29,7 +29,7 @@ export const TempData = () => {
             try {
                 setLoading(true);
                 setError(null);
-                
+
                 const token = localStorage.getItem("token");
                 if (!token) {
                     throw new Error('No hay token de autenticación. Por favor, inicia sesión.');
@@ -46,10 +46,10 @@ export const TempData = () => {
                         'Accept': 'application/json'
                     }
                 });
-                
+
                 console.log('Response status:', response.status);
                 console.log('Response headers:', response.headers);
-                
+
                 if (!response.ok) {
                     if (response.status === 401) {
                         // Limpiar token expirado
@@ -61,7 +61,7 @@ export const TempData = () => {
                     console.error('Error response:', errorText);
                     throw new Error(`Error ${response.status}: ${response.statusText}`);
                 }
-                
+
                 const data = await response.json();
                 console.log('Data recibida:', data);
                 // Asegurar que data sea un array
@@ -87,7 +87,7 @@ export const TempData = () => {
         try {
             setLoading(true);
             setError(null);
-            
+
             const token = localStorage.getItem("token");
             if (!token) {
                 throw new Error('No hay token de autenticación. Por favor, inicia sesión.');
@@ -103,7 +103,7 @@ export const TempData = () => {
                     'Accept': 'application/json'
                 }
             });
-            
+
             if (!response.ok) {
                 if (response.status === 401) {
                     localStorage.removeItem("token");
@@ -114,7 +114,7 @@ export const TempData = () => {
                 console.error('Error response:', errorText);
                 throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
-            
+
             const data = await response.json();
             const datosArray = Array.isArray(data) ? data : (data?.datos || data?.temperaturas || []);
             setDatos(datosArray);
@@ -133,9 +133,9 @@ export const TempData = () => {
         .slice(0, 50) // Mostrar solo los últimos 50 registros
         .map(d => ({
             ...d,
-            hora: new Date(d.fecha_hora).toLocaleTimeString("es-CL", { 
-                hour: '2-digit', 
-                minute: '2-digit' 
+            hora: new Date(d.fecha_hora).toLocaleTimeString("es-CL", {
+                hour: '2-digit',
+                minute: '2-digit'
             })
         }));
 
@@ -178,10 +178,10 @@ export const TempData = () => {
                             className="ml-4 p-3 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                             title="Actualizar datos"
                         >
-                            <svg 
-                                className={`w-5 h-5 text-blue-600 ${loading ? 'animate-spin' : ''}`} 
-                                fill="none" 
-                                stroke="currentColor" 
+                            <svg
+                                className={`w-5 h-5 text-blue-600 ${loading ? 'animate-spin' : ''}`}
+                                fill="none"
+                                stroke="currentColor"
                                 viewBox="0 0 24 24"
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -274,9 +274,9 @@ export const TempData = () => {
                             <div>
                                 <p className="text-sm font-medium text-gray-500">Última Actualización</p>
                                 <p className="text-2xl font-bold text-gray-800">
-                                    {datos.length > 0 ? new Date(datos[0]?.fecha_hora).toLocaleTimeString("es-CL", { 
-                                        hour: '2-digit', 
-                                        minute: '2-digit' 
+                                    {datos.length > 0 ? new Date(datos[0]?.fecha_hora).toLocaleTimeString("es-CL", {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
                                     }) : 'N/A'}
                                 </p>
                             </div>
@@ -294,16 +294,16 @@ export const TempData = () => {
                         <ResponsiveContainer width="100%" height={400}>
                             <LineChart data={datosGrafica}>
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis 
-                                    dataKey="hora" 
+                                <XAxis
+                                    dataKey="hora"
                                     tick={{ fontSize: 12 }}
                                     interval="preserveStartEnd"
                                 />
-                                <YAxis 
+                                <YAxis
                                     label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft' }}
                                     tick={{ fontSize: 12 }}
                                 />
-                                <Tooltip 
+                                <Tooltip
                                     labelFormatter={(value, payload) => {
                                         if (payload && payload[0]) {
                                             return `Hora: ${value}`;
@@ -311,14 +311,14 @@ export const TempData = () => {
                                         return value;
                                     }}
                                     formatter={(value, name) => [
-                                        `${value}°C`, 
+                                        `${value}°C`,
                                         name === 'temperatura' ? 'Temperatura' : name
                                     ]}
                                 />
-                                <Line 
-                                    type="monotone" 
-                                    dataKey="temperatura" 
-                                    stroke="#3B82F6" 
+                                <Line
+                                    type="monotone"
+                                    dataKey="temperatura"
+                                    stroke="#3B82F6"
                                     strokeWidth={2}
                                     dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
                                     activeDot={{ r: 6, stroke: '#3B82F6', strokeWidth: 2 }}
@@ -343,7 +343,7 @@ export const TempData = () => {
                             Historial de Datos
                         </h3>
                     </div>
-                    
+
                     {datosPagina.length > 0 ? (
                         <>
                             <div className="overflow-x-auto">
@@ -404,11 +404,11 @@ export const TempData = () => {
                                             >
                                                 <ChevronLeftIcon className="w-4 h-4" />
                                             </button>
-                                            
+
                                             <span className="px-3 py-2 text-sm font-medium text-gray-700">
                                                 Página {pagina} de {totalPaginas}
                                             </span>
-                                            
+
                                             <button
                                                 onClick={() => setPagina(Math.min(totalPaginas, pagina + 1))}
                                                 disabled={pagina === totalPaginas}
