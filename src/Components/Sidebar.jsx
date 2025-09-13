@@ -222,11 +222,10 @@ function Sidebar() {
                         {group.children.length > 1 ? (
                             <>
                                 <button
-                                    className={`w-full flex items-center px-3 py-2.5 rounded-xl transition-all duration-200 group ${
-                                        openMenus[group.label] 
-                                            ? 'bg-white/20 shadow-lg' 
+                                    className={`w-full flex items-center px-3 py-2.5 rounded-xl transition-all duration-200 group ${openMenus[group.label]
+                                            ? 'bg-white/20 shadow-lg'
                                             : 'hover:bg-white/10'
-                                    }`}
+                                        }`}
                                     onClick={() => toggleMenu(group.label)}
                                 >
                                     <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${group.color} flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200`}>
@@ -249,11 +248,10 @@ function Sidebar() {
                                             <Link
                                                 key={link.to}
                                                 to={link.to}
-                                                className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 group ${
-                                                    location.pathname === link.to
+                                                className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 group ${location.pathname === link.to
                                                         ? 'bg-white/20 shadow-lg transform scale-[1.02]'
                                                         : 'hover:bg-white/10 hover:transform hover:scale-[1.01]'
-                                                }`}
+                                                    }`}
                                             >
                                                 <div className={`w-6 h-6 rounded-md bg-gradient-to-r ${link.color} flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200`}>
                                                     {link.icon}
@@ -273,11 +271,10 @@ function Sidebar() {
                                 <Link
                                     key={link.to}
                                     to={link.to}
-                                    className={`flex items-center px-3 py-2.5 rounded-xl transition-all duration-200 group ${
-                                        location.pathname === link.to
+                                    className={`flex items-center px-3 py-2.5 rounded-xl transition-all duration-200 group ${location.pathname === link.to
                                             ? 'bg-white/20 shadow-lg transform scale-[1.02]'
                                             : 'hover:bg-white/10 hover:transform hover:scale-[1.01]'
-                                    }`}
+                                        }`}
                                 >
                                     <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${link.color} flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200`}>
                                         {link.icon}
