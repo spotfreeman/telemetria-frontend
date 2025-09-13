@@ -20,7 +20,7 @@ export const Esp32List = () => {
             try {
                 setLoading(true);
                 setError("");
-                
+
                 const token = localStorage.getItem("token");
                 if (!token) {
                     setError("No hay token de autenticación. Por favor, inicia sesión.");
@@ -29,9 +29,9 @@ export const Esp32List = () => {
                 }
 
                 console.log('Token encontrado:', token ? 'Sí' : 'No');
-                console.log('Haciendo request a:', 'https://telemetria-backend.onrender.com/api/esp32');
+                console.log('Haciendo request a:', 'https://telemetria-backend.onrender.com/api/telemetry/esp32');
 
-                const response = await fetch("https://telemetria-backend.onrender.com/api/esp32", {
+                const response = await fetch("https://telemetria-backend.onrender.com/api/telemetry/esp32", {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -56,7 +56,7 @@ export const Esp32List = () => {
 
                 const data = await response.json();
                 console.log('Data recibida:', data);
-                
+
                 // Asegurar que data sea un array
                 const devicesArray = Array.isArray(data) ? data : (data?.devices || []);
                 setDevices(devicesArray);
