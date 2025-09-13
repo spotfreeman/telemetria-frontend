@@ -394,30 +394,28 @@ export const ProyectoDetalle = () => {
                                     <p className="text-gray-600 mt-1">Código: {proyecto.codigo}</p>
                                 </div>
                             </div>
-                            
+
                             {/* Estado del proyecto */}
                             <div className="flex items-center gap-4">
-                                <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${
-                                    proyecto.estado === 'Completado' ? 'bg-green-100 text-green-800' :
-                                    proyecto.estado === 'En Progreso' ? 'bg-blue-100 text-blue-800' :
-                                    proyecto.estado === 'Planificación' ? 'bg-yellow-100 text-yellow-800' :
-                                    proyecto.estado === 'En Revisión' ? 'bg-purple-100 text-purple-800' :
-                                    proyecto.estado === 'Pausado' ? 'bg-orange-100 text-orange-800' :
-                                    proyecto.estado === 'Cancelado' ? 'bg-red-100 text-red-800' :
-                                    'bg-gray-100 text-gray-800'
-                                }`}>
-                                    <div className={`w-2 h-2 rounded-full mr-2 ${
-                                        proyecto.estado === 'Completado' ? 'bg-green-500' :
-                                        proyecto.estado === 'En Progreso' ? 'bg-blue-500' :
-                                        proyecto.estado === 'Planificación' ? 'bg-yellow-500' :
-                                        proyecto.estado === 'En Revisión' ? 'bg-purple-500' :
-                                        proyecto.estado === 'Pausado' ? 'bg-orange-500' :
-                                        proyecto.estado === 'Cancelado' ? 'bg-red-500' :
-                                        'bg-gray-500'
-                                    }`}></div>
+                                <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${proyecto.estado === 'Completado' ? 'bg-green-100 text-green-800' :
+                                        proyecto.estado === 'En Progreso' ? 'bg-blue-100 text-blue-800' :
+                                            proyecto.estado === 'Planificación' ? 'bg-yellow-100 text-yellow-800' :
+                                                proyecto.estado === 'En Revisión' ? 'bg-purple-100 text-purple-800' :
+                                                    proyecto.estado === 'Pausado' ? 'bg-orange-100 text-orange-800' :
+                                                        proyecto.estado === 'Cancelado' ? 'bg-red-100 text-red-800' :
+                                                            'bg-gray-100 text-gray-800'
+                                    }`}>
+                                    <div className={`w-2 h-2 rounded-full mr-2 ${proyecto.estado === 'Completado' ? 'bg-green-500' :
+                                            proyecto.estado === 'En Progreso' ? 'bg-blue-500' :
+                                                proyecto.estado === 'Planificación' ? 'bg-yellow-500' :
+                                                    proyecto.estado === 'En Revisión' ? 'bg-purple-500' :
+                                                        proyecto.estado === 'Pausado' ? 'bg-orange-500' :
+                                                            proyecto.estado === 'Cancelado' ? 'bg-red-500' :
+                                                                'bg-gray-500'
+                                        }`}></div>
                                     {proyecto.estado}
                                 </span>
-                                
+
                                 {proyecto.descripcion && (
                                     <p className="text-gray-600 text-sm max-w-md">
                                         {proyecto.descripcion}
@@ -437,7 +435,7 @@ export const ProyectoDetalle = () => {
                                 </svg>
                                 Exportar Word
                             </button>
-                            
+
                             <button
                                 onClick={() => window.print()}
                                 className="flex items-center justify-center px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 transform hover:scale-[1.02]"
@@ -551,34 +549,34 @@ export const ProyectoDetalle = () => {
                                 </svg>
                                 Información del Proyecto
                             </h3>
-                            
+
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between py-2 border-b border-gray-200">
                                     <span className="text-sm font-medium text-gray-600">ID del Proyecto</span>
                                     <span className="text-sm text-gray-800 font-mono">{proyecto._id}</span>
                                 </div>
-                                
+
                                 <div className="flex items-center justify-between py-2 border-b border-gray-200">
                                     <span className="text-sm font-medium text-gray-600">Fecha de Creación</span>
                                     <span className="text-sm text-gray-800">
                                         {proyecto.createdAt ? new Date(proyecto.createdAt).toLocaleDateString() : 'N/A'}
                                     </span>
                                 </div>
-                                
+
                                 <div className="flex items-center justify-between py-2 border-b border-gray-200">
                                     <span className="text-sm font-medium text-gray-600">Última Actualización</span>
                                     <span className="text-sm text-gray-800">
                                         {proyecto.updatedAt ? new Date(proyecto.updatedAt).toLocaleDateString() : 'N/A'}
                                     </span>
                                 </div>
-                                
+
                                 {proyecto.avance && proyecto.avance.length > 0 && (
                                     <div className="flex items-center justify-between py-2 border-b border-gray-200">
                                         <span className="text-sm font-medium text-gray-600">Total de Avances</span>
                                         <span className="text-sm text-gray-800">{proyecto.avance.length}</span>
                                     </div>
                                 )}
-                                
+
                                 {proyecto.fechas && proyecto.fechas.length > 0 && (
                                     <div className="flex items-center justify-between py-2 border-b border-gray-200">
                                         <span className="text-sm font-medium text-gray-600">Fechas Importantes</span>
@@ -596,7 +594,7 @@ export const ProyectoDetalle = () => {
                                 </svg>
                                 Acciones Rápidas
                             </h3>
-                            
+
                             <div className="space-y-3">
                                 <button
                                     onClick={() => window.history.back()}
@@ -607,7 +605,7 @@ export const ProyectoDetalle = () => {
                                     </svg>
                                     Volver a la Lista
                                 </button>
-                                
+
                                 <button
                                     onClick={() => window.location.reload()}
                                     className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
