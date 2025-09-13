@@ -22,7 +22,7 @@ export const Registrar = () => {
         e.preventDefault();
         setMensaje("");
         setError("");
-        
+
         // Debug: Mostrar alert con los datos del formulario
         alert(`Datos del formulario:\n${JSON.stringify(form, null, 2)}`);
 

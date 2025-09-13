@@ -41,6 +41,8 @@ export const Usuarioconfig = () => {
                 if (response.ok) {
                     const data = await response.json();
                     const userData = data.data; // El backend devuelve los datos en data.data
+                    console.log("Datos del usuario cargados:", userData);
+                    console.log("Rol del usuario:", userData.rol);
                     setForm(f => ({
                         ...f,
                         username: userData.username || "",
@@ -142,6 +144,10 @@ export const Usuarioconfig = () => {
                 updateData.password = form.password;
             }
 
+            // Debug: Imprimir los datos que se van a enviar
+            console.log("Datos del perfil a actualizar:", updateData);
+            console.log("Rol seleccionado:", form.rol);
+
             const response = await fetch("https://telemetria-backend.onrender.com/api/auth/profile", {
                 method: "PUT",
                 headers: {
@@ -153,6 +159,8 @@ export const Usuarioconfig = () => {
 
             if (response.ok) {
                 const data = await response.json();
+                console.log("Respuesta del servidor (perfil):", data);
+                console.log("Status de la respuesta:", response.status);
 
                 // Actualizar localStorage con los nuevos datos
                 if (form.nombre) {
