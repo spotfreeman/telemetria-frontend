@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { 
-    ChartPieIcon, 
-    FolderIcon, 
-    UserGroupIcon, 
+import {
+    ChartPieIcon,
+    FolderIcon,
+    UserGroupIcon,
     CurrencyDollarIcon,
     ArrowTrendingUpIcon,
     ClockIcon,
@@ -43,37 +43,37 @@ export const Bienvenida = () => {
     }, []);
 
     const stats = [
-        { 
-            id: 1, 
-            name: 'Proyectos Activos', 
-            value: `${totalProyectos}`, 
+        {
+            id: 1,
+            name: 'Proyectos Activos',
+            value: `${totalProyectos}`,
             icon: <FolderIcon className="w-6 h-6" />,
             color: "from-blue-500 to-cyan-500",
             bgColor: "bg-blue-50",
             textColor: "text-blue-600"
         },
-        { 
-            id: 2, 
-            name: 'Gasto Proyectado', 
-            value: '$500M', 
+        {
+            id: 2,
+            name: 'Gasto Proyectado',
+            value: '$500M',
             icon: <CurrencyDollarIcon className="w-6 h-6" />,
             color: "from-green-500 to-emerald-500",
             bgColor: "bg-green-50",
             textColor: "text-green-600"
         },
-        { 
-            id: 3, 
-            name: 'Progreso Ejecutado', 
-            value: '35%', 
+        {
+            id: 3,
+            name: 'Progreso Ejecutado',
+            value: '35%',
             icon: <ArrowTrendingUpIcon className="w-6 h-6" />,
             color: "from-purple-500 to-pink-500",
             bgColor: "bg-purple-50",
             textColor: "text-purple-600"
         },
-        { 
-            id: 4, 
-            name: 'Usuarios Activos', 
-            value: '12', 
+        {
+            id: 4,
+            name: 'Usuarios Activos',
+            value: '12',
             icon: <UserGroupIcon className="w-6 h-6" />,
             color: "from-orange-500 to-red-500",
             bgColor: "bg-orange-50",
@@ -84,11 +84,11 @@ export const Bienvenida = () => {
     // Funciones para redirigir según el rol
     const rol = localStorage.getItem("rol");
     const nombre = localStorage.getItem("nombre");
-    
+
     const getRolDisplay = (rol) => {
         const rolesMap = {
             'admin': 'Administrador',
-            'supervisor': 'Supervisor', 
+            'supervisor': 'Supervisor',
             'monitor': 'Monitor',
             'visor': 'Visor',
             'usuario': 'Usuario'
@@ -115,7 +115,7 @@ export const Bienvenida = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
                 <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
                 <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-                
+
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                     {/* Header con saludo personalizado */}
                     <div className="text-center mb-12">
@@ -124,20 +124,20 @@ export const Bienvenida = () => {
                                 <ChartPieIcon className="w-10 h-10 text-white" />
                             </div>
                         </div>
-                        
+
                         <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
                             ¡Bienvenido, <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{nombre || 'Usuario'}!</span>
                         </h1>
-                        
+
                         <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-white/20 shadow-lg mb-6">
                             <div className={`w-3 h-3 bg-gradient-to-r ${getRolColor(rol)} rounded-full mr-2`}></div>
                             <span className="text-sm font-medium text-gray-700">
                                 {getRolDisplay(rol)}
                             </span>
                         </div>
-                        
+
                         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                            Plataforma integral para la gestión de telemetría de equipos. 
+                            Plataforma integral para la gestión de telemetría de equipos.
                             Monitorea y analiza datos en tiempo real para optimizar el rendimiento y la seguridad.
                         </p>
                     </div>
@@ -157,7 +157,7 @@ export const Bienvenida = () => {
                                     </div>
                                     <div className={`w-3 h-3 bg-gradient-to-r ${stat.color} rounded-full`}></div>
                                 </div>
-                                
+
                                 <h3 className="text-2xl font-bold text-gray-900 mb-1">
                                     {stat.value}
                                 </h3>
@@ -173,7 +173,7 @@ export const Bienvenida = () => {
                         <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
                             Acciones Rápidas
                         </h2>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <button
                                 onClick={() => navigate('/proyectos')}
@@ -187,7 +187,7 @@ export const Bienvenida = () => {
                                     <p className="text-sm text-gray-600">Gestionar proyectos</p>
                                 </div>
                             </button>
-                            
+
                             <button
                                 onClick={() => navigate('/tempdata')}
                                 className="group flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200 hover:from-green-100 hover:to-emerald-100 transition-all duration-200 transform hover:scale-105"
@@ -200,7 +200,7 @@ export const Bienvenida = () => {
                                     <p className="text-sm text-gray-600">Ver datos en tiempo real</p>
                                 </div>
                             </button>
-                            
+
                             <button
                                 onClick={() => navigate('/usuarioconfig')}
                                 className="group flex items-center p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200 hover:from-purple-100 hover:to-pink-100 transition-all duration-200 transform hover:scale-105"
