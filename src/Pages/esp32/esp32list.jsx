@@ -29,47 +29,21 @@ export const Esp32List = () => {
                 }
 
                 console.log('Token encontrado:', token ? 'Sí' : 'No');
-                
-                // Probar primero la ruta legacy, luego la nueva
-                let response;
-                let endpoint = '';
-                
-                try {
-                    // Intentar primero la ruta legacy
-                    endpoint = 'https://telemetria-backend.onrender.com/api/esp32';
-                    console.log('Probando endpoint legacy:', endpoint);
-                    
-                    response = await fetch(endpoint, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        }
-                    });
-                    
-                    console.log('Response status (legacy):', response.status);
-                    
-                    if (!response.ok && response.status === 404) {
-                        // Si falla con 404, probar la nueva ruta
-                        endpoint = 'https://telemetria-backend.onrender.com/api/telemetry/esp32';
-                        console.log('Probando endpoint nuevo:', endpoint);
-                        
-                        response = await fetch(endpoint, {
-                            method: 'GET',
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            }
-                        });
-                        
-                        console.log('Response status (nuevo):', response.status);
+
+                // Usar la ruta unificada de telemetría
+                const endpoint = 'https://telemetria-backend.onrender.com/api/telemetry/esp32';
+                console.log('Usando endpoint:', endpoint);
+
+                const response = await fetch(endpoint, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     }
-                } catch (fetchError) {
-                    console.error('Error en fetch:', fetchError);
-                    throw fetchError;
-                }
+                });
+
+                console.log('Response status:', response.status);
 
                 console.log('Response headers:', response.headers);
 
