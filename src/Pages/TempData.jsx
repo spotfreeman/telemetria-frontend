@@ -29,12 +29,30 @@ export const TempData = () => {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch('https://telemetria-backend.onrender.com/api/temperaturas');
-                if (!response.ok) {
-                    throw new Error('Error al cargar los datos');
+
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    throw new Error('No hay token de autenticación');
                 }
+
+                const response = await fetch('https://telemetria-backend.onrender.com/api/temperaturas', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+                    }
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+
                 const data = await response.json();
-                setDatos(data);
+                // Asegurar que data sea un array
+                const datosArray = Array.isArray(data) ? data : (data?.datos || data?.temperaturas || []);
+                setDatos(datosArray);
             } catch (err) {
                 setError(err.message);
                 console.error('Error fetching temperature data:', err);
@@ -49,6 +67,42 @@ export const TempData = () => {
     const totalPaginas = Math.ceil(datos.length / porPagina);
     const datosOrdenados = datos.slice().sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora));
     const datosPagina = datosOrdenados.slice((pagina - 1) * porPagina, pagina * porPagina);
+
+    // Función para refrescar los datos
+    const refreshData = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const token = localStorage.getItem("token");
+            if (!token) {
+                throw new Error('No hay token de autenticación');
+            }
+
+            const response = await fetch('https://telemetria-backend.onrender.com/api/temperaturas', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+                }
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const datosArray = Array.isArray(data) ? data : (data?.datos || data?.temperaturas || []);
+            setDatos(datosArray);
+        } catch (err) {
+            setError(err.message);
+            console.error('Error refreshing temperature data:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Prepara los datos para la gráfica (sin modificar la hora)
     const datosGrafica = datos
@@ -87,7 +141,7 @@ export const TempData = () => {
                     <h2 className="text-xl font-semibold text-gray-700 mb-2">Error al cargar datos</h2>
                     <p className="text-gray-500 mb-4">{error}</p>
                     <button
-                        onClick={() => window.location.reload()}
+                        onClick={refreshData}
                         className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
                     >
                         Reintentar
@@ -102,8 +156,25 @@ export const TempData = () => {
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mb-4">
-                        <CpuChipIcon className="w-8 h-8 text-white" />
+                    <div className="flex justify-center items-center mb-4">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl">
+                            <CpuChipIcon className="w-8 h-8 text-white" />
+                        </div>
+                        <button
+                            onClick={refreshData}
+                            disabled={loading}
+                            className="ml-4 p-3 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Actualizar datos"
+                        >
+                            <svg
+                                className={`w-5 h-5 text-blue-600 ${loading ? 'animate-spin' : ''}`}
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </button>
                     </div>
                     <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                         Telemetría Raspberry Pi

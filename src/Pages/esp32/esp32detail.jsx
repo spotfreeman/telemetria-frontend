@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Line } from "react-chartjs-2";
+import { motion } from "framer-motion";
+import { MainLoading } from "../../Components/LoadingStates";
 import {
     Chart as ChartJS,
     LineElement,
@@ -11,6 +13,16 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
+import {
+    CpuChipIcon,
+    ChartBarIcon,
+    ClockIcon,
+    ExclamationTriangleIcon,
+    ArrowLeftIcon,
+    FireIcon,
+    CloudIcon,
+    CalendarDaysIcon
+} from '@heroicons/react/24/outline';
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
@@ -39,10 +51,44 @@ export const Esp32Detail = () => {
             .finally(() => setLoading(false));
     }, [deviceId]);
 
-    if (loading) return <div className="text-center py-8 text-blue-700">Cargando...</div>;
-    if (error) return <div className="text-center py-8 text-red-600">Error: {error}</div>;
+    if (loading) return <MainLoading message="Cargando datos del dispositivo..." />;
+
+    if (error) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
+                <div className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20">
+                    <ExclamationTriangleIcon className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                    <h2 className="text-xl font-semibold text-gray-700 mb-2">Error al cargar dispositivo</h2>
+                    <p className="text-gray-500 mb-4">{error}</p>
+                    <Link
+                        to="/esp32"
+                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                        Volver a la lista
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
     if (!device || (Array.isArray(device) && device.length === 0)) {
-        return <div className="text-center py-8 text-gray-600">No se encontró el dispositivo.</div>;
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
+                <div className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20">
+                    <CpuChipIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <h2 className="text-xl font-semibold text-gray-700 mb-2">Dispositivo no encontrado</h2>
+                    <p className="text-gray-500 mb-4">No se encontró el dispositivo especificado.</p>
+                    <Link
+                        to="/esp32"
+                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                        Volver a la lista
+                    </Link>
+                </div>
+            </div>
+        );
     }
 
     const deviceObj = Array.isArray(device) ? device[0] : device;
@@ -109,51 +155,208 @@ export const Esp32Detail = () => {
     };
 
     return (
-        <div className="w-full container mt-10 bg-white rounded-lg shadow-lg p-8 px-4">
-            <h2 className="text-2xl font-bold text-blue-800 mb-6 text-center">
-                Detalle de <span className="text-blue-600">{deviceObj.deviceId}</span>
-            </h2>
-            <div className="mb-6 flex flex-col md:flex-row items-center gap-4">
-                <label className="font-semibold text-blue-700">Selecciona un día:</label>
-                <select
-                    className="border rounded px-2 py-1"
-                    value={selectedDay}
-                    onChange={e => setSelectedDay(e.target.value)}
-                >
-                    <option value="">Todos</option>
-                    {diasDisponibles.map(dia => (
-                        <option key={dia} value={dia}>{dia}</option>
-                    ))}
-                </select>
-            </div>
-            <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-blue-50 rounded-lg p-4 shadow">
-                    <h3 className="text-lg font-semibold text-blue-700 mb-2 text-center">Temperatura</h3>
-                    <Line data={tempChartData} options={chartOptions} />
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8 px-4">
+            <div className="max-w-7xl mx-auto">
+                {/* Header */}
+                <div className="mb-8">
+                    <Link
+                        to="/esp32"
+                        className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4 transition-colors"
+                    >
+                        <ArrowLeftIcon className="w-5 h-5 mr-2" />
+                        Volver a la lista
+                    </Link>
+
+                    <div className="text-center">
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl mb-4"
+                        >
+                            <CpuChipIcon className="w-10 h-10 text-white" />
+                        </motion.div>
+                        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+                            {deviceObj.deviceId}
+                        </h1>
+                        <p className="text-gray-600 text-lg">
+                            Monitoreo en tiempo real de sensores
+                        </p>
+                    </div>
                 </div>
-                <div className="bg-cyan-50 rounded-lg p-4 shadow">
-                    <h3 className="text-lg font-semibold text-cyan-700 mb-2 text-center">Humedad</h3>
-                    <Line data={humChartData} options={chartOptions} />
+
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6"
+                    >
+                        <div className="flex items-center">
+                            <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-600 rounded-xl flex items-center justify-center mr-4">
+                                <FireIcon className="w-6 h-6 text-white" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Temperatura Promedio</p>
+                                <p className="text-2xl font-bold text-gray-800">
+                                    {datas.length > 0 ? (datas.reduce((sum, d) => sum + d.temperature, 0) / datas.length).toFixed(1) : '0'}°C
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6"
+                    >
+                        <div className="flex items-center">
+                            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center mr-4">
+                                <CloudIcon className="w-6 h-6 text-white" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Humedad Promedio</p>
+                                <p className="text-2xl font-bold text-gray-800">
+                                    {datas.length > 0 ? (datas.reduce((sum, d) => sum + d.humidity, 0) / datas.length).toFixed(1) : '0'}%
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6"
+                    >
+                        <div className="flex items-center">
+                            <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mr-4">
+                                <ChartBarIcon className="w-6 h-6 text-white" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Total Lecturas</p>
+                                <p className="text-2xl font-bold text-gray-800">{datas.length}</p>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+
+                {/* Filtro de Fecha */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8">
+                    <div className="flex flex-col md:flex-row items-center gap-4">
+                        <div className="flex items-center">
+                            <CalendarDaysIcon className="w-6 h-6 text-blue-600 mr-2" />
+                            <label className="font-semibold text-gray-700">Filtrar por día:</label>
+                        </div>
+                        <select
+                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            value={selectedDay}
+                            onChange={e => setSelectedDay(e.target.value)}
+                        >
+                            <option value="">Todos los días</option>
+                            {diasDisponibles.map(dia => (
+                                <option key={dia} value={dia}>{dia}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                {/* Gráficos */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6"
+                    >
+                        <div className="flex items-center mb-4">
+                            <FireIcon className="w-6 h-6 text-red-500 mr-2" />
+                            <h3 className="text-xl font-semibold text-gray-800">Temperatura</h3>
+                        </div>
+                        <Line data={tempChartData} options={chartOptions} />
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6"
+                    >
+                        <div className="flex items-center mb-4">
+                            <CloudIcon className="w-6 h-6 text-blue-500 mr-2" />
+                            <h3 className="text-xl font-semibold text-gray-800">Humedad</h3>
+                        </div>
+                        <Line data={humChartData} options={chartOptions} />
+                    </motion.div>
+                </div>
+
+                {/* Tabla de Datos */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-200">
+                        <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+                            <ClockIcon className="w-6 h-6 text-blue-600 mr-2" />
+                            Historial de Lecturas
+                        </h3>
+                    </div>
+
+                    {datosFiltrados.length > 0 ? (
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Fecha y Hora
+                                        </th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Temperatura
+                                        </th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Humedad
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    {datosFiltrados.map((d, idx) => (
+                                        <motion.tr
+                                            key={idx}
+                                            className="hover:bg-gray-50 transition-colors duration-200"
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: idx * 0.05 }}
+                                        >
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {new Date(d.timestamp).toLocaleString("es-CL")}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                    {d.temperature}°C
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    {d.humidity}%
+                                                </span>
+                                            </td>
+                                        </motion.tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <div className="text-center py-12">
+                            <ChartBarIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                                No hay datos disponibles
+                            </h3>
+                            <p className="text-gray-600">
+                                {selectedDay ? 'No hay lecturas para el día seleccionado.' : 'El dispositivo aún no ha enviado datos.'}
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
-            <ul className="divide-y divide-blue-100">
-                {datosFiltrados.map((d, idx) => (
-                    <li key={idx} className="py-4 flex flex-col md:flex-row md:items-center md:justify-between">
-                        <div className="text-gray-700">
-                            <span className="font-semibold text-blue-700">Fecha:</span>{" "}
-                            <span className="text-gray-900">{new Date(d.timestamp).toLocaleString("es-CL")}</span>
-                        </div>
-                        <div className="mt-2 md:mt-0 text-gray-700">
-                            <span className="font-semibold text-green-700">Temp:</span>{" "}
-                            <span className="text-gray-900">{d.temperature}°C</span>
-                        </div>
-                        <div className="mt-2 md:mt-0 text-gray-700">
-                            <span className="font-semibold text-cyan-700">Humedad:</span>{" "}
-                            <span className="text-gray-900">{d.humidity}%</span>
-                        </div>
-                    </li>
-                ))}
-            </ul>
         </div>
     );
 };
