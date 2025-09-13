@@ -14,6 +14,7 @@ export const Usuarioconfig = () => {
         password: "",
         confirmarPassword: ""
     });
+
     const [mensaje, setMensaje] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);

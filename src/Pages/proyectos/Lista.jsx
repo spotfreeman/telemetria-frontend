@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { CardLoading, ButtonLoading } from "../../Components/LoadingStates";
+import { TableLoading, ButtonLoading } from "../../Components/LoadingStates";
+import {
+    PencilIcon,
+    TrashIcon,
+    EyeIcon,
+    PlusIcon,
+    MagnifyingGlassIcon
+} from '@heroicons/react/24/outline';
 
 
 export const Lista = () => {
@@ -16,6 +23,10 @@ export const Lista = () => {
     const [busquedaCodigo, setBusquedaCodigo] = useState("");
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [sortField, setSortField] = useState('nombre');
+    const [sortDirection, setSortDirection] = useState('asc');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
 
     useEffect(() => {
         const fetchProyectos = async () => {
@@ -79,13 +90,62 @@ export const Lista = () => {
         setForm({ codigo: "", nombre: "", estado: "" });
     };
 
-    // Filtrado por nombre
+    // Filtrado y ordenamiento
     const proyectosFiltrados = Array.isArray(proyectos)
         ? proyectos.filter(p =>
             p.nombre.toLowerCase().includes(busqueda.toLowerCase()) &&
             p.codigo.toLowerCase().includes(busquedaCodigo.toLowerCase())
         )
         : [];
+
+    // Ordenamiento
+    const proyectosOrdenados = [...proyectosFiltrados].sort((a, b) => {
+        const aValue = a[sortField]?.toString().toLowerCase() || '';
+        const bValue = b[sortField]?.toString().toLowerCase() || '';
+
+        if (sortDirection === 'asc') {
+            return aValue.localeCompare(bValue);
+        } else {
+            return bValue.localeCompare(aValue);
+        }
+    });
+
+    // Paginación
+    const totalPages = Math.ceil(proyectosOrdenados.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const proyectosPaginados = proyectosOrdenados.slice(startIndex, endIndex);
+
+    // Funciones de ordenamiento
+    const handleSort = (field) => {
+        if (sortField === field) {
+            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortField(field);
+            setSortDirection('asc');
+        }
+        setCurrentPage(1);
+    };
+
+    // Función para eliminar proyecto
+    const handleEliminar = async (id) => {
+        if (!window.confirm("¿Estás seguro de que deseas eliminar este proyecto?")) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`https://telemetria-backend.onrender.com/api/proyectos/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (res.ok) {
+                setProyectos(proyectos.filter(p => p._id !== id));
+            }
+        } catch (error) {
+            console.error('Error deleting proyecto:', error);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 px-4">
@@ -287,91 +347,185 @@ export const Lista = () => {
                     </div>
                 )}
 
-                {/* Lista de Proyectos */}
-                <div className="space-y-6">
-                    {/* Header de la lista */}
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            <svg className="w-6 h-6 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
-                            <h3 className="text-xl font-semibold text-gray-800">
-                                Proyectos ({proyectosFiltrados.length})
-                            </h3>
+                {/* Tabla de Proyectos */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+                    {/* Header de la tabla */}
+                    <div className="px-6 py-4 border-b border-gray-200">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                                <svg className="w-6 h-6 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                <h3 className="text-xl font-semibold text-gray-800">
+                                    Proyectos ({proyectosFiltrados.length})
+                                </h3>
+                            </div>
+                            <div className="text-sm text-gray-500">
+                                Página {currentPage} de {totalPages}
+                            </div>
                         </div>
                     </div>
 
-                    {/* Grid de proyectos */}
+                    {/* Contenido de la tabla */}
                     {loading ? (
-                        <CardLoading count={6} />
-                    ) : proyectosFiltrados.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {proyectosFiltrados.map((proyecto, idx) => (
-                                <div
-                                    key={proyecto._id || idx}
-                                    className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] group"
-                                >
-                                    {/* Header del card */}
-                                    <div className="flex items-start justify-between mb-4">
-                                        <div className="flex items-center">
-                                            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mr-3">
-                                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <p className="text-sm font-medium text-gray-500">Código</p>
-                                                <p className="text-lg font-bold text-gray-800">{proyecto.codigo}</p>
-                                            </div>
+                        <TableLoading rows={5} />
+                    ) : proyectosPaginados.length > 0 ? (
+                        <>
+                            {/* Tabla */}
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                                                onClick={() => handleSort('codigo')}
+                                            >
+                                                <div className="flex items-center">
+                                                    Código
+                                                    {sortField === 'codigo' && (
+                                                        <svg className={`w-4 h-4 ml-1 ${sortDirection === 'asc' ? 'transform rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th
+                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                                                onClick={() => handleSort('nombre')}
+                                            >
+                                                <div className="flex items-center">
+                                                    Nombre
+                                                    {sortField === 'nombre' && (
+                                                        <svg className={`w-4 h-4 ml-1 ${sortDirection === 'asc' ? 'transform rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th
+                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                                                onClick={() => handleSort('estado')}
+                                            >
+                                                <div className="flex items-center">
+                                                    Estado
+                                                    {sortField === 'estado' && (
+                                                        <svg className={`w-4 h-4 ml-1 ${sortDirection === 'asc' ? 'transform rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Acciones
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-gray-200">
+                                        {proyectosPaginados.map((proyecto, idx) => (
+                                            <motion.tr
+                                                key={proyecto._id || idx}
+                                                className="hover:bg-gray-50 transition-colors duration-200"
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: idx * 0.05 }}
+                                            >
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="flex items-center">
+                                                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center mr-3">
+                                                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                                            </svg>
+                                                        </div>
+                                                        <div>
+                                                            <div className="text-sm font-medium text-gray-900">{proyecto.codigo}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="text-sm text-gray-900 font-medium">{proyecto.nombre}</div>
+                                                    <div className="text-sm text-gray-500">Proyecto de telemetría</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${proyecto.estado === 'completado' ? 'bg-green-100 text-green-800' :
+                                                        proyecto.estado === 'en_progreso' ? 'bg-blue-100 text-blue-800' :
+                                                            proyecto.estado === 'planificacion' ? 'bg-yellow-100 text-yellow-800' :
+                                                                proyecto.estado === 'en_revision' ? 'bg-purple-100 text-purple-800' :
+                                                                    proyecto.estado === 'pausado' ? 'bg-orange-100 text-orange-800' :
+                                                                        proyecto.estado === 'cancelado' ? 'bg-red-100 text-red-800' :
+                                                                            'bg-gray-100 text-gray-800'
+                                                        }`}>
+                                                        {proyecto.estado}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <div className="flex items-center space-x-2">
+                                                        <Link
+                                                            to={`/proyectos/${proyecto._id}`}
+                                                            className="inline-flex items-center p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                                                            title="Ver detalles"
+                                                        >
+                                                            <EyeIcon className="w-4 h-4" />
+                                                        </Link>
+                                                        <button
+                                                            onClick={() => handleEliminar(proyecto._id)}
+                                                            className="inline-flex items-center p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                                                            title="Eliminar"
+                                                        >
+                                                            <TrashIcon className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </motion.tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Paginación */}
+                            {totalPages > 1 && (
+                                <div className="px-6 py-4 border-t border-gray-200">
+                                    <div className="flex items-center justify-between">
+                                        <div className="text-sm text-gray-700">
+                                            Mostrando {startIndex + 1} a {Math.min(endIndex, proyectosOrdenados.length)} de {proyectosOrdenados.length} proyectos
                                         </div>
+                                        <div className="flex items-center space-x-2">
+                                            <button
+                                                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                                                disabled={currentPage === 1}
+                                                className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                                            >
+                                                Anterior
+                                            </button>
 
-                                        {/* Estado badge */}
-                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${proyecto.estado === 'completado' ? 'bg-green-100 text-green-800' :
-                                            proyecto.estado === 'en_progreso' ? 'bg-blue-100 text-blue-800' :
-                                                proyecto.estado === 'planificacion' ? 'bg-yellow-100 text-yellow-800' :
-                                                    proyecto.estado === 'en_revision' ? 'bg-purple-100 text-purple-800' :
-                                                        proyecto.estado === 'pausado' ? 'bg-orange-100 text-orange-800' :
-                                                            proyecto.estado === 'cancelado' ? 'bg-red-100 text-red-800' :
-                                                                'bg-gray-100 text-gray-800'
-                                            }`}>
-                                            {proyecto.estado}
-                                        </span>
-                                    </div>
+                                            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                                const pageNum = i + 1;
+                                                return (
+                                                    <button
+                                                        key={pageNum}
+                                                        onClick={() => setCurrentPage(pageNum)}
+                                                        className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${currentPage === pageNum
+                                                            ? 'bg-blue-600 text-white'
+                                                            : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+                                                            }`}
+                                                    >
+                                                        {pageNum}
+                                                    </button>
+                                                );
+                                            })}
 
-                                    {/* Contenido del card */}
-                                    <div className="mb-4">
-                                        <h4 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
-                                            {proyecto.nombre}
-                                        </h4>
-                                        <p className="text-sm text-gray-600">
-                                            Proyecto creado y gestionado desde la plataforma de telemetría
-                                        </p>
-                                    </div>
-
-                                    {/* Footer del card */}
-                                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                                        <div className="flex items-center text-sm text-gray-500">
-                                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                            Proyecto
+                                            <button
+                                                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                                                disabled={currentPage === totalPages}
+                                                className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                                            >
+                                                Siguiente
+                                            </button>
                                         </div>
-
-                                        <Link
-                                            to={`/proyectos/${proyecto._id}`}
-                                            className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105"
-                                        >
-                                            Ver Detalles
-                                            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                            </svg>
-                                        </Link>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            )}
+                        </>
                     ) : (
-                        /* Estado vacío */
                         <div className="text-center py-12">
                             <div className="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-4">
                                 <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
