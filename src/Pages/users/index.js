@@ -2,4 +2,3 @@
 export { Usuarioconfig as Profile } from './Profile';
 export { Bienvenida as Welcome } from './Welcome';
 export { Intro } from './Intro';
-export { Roles } from './Roles';

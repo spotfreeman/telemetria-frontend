@@ -13,7 +13,7 @@ import { Archivos } from './Pages/archivos/Archivos';
 import { Welcome } from './Pages/users';
 import { Login } from './Pages/auth';
 import { Page404 } from './Pages/Page404';
-import { Intro, Profile, Roles } from './Pages/users';
+import { Intro, Profile } from './Pages/users';
 
 import { Esp32List } from './Pages/esp32/esp32list';
 import { Esp32Detail } from './Pages/esp32/esp32detail';
@@ -47,7 +47,6 @@ function App() {
             <Route path="/archivos" element={<Archivos />} />
             <Route path='/bienvenida' element={<Welcome />} />
             <Route path="/usuarioconfig" element={<Profile />} />
-            <Route path="/roles" element={<Roles />} />
 
             <Route path="/register" element={<Register />} />
 

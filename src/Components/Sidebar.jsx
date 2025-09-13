@@ -114,7 +114,6 @@ function Sidebar() {
             children: [
                 { to: "/bienvenida", icon: <HomeIcon className="h-5 w-5" />, label: "Bienvenida", color: "from-orange-500 to-red-500" },
                 { to: "/server", icon: <FolderIcon className="h-5 w-5" />, label: "IP Server", color: "from-orange-500 to-red-500" },
-                { to: "/roles", icon: <UsersIcon className="h-5 w-5" />, label: "Roles", color: "from-orange-500 to-red-500" },
             ]
         }
     ];
@@ -130,7 +129,7 @@ function Sidebar() {
                     // El resto igual que antes
                     if (link.to === "/" && tokenValido) return false;
                     if (
-                        ["/proyectos", "/server", "/notas", "/calendario", "/archivos", "/tempdata", "/datos", "/bienvenida", "/roles", "/esp32", "/mercado"]
+                        ["/proyectos", "/server", "/notas", "/calendario", "/archivos", "/tempdata", "/datos", "/bienvenida", "/esp32", "/mercado"]
                             .includes(link.to) && !tokenValido
                     ) return false;
                     return true;
