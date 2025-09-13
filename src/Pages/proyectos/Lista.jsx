@@ -232,12 +232,12 @@ export const Lista = () => {
                                             className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white/50 backdrop-blur-sm appearance-none"
                                         >
                                             <option value="">Selecciona un estado</option>
-                                            <option value="Planificación">Planificación</option>
-                                            <option value="En Progreso">En Progreso</option>
-                                            <option value="En Revisión">En Revisión</option>
-                                            <option value="Completado">Completado</option>
-                                            <option value="Pausado">Pausado</option>
-                                            <option value="Cancelado">Cancelado</option>
+                                            <option value="planificacion">Planificación</option>
+                                            <option value="en_progreso">En Progreso</option>
+                                            <option value="en_revision">En Revisión</option>
+                                            <option value="completado">Completado</option>
+                                            <option value="pausado">Pausado</option>
+                                            <option value="cancelado">Cancelado</option>
                                         </select>
                                     </div>
                                 </div>
@@ -303,12 +303,12 @@ export const Lista = () => {
                                         </div>
 
                                         {/* Estado badge */}
-                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${proyecto.estado === 'Completado' ? 'bg-green-100 text-green-800' :
-                                            proyecto.estado === 'En Progreso' ? 'bg-blue-100 text-blue-800' :
-                                                proyecto.estado === 'Planificación' ? 'bg-yellow-100 text-yellow-800' :
-                                                    proyecto.estado === 'En Revisión' ? 'bg-purple-100 text-purple-800' :
-                                                        proyecto.estado === 'Pausado' ? 'bg-orange-100 text-orange-800' :
-                                                            proyecto.estado === 'Cancelado' ? 'bg-red-100 text-red-800' :
+                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${proyecto.estado === 'completado' ? 'bg-green-100 text-green-800' :
+                                            proyecto.estado === 'en_progreso' ? 'bg-blue-100 text-blue-800' :
+                                                proyecto.estado === 'planificacion' ? 'bg-yellow-100 text-yellow-800' :
+                                                    proyecto.estado === 'en_revision' ? 'bg-purple-100 text-purple-800' :
+                                                        proyecto.estado === 'pausado' ? 'bg-orange-100 text-orange-800' :
+                                                            proyecto.estado === 'cancelado' ? 'bg-red-100 text-red-800' :
                                                                 'bg-gray-100 text-gray-800'
                                             }`}>
                                             {proyecto.estado}

@@ -423,10 +423,11 @@ export const Usuarioconfig = () => {
                                                 className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200 bg-white/50 backdrop-blur-sm appearance-none"
                                             >
                                                 <option value="">Selecciona un rol</option>
-                                                <option value="Administrador">Administrador</option>
-                                                <option value="Supervisor">Supervisor</option>
-                                                <option value="Monitor">Monitor</option>
-                                                <option value="Visita">Visita</option>
+                                                <option value="usuario">Usuario</option>
+                                                <option value="admin">Admin</option>
+                                                <option value="supervisor">Supervisor</option>
+                                                <option value="monitor">Monitor</option>
+                                                <option value="visor">Visor</option>
                                             </select>
                                         </div>
                                     </div>

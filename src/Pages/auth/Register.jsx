@@ -243,7 +243,10 @@ export const Registrar = () => {
                                         className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200 bg-white/50 backdrop-blur-sm appearance-none"
                                     >
                                         <option value="usuario">Usuario</option>
-                                        <option value="admin">Administrador</option>
+                                        <option value="admin">Admin</option>
+                                        <option value="supervisor">Supervisor</option>
+                                        <option value="monitor">Monitor</option>
+                                        <option value="visor">Visor</option>
                                     </select>
                                 </div>
                             </div>
