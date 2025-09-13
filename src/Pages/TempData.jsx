@@ -29,27 +29,41 @@ export const TempData = () => {
             try {
                 setLoading(true);
                 setError(null);
-
+                
                 const token = localStorage.getItem("token");
                 if (!token) {
-                    throw new Error('No hay token de autenticación');
+                    throw new Error('No hay token de autenticación. Por favor, inicia sesión.');
                 }
+
+                console.log('Token encontrado:', token ? 'Sí' : 'No');
+                console.log('Haciendo request a:', 'https://telemetria-backend.onrender.com/api/temperaturas');
 
                 const response = await fetch('https://telemetria-backend.onrender.com/api/temperaturas', {
+                    method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     }
                 });
-
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
                 if (!response.ok) {
                     if (response.status === 401) {
+                        // Limpiar token expirado
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
                         throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
                     }
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
                     throw new Error(`Error ${response.status}: ${response.statusText}`);
                 }
-
+                
                 const data = await response.json();
+                console.log('Data recibida:', data);
                 // Asegurar que data sea un array
                 const datosArray = Array.isArray(data) ? data : (data?.datos || data?.temperaturas || []);
                 setDatos(datosArray);
@@ -73,26 +87,34 @@ export const TempData = () => {
         try {
             setLoading(true);
             setError(null);
-
+            
             const token = localStorage.getItem("token");
             if (!token) {
-                throw new Error('No hay token de autenticación');
+                throw new Error('No hay token de autenticación. Por favor, inicia sesión.');
             }
+
+            console.log('Refrescando datos...');
 
             const response = await fetch('https://telemetria-backend.onrender.com/api/temperaturas', {
+                method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 }
             });
-
+            
             if (!response.ok) {
                 if (response.status === 401) {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
                     throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
                 }
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
                 throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
-
+            
             const data = await response.json();
             const datosArray = Array.isArray(data) ? data : (data?.datos || data?.temperaturas || []);
             setDatos(datosArray);
@@ -108,24 +130,14 @@ export const TempData = () => {
     const datosGrafica = datos
         .slice()
         .sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora))
-        .slice(0, 100)
-        .reverse()
-        .map(dato => ({
-            fecha: dato.fecha_hora,
-            temperatura: dato.temperatura,
+        .slice(0, 50) // Mostrar solo los últimos 50 registros
+        .map(d => ({
+            ...d,
+            hora: new Date(d.fecha_hora).toLocaleTimeString("es-CL", { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            })
         }));
-
-    const temperaturas = datos.map(d => d.temperatura);
-    const max = temperaturas.length ? Math.max(...temperaturas) : '-';
-    const min = temperaturas.length ? Math.min(...temperaturas) : '-';
-    const avg = temperaturas.length
-        ? (temperaturas.reduce((a, b) => a + b, 0) / temperaturas.length).toFixed(2)
-        : '-';
-
-
-    const almacenamiento = datosOrdenados.length && datosOrdenados[0].almacenamiento !== undefined
-        ? datosOrdenados[0].almacenamiento
-        : '-';
 
     if (loading) {
         return <MainLoading message="Cargando datos de telemetría..." />;
@@ -166,10 +178,10 @@ export const TempData = () => {
                             className="ml-4 p-3 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                             title="Actualizar datos"
                         >
-                            <svg
-                                className={`w-5 h-5 text-blue-600 ${loading ? 'animate-spin' : ''}`}
-                                fill="none"
-                                stroke="currentColor"
+                            <svg 
+                                className={`w-5 h-5 text-blue-600 ${loading ? 'animate-spin' : ''}`} 
+                                fill="none" 
+                                stroke="currentColor" 
                                 viewBox="0 0 24 24"
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -200,14 +212,17 @@ export const TempData = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                     >
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center">
-                                <ArrowUpIcon className="w-6 h-6 text-white" />
+                        <div className="flex items-center">
+                            <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-600 rounded-xl flex items-center justify-center mr-4">
+                                <FireIcon className="w-6 h-6 text-white" />
                             </div>
-                            <div className="w-3 h-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-full"></div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Temperatura Actual</p>
+                                <p className="text-2xl font-bold text-gray-800">
+                                    {datos.length > 0 ? `${datos[0]?.temperatura || 'N/A'}°C` : 'N/A'}
+                                </p>
+                            </div>
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-1">{max}°C</h3>
-                        <p className="text-sm font-medium text-red-600">Temperatura Máxima</p>
                     </motion.div>
 
                     <motion.div
@@ -216,14 +231,17 @@ export const TempData = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                     >
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
-                                <ArrowDownIcon className="w-6 h-6 text-white" />
+                        <div className="flex items-center">
+                            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center mr-4">
+                                <ChartPieIcon className="w-6 h-6 text-white" />
                             </div>
-                            <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Almacenamiento</p>
+                                <p className="text-2xl font-bold text-gray-800">
+                                    {datos.length > 0 ? `${datos[0]?.almacenamiento || 'N/A'}%` : 'N/A'}
+                                </p>
+                            </div>
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-1">{min}°C</h3>
-                        <p className="text-sm font-medium text-blue-600">Temperatura Mínima</p>
                     </motion.div>
 
                     <motion.div
@@ -232,14 +250,15 @@ export const TempData = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                     >
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
-                                <FireIcon className="w-6 h-6 text-white" />
+                        <div className="flex items-center">
+                            <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mr-4">
+                                <CheckCircleIcon className="w-6 h-6 text-white" />
                             </div>
-                            <div className="w-3 h-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Estado</p>
+                                <p className="text-2xl font-bold text-gray-800">Activo</p>
+                            </div>
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-1">{avg}°C</h3>
-                        <p className="text-sm font-medium text-green-600">Temperatura Promedio</p>
                     </motion.div>
 
                     <motion.div
@@ -248,142 +267,175 @@ export const TempData = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
                     >
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                                <ChartPieIcon className="w-6 h-6 text-white" />
+                        <div className="flex items-center">
+                            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-4">
+                                <ClockIcon className="w-6 h-6 text-white" />
                             </div>
-                            <div className="w-3 h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Última Actualización</p>
+                                <p className="text-2xl font-bold text-gray-800">
+                                    {datos.length > 0 ? new Date(datos[0]?.fecha_hora).toLocaleTimeString("es-CL", { 
+                                        hour: '2-digit', 
+                                        minute: '2-digit' 
+                                    }) : 'N/A'}
+                                </p>
+                            </div>
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-1">{almacenamiento}%</h3>
-                        <p className="text-sm font-medium text-purple-600">Almacenamiento Libre</p>
                     </motion.div>
                 </div>
 
-                {/* Contenido Principal */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Tabla de Datos */}
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xl font-semibold text-gray-800">Registros Recientes</h2>
-                            <div className="text-sm text-gray-500">
-                                Página {pagina} de {totalPaginas}
+                {/* Gráfico */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <ChartPieIcon className="w-6 h-6 text-blue-600 mr-2" />
+                        Gráfico de Temperatura (Últimas 50 lecturas)
+                    </h3>
+                    {datosGrafica.length > 0 ? (
+                        <ResponsiveContainer width="100%" height={400}>
+                            <LineChart data={datosGrafica}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis 
+                                    dataKey="hora" 
+                                    tick={{ fontSize: 12 }}
+                                    interval="preserveStartEnd"
+                                />
+                                <YAxis 
+                                    label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft' }}
+                                    tick={{ fontSize: 12 }}
+                                />
+                                <Tooltip 
+                                    labelFormatter={(value, payload) => {
+                                        if (payload && payload[0]) {
+                                            return `Hora: ${value}`;
+                                        }
+                                        return value;
+                                    }}
+                                    formatter={(value, name) => [
+                                        `${value}°C`, 
+                                        name === 'temperatura' ? 'Temperatura' : name
+                                    ]}
+                                />
+                                <Line 
+                                    type="monotone" 
+                                    dataKey="temperatura" 
+                                    stroke="#3B82F6" 
+                                    strokeWidth={2}
+                                    dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
+                                    activeDot={{ r: 6, stroke: '#3B82F6', strokeWidth: 2 }}
+                                />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    ) : (
+                        <div className="h-96 flex items-center justify-center">
+                            <div className="text-center">
+                                <ChartPieIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                                <p className="text-gray-500">No hay datos para mostrar</p>
                             </div>
                         </div>
+                    )}
+                </div>
 
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="border-b border-gray-200">
-                                        <th className="text-left py-3 px-2 font-medium text-gray-600">Fecha y Hora</th>
-                                        <th className="text-left py-3 px-2 font-medium text-gray-600">Temperatura</th>
-                                        <th className="text-left py-3 px-2 font-medium text-gray-600">Almacenamiento</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {datosPagina.map((dato, idx) => (
-                                        <tr key={dato._id || idx} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
-                                            <td className="py-3 px-2 text-sm text-gray-600">
-                                                {new Date(dato.fecha_hora).toLocaleString()}
-                                            </td>
-                                            <td className="py-3 px-2">
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                    {dato.temperatura}°C
-                                                </span>
-                                            </td>
-                                            <td className="py-3 px-2">
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    {dato.almacenamiento} GB
-                                                </span>
-                                            </td>
+                {/* Tabla de Datos */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-200">
+                        <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+                            <ClockIcon className="w-6 h-6 text-blue-600 mr-2" />
+                            Historial de Datos
+                        </h3>
+                    </div>
+                    
+                    {datosPagina.length > 0 ? (
+                        <>
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Fecha y Hora
+                                            </th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Temperatura
+                                            </th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Almacenamiento
+                                            </th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {/* Paginación Mejorada */}
-                        <div className="flex items-center justify-between mt-6">
-                            <button
-                                onClick={() => setPagina(pagina - 1)}
-                                disabled={pagina === 1}
-                                className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-                            >
-                                <ChevronLeftIcon className="w-4 h-4 mr-1" />
-                                Anterior
-                            </button>
-
-                            <div className="flex space-x-1">
-                                {Array.from({ length: Math.min(5, totalPaginas) }, (_, i) => {
-                                    const pageNum = i + 1;
-                                    return (
-                                        <button
-                                            key={pageNum}
-                                            onClick={() => setPagina(pageNum)}
-                                            className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${pagina === pageNum
-                                                ? 'bg-blue-600 text-white'
-                                                : 'text-gray-700 hover:bg-gray-100'
-                                                }`}
-                                        >
-                                            {pageNum}
-                                        </button>
-                                    );
-                                })}
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-gray-200">
+                                        {datosPagina.map((dato, idx) => (
+                                            <motion.tr
+                                                key={idx}
+                                                className="hover:bg-gray-50 transition-colors duration-200"
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: idx * 0.05 }}
+                                            >
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    {new Date(dato.fecha_hora).toLocaleString("es-CL")}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                        {dato.temperatura}°C
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                        {dato.almacenamiento}%
+                                                    </span>
+                                                </td>
+                                            </motion.tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
 
-                            <button
-                                onClick={() => setPagina(pagina + 1)}
-                                disabled={pagina === totalPaginas}
-                                className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-                            >
-                                Siguiente
-                                <ChevronRightIcon className="w-4 h-4 ml-1" />
-                            </button>
+                            {/* Paginación */}
+                            {totalPaginas > 1 && (
+                                <div className="px-6 py-4 border-t border-gray-200">
+                                    <div className="flex items-center justify-between">
+                                        <div className="text-sm text-gray-700">
+                                            Mostrando {((pagina - 1) * porPagina) + 1} a {Math.min(pagina * porPagina, datos.length)} de {datos.length} registros
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <button
+                                                onClick={() => setPagina(Math.max(1, pagina - 1))}
+                                                disabled={pagina === 1}
+                                                className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                                            >
+                                                <ChevronLeftIcon className="w-4 h-4" />
+                                            </button>
+                                            
+                                            <span className="px-3 py-2 text-sm font-medium text-gray-700">
+                                                Página {pagina} de {totalPaginas}
+                                            </span>
+                                            
+                                            <button
+                                                onClick={() => setPagina(Math.min(totalPaginas, pagina + 1))}
+                                                disabled={pagina === totalPaginas}
+                                                className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                                            >
+                                                <ChevronRightIcon className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="text-center py-12">
+                            <ChartPieIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                                No hay datos disponibles
+                            </h3>
+                            <p className="text-gray-600">
+                                Los datos de telemetría aparecerán aquí cuando estén disponibles.
+                            </p>
                         </div>
-                    </div>
-
-                    {/* Gráfico */}
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6">
-                        <h2 className="text-xl font-semibold text-gray-800 mb-6">Tendencia de Temperatura</h2>
-                        <div className="h-80">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart data={datosGrafica}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                                    <XAxis
-                                        dataKey="fecha"
-                                        interval="preserveStartEnd"
-                                        angle={-45}
-                                        textAnchor="end"
-                                        height={60}
-                                        fontSize={12}
-                                        stroke="#6b7280"
-                                    />
-                                    <YAxis
-                                        domain={['auto', 'auto']}
-                                        fontSize={12}
-                                        stroke="#6b7280"
-                                    />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                                            border: '1px solid #e5e7eb',
-                                            borderRadius: '8px',
-                                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                        }}
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="temperatura"
-                                        stroke="#3b82f6"
-                                        strokeWidth={3}
-                                        dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
-                                        activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2 }}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>
     );
-}
+};
+
+export default TempData;
