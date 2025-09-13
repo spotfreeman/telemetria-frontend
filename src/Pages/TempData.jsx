@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
     LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid
 } from "recharts";
-import { 
-    ChartPieIcon, 
-    CpuChipIcon, 
+import {
+    ChartPieIcon,
+    CpuChipIcon,
     FireIcon,
     ClockIcon,
     ArrowUpIcon,
@@ -237,8 +237,8 @@ export const TempData = () => {
                                             key={pageNum}
                                             onClick={() => setPagina(pageNum)}
                                             className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${pagina === pageNum
-                                                    ? 'bg-blue-600 text-white'
-                                                    : 'text-gray-700 hover:bg-gray-100'
+                                                ? 'bg-blue-600 text-white'
+                                                : 'text-gray-700 hover:bg-gray-100'
                                                 }`}
                                         >
                                             {pageNum}
