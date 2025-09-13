@@ -9,6 +9,14 @@ import {
     FolderIcon,
     HomeIcon,
     UsersIcon,
+    ChevronDownIcon,
+    ChevronRightIcon,
+    ArrowRightOnRectangleIcon,
+    UserCircleIcon,
+    Cog6ToothIcon,
+    BellIcon,
+    SunIcon,
+    MoonIcon,
 } from '@heroicons/react/24/outline'
 
 // Importa el componente ValorUF
@@ -40,6 +48,7 @@ function Sidebar() {
     const tokenValido = isTokenValid(token);
     const usuario = localStorage.getItem("usuario");
     const nombre = localStorage.getItem("nombre");
+    const rol = localStorage.getItem("rol");
 
     // Fecha actual formateada
     const hoy = new Date();
@@ -49,12 +58,10 @@ function Sidebar() {
         day: '2-digit',
     });
 
-    // Nota: Los enlaces se manejan directamente en el renderizado con groupedLinks
-
-    // Nota: La lógica de filtrado se maneja directamente en el renderizado
-
     // Estado para controlar qué menús desplegables están abiertos
     const [openMenus, setOpenMenus] = useState({});
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [darkMode, setDarkMode] = useState(false);
 
     /**
      * Alterna el estado abierto/cerrado de un menú desplegable.
@@ -72,37 +79,42 @@ function Sidebar() {
         // Grupo solo para Login (si no hay sesión)
         {
             label: "Acceso",
+            icon: <UserCircleIcon className="h-5 w-5" />,
             children: [
-                { to: "/login", icon: <UsersIcon className="h-5 w-5" />, label: "Login" }
+                { to: "/login", icon: <UserCircleIcon className="h-5 w-5" />, label: "Iniciar Sesión", color: "from-blue-500 to-cyan-500" }
             ]
         },
         {
             label: "Telemetría",
             icon: <ChartPieIcon className="h-5 w-5" />,
+            color: "from-emerald-500 to-teal-500",
             children: [
-                { to: "/datos", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Histórico" },
-                { to: "/tempdata", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Resumen" },
-                { to: "/esp32", icon: <UsersIcon className="h-5 w-5" />, label: "ESP32" },
+                { to: "/datos", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Histórico", color: "from-emerald-500 to-teal-500" },
+                { to: "/tempdata", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Resumen", color: "from-emerald-500 to-teal-500" },
+                { to: "/esp32", icon: <UsersIcon className="h-5 w-5" />, label: "ESP32", color: "from-emerald-500 to-teal-500" },
             ]
         },
         {
             label: "Proyectos",
             icon: <FolderIcon className="h-5 w-5" />,
+            color: "from-purple-500 to-pink-500",
             children: [
-                { to: "/proyectos", icon: <FolderIcon className="h-5 w-5" />, label: "Proyectos" },
-                { to: "/mercado", icon: <UsersIcon className="h-5 w-5" />, label: "Mercado Público" },
-                { to: "/calendario", icon: <CalendarIcon className="h-5 w-5" />, label: "Calendario" },
-                { to: "/archivos", icon: <DocumentDuplicateIcon className="h-5 w-5" />, label: "Archivos" },
-                { to: "/notas", icon: <FolderIcon className="h-5 w-5" />, label: "Notas" },
+                { to: "/proyectos", icon: <FolderIcon className="h-5 w-5" />, label: "Proyectos", color: "from-purple-500 to-pink-500" },
+                { to: "/mercado", icon: <UsersIcon className="h-5 w-5" />, label: "Mercado Público", color: "from-purple-500 to-pink-500" },
+                { to: "/calendario", icon: <CalendarIcon className="h-5 w-5" />, label: "Calendario", color: "from-purple-500 to-pink-500" },
+                { to: "/archivos", icon: <DocumentDuplicateIcon className="h-5 w-5" />, label: "Archivos", color: "from-purple-500 to-pink-500" },
+                { to: "/notas", icon: <FolderIcon className="h-5 w-5" />, label: "Notas", color: "from-purple-500 to-pink-500" },
             ]
         },
         // Otros links sueltos
         {
-            label: "Otros",
+            label: "Sistema",
+            icon: <Cog6ToothIcon className="h-5 w-5" />,
+            color: "from-orange-500 to-red-500",
             children: [
-                { to: "/bienvenida", icon: <HomeIcon className="h-5 w-5" />, label: "Bienvenida" },
-                { to: "/server", icon: <FolderIcon className="h-5 w-5" />, label: "IP Server" },
-                { to: "/roles", icon: <UsersIcon className="h-5 w-5" />, label: "Roles" },
+                { to: "/bienvenida", icon: <HomeIcon className="h-5 w-5" />, label: "Bienvenida", color: "from-orange-500 to-red-500" },
+                { to: "/server", icon: <FolderIcon className="h-5 w-5" />, label: "IP Server", color: "from-orange-500 to-red-500" },
+                { to: "/roles", icon: <UsersIcon className="h-5 w-5" />, label: "Roles", color: "from-orange-500 to-red-500" },
             ]
         }
     ];
@@ -141,55 +153,115 @@ function Sidebar() {
     };
 
     return (
-        <aside className="w-56 bg-gradient-to-b from-blue-900 to-gray-800 text-white min-h-screen flex flex-col py-6 px-2 shadow-lg">
+        <aside className={`${isCollapsed ? 'w-16' : 'w-64'} bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white min-h-screen flex flex-col transition-all duration-300 ease-in-out shadow-2xl border-r border-white/10`}>
+            {/* Header con logo y controles */}
+            <div className="p-4 border-b border-white/10">
+                <div className="flex items-center justify-between">
+                    {!isCollapsed && (
+                        <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <ChartPieIcon className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                                ROB-Data
+                            </span>
+                        </div>
+                    )}
+                    <div className="flex items-center space-x-2">
+                        {/* Toggle dark mode */}
+                        <button
+                            onClick={() => setDarkMode(!darkMode)}
+                            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-200"
+                            title="Cambiar tema"
+                        >
+                            {darkMode ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
+                        </button>
+                        {/* Toggle collapse */}
+                        <button
+                            onClick={() => setIsCollapsed(!isCollapsed)}
+                            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-200"
+                            title={isCollapsed ? "Expandir" : "Contraer"}
+                        >
+                            <ChevronRightIcon className={`w-4 h-4 transition-transform duration-200 ${isCollapsed ? 'rotate-180' : ''}`} />
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             {/* Información del usuario */}
-            <div className="mb-8 flex flex-col items-center justify-center">
-                <span className="text-xl font-bold tracking-wide text-blue-300">ROB-Data</span>
-                {token && usuario && (
-                    <div className="mt-4 flex flex-col items-center">
-                        {/* Botón para editar información personal */}
+            {tokenValido && usuario && (
+                <div className="p-4 border-b border-white/10">
+                    <div className="flex items-center space-x-3">
                         <button
                             onClick={() => navigate("/usuarioconfig")}
-                            className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-blue-200 text-blue-800 font-bold text-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition hover:scale-105"
-                            title="Editar información personal"
+                            className="relative group"
+                            title="Editar perfil"
                         >
-                            {nombre && nombre.length > 0 ? nombre.charAt(0).toUpperCase() : "?"}
+                            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center font-bold text-white shadow-lg group-hover:scale-110 transition-transform duration-200">
+                                {nombre && nombre.length > 0 ? nombre.charAt(0).toUpperCase() : "?"}
+                            </div>
+                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-900"></div>
                         </button>
-                        <span className="mt-2 text-blue-100 text-sm">{nombre}</span>
-                        <span className="text-blue-200 text-xs">{fechaFormateada}</span>
-                        <ValorUF />
+                        {!isCollapsed && (
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-white truncate">{nombre}</p>
+                                <p className="text-xs text-gray-400 truncate">{rol || 'Usuario'}</p>
+                                <p className="text-xs text-gray-500">{fechaFormateada}</p>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-            {/* Navegación principal con menús agrupados y desplegables */}
-            <nav className="flex flex-col gap-1">
+                    {!isCollapsed && <ValorUF />}
+                </div>
+            )}
+
+            {/* Navegación principal */}
+            <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
                 {groupedLinksFiltrados.map((group, idx) => (
-                    <div key={group.label}>
+                    <div key={group.label} className="space-y-1">
                         {/* Si el grupo tiene más de un hijo, muestra como menú desplegable */}
                         {group.children.length > 1 ? (
                             <>
                                 <button
-                                    className="flex items-center w-full px-3 py-2 rounded hover:bg-blue-700 font-semibold transition"
+                                    className={`w-full flex items-center px-3 py-2.5 rounded-xl transition-all duration-200 group ${
+                                        openMenus[group.label] 
+                                            ? 'bg-white/20 shadow-lg' 
+                                            : 'hover:bg-white/10'
+                                    }`}
                                     onClick={() => toggleMenu(group.label)}
                                 >
-                                    {group.icon}
-                                    <span className="ml-2 flex-1 text-left">{group.label}</span>
-                                    <span>{openMenus[group.label] ? "▲" : "▼"}</span>
+                                    <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${group.color} flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200`}>
+                                        {group.icon}
+                                    </div>
+                                    {!isCollapsed && (
+                                        <>
+                                            <span className="flex-1 text-left font-medium">{group.label}</span>
+                                            {openMenus[group.label] ? (
+                                                <ChevronDownIcon className="w-4 h-4 transition-transform duration-200" />
+                                            ) : (
+                                                <ChevronRightIcon className="w-4 h-4 transition-transform duration-200" />
+                                            )}
+                                        </>
+                                    )}
                                 </button>
-                                {openMenus[group.label] && (
-                                    <div className="ml-6 flex flex-col">
+                                {openMenus[group.label] && !isCollapsed && (
+                                    <div className="ml-4 space-y-1 border-l-2 border-white/20 pl-4">
                                         {group.children.map(link => (
                                             <Link
                                                 key={link.to}
                                                 to={link.to}
-                                                className={`flex items-center gap-3 px-3 py-2 rounded transition
-                                                    ${location.pathname === link.to
-                                                        ? "bg-blue-700 text-white font-semibold shadow"
-                                                        : "hover:bg-blue-600 hover:text-blue-100"}
-                                                `}
+                                                className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 group ${
+                                                    location.pathname === link.to
+                                                        ? 'bg-white/20 shadow-lg transform scale-[1.02]'
+                                                        : 'hover:bg-white/10 hover:transform hover:scale-[1.01]'
+                                                }`}
                                             >
-                                                {link.icon}
-                                                <span>{link.label}</span>
+                                                <div className={`w-6 h-6 rounded-md bg-gradient-to-r ${link.color} flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200`}>
+                                                    {link.icon}
+                                                </div>
+                                                <span className="font-medium">{link.label}</span>
+                                                {location.pathname === link.to && (
+                                                    <div className="ml-auto w-2 h-2 bg-white rounded-full"></div>
+                                                )}
                                             </Link>
                                         ))}
                                     </div>
@@ -201,32 +273,55 @@ function Sidebar() {
                                 <Link
                                     key={link.to}
                                     to={link.to}
-                                    className={`flex items-center gap-3 px-3 py-2 rounded transition
-                                        ${location.pathname === link.to
-                                            ? "bg-blue-700 text-white font-semibold shadow"
-                                            : "hover:bg-blue-600 hover:text-blue-100"}
-                                    `}
+                                    className={`flex items-center px-3 py-2.5 rounded-xl transition-all duration-200 group ${
+                                        location.pathname === link.to
+                                            ? 'bg-white/20 shadow-lg transform scale-[1.02]'
+                                            : 'hover:bg-white/10 hover:transform hover:scale-[1.01]'
+                                    }`}
                                 >
-                                    {link.icon}
-                                    <span>{link.label}</span>
+                                    <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${link.color} flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200`}>
+                                        {link.icon}
+                                    </div>
+                                    {!isCollapsed && (
+                                        <>
+                                            <span className="font-medium">{link.label}</span>
+                                            {location.pathname === link.to && (
+                                                <div className="ml-auto w-2 h-2 bg-white rounded-full"></div>
+                                            )}
+                                        </>
+                                    )}
                                 </Link>
                             ))
                         )}
                     </div>
                 ))}
             </nav>
-            {/* Botón de cerrar sesión solo si hay token válido */}
+
+            {/* Botón de cerrar sesión */}
             {tokenValido && (
-                <button
-                    onClick={handleLogout}
-                    className="mt-6 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded w-full transition"
-                >
-                    Cerrar Sesión
-                </button>
+                <div className="p-4 border-t border-white/10">
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center px-3 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-lg"
+                    >
+                        <ArrowRightOnRectangleIcon className="w-5 h-5 mr-3" />
+                        {!isCollapsed && "Cerrar Sesión"}
+                    </button>
+                </div>
             )}
+
             {/* Footer */}
-            <div className="mt-auto border-t border-blue-900 pt-4 text-xs text-blue-200 text-center opacity-60">
-                &copy; {new Date().getFullYear()} ROB-Data
+            <div className="p-4 border-t border-white/10">
+                {!isCollapsed && (
+                    <div className="text-center">
+                        <p className="text-xs text-gray-400">
+                            &copy; {new Date().getFullYear()} ROB-Data
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                            Sistema de Telemetría
+                        </p>
+                    </div>
+                )}
             </div>
         </aside>
     );
