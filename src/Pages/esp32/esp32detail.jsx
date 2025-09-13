@@ -47,18 +47,48 @@ export const Esp32Detail = () => {
                 }
 
                 console.log('Token encontrado:', token ? 'Sí' : 'No');
-                console.log('Haciendo request a:', `https://telemetria-backend.onrender.com/api/telemetry/esp32/${deviceId}`);
-
-                const response = await fetch(`https://telemetria-backend.onrender.com/api/telemetry/esp32/${deviceId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                
+                // Probar primero la ruta legacy, luego la nueva
+                let response;
+                let endpoint = '';
+                
+                try {
+                    // Intentar primero la ruta legacy
+                    endpoint = `https://telemetria-backend.onrender.com/api/esp32/${deviceId}`;
+                    console.log('Probando endpoint legacy:', endpoint);
+                    
+                    response = await fetch(endpoint, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    console.log('Response status (legacy):', response.status);
+                    
+                    if (!response.ok && response.status === 404) {
+                        // Si falla con 404, probar la nueva ruta
+                        endpoint = `https://telemetria-backend.onrender.com/api/telemetry/esp32/${deviceId}`;
+                        console.log('Probando endpoint nuevo:', endpoint);
+                        
+                        response = await fetch(endpoint, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        });
+                        
+                        console.log('Response status (nuevo):', response.status);
                     }
-                });
+                } catch (fetchError) {
+                    console.error('Error en fetch:', fetchError);
+                    throw fetchError;
+                }
 
-                console.log('Response status:', response.status);
                 console.log('Response headers:', response.headers);
 
                 if (!response.ok) {
@@ -69,7 +99,7 @@ export const Esp32Detail = () => {
                     }
                     const errorText = await response.text();
                     console.error('Error response:', errorText);
-                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                    throw new Error(`Error ${response.status}: ${response.statusText} en endpoint ${endpoint}`);
                 }
 
                 const data = await response.json();
