@@ -22,6 +22,9 @@ export const Registrar = () => {
         e.preventDefault();
         setMensaje("");
         setError("");
+        
+        // Debug: Mostrar alert con los datos del formulario
+        alert(`Datos del formulario:\n${JSON.stringify(form, null, 2)}`);
 
         // Validar campos vacíos
         if (!form.username || !form.email || !form.password || !form.nombre) {
@@ -39,7 +42,7 @@ export const Registrar = () => {
         try {
             // Debug: Imprimir los datos que se van a enviar
             console.log("Datos del formulario a enviar:", form);
-            
+
             const res = await fetch("https://telemetria-backend.onrender.com/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -48,7 +51,7 @@ export const Registrar = () => {
             const data = await res.json();
             console.log("Respuesta del servidor:", data);
             console.log("Status de la respuesta:", res.status);
-            
+
             if (res.ok) {
                 setMensaje(data.message || "Usuario registrado correctamente");
                 setForm({
