@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { 
-    ServerIcon, 
-    GlobeAltIcon, 
+import {
+    ServerIcon,
+    GlobeAltIcon,
     PlayIcon,
     ExclamationTriangleIcon,
     CheckCircleIcon,
@@ -23,7 +23,7 @@ export const Server = () => {
             try {
                 setLoading(true);
                 setError(null);
-                
+
                 const [rpisResponse, serverResponse] = await Promise.all([
                     fetch('https://telemetria-backend.onrender.com/api/rpis'),
                     fetch('https://telemetria-backend.onrender.com/api/serverip')
@@ -41,7 +41,7 @@ export const Server = () => {
                 // Ordena los datos por fecha_hora descendente (más nuevo primero)
                 const datosOrdenados = [...rpisData].sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora));
                 const datosServerOrdenados = [...serverData].sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora));
-                
+
                 setDatos(datosOrdenados);
                 setDatosServer(datosServerOrdenados);
             } catch (err) {
@@ -162,10 +162,10 @@ export const Server = () => {
                         >
                             {/* Imagen del servidor */}
                             <div className="relative h-48 overflow-hidden">
-                                <img 
-                                    alt={servidor.name} 
-                                    src={servidor.image} 
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
+                                <img
+                                    alt={servidor.name}
+                                    src={servidor.image}
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                                 <div className="absolute top-4 right-4">

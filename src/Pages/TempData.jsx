@@ -5,7 +5,7 @@ import {
 import { 
     ChartPieIcon, 
     CpuChipIcon, 
-    ThermometerIcon,
+    FireIcon,
     ClockIcon,
     ArrowUpIcon,
     ArrowDownIcon,
@@ -156,7 +156,7 @@ export const TempData = () => {
                     <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                         <div className="flex items-center justify-between mb-4">
                             <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
-                                <ThermometerIcon className="w-6 h-6 text-white" />
+                                <FireIcon className="w-6 h-6 text-white" />
                             </div>
                             <div className="w-3 h-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
                         </div>
@@ -228,7 +228,7 @@ export const TempData = () => {
                                 <ChevronLeftIcon className="w-4 h-4 mr-1" />
                                 Anterior
                             </button>
-                            
+
                             <div className="flex space-x-1">
                                 {Array.from({ length: Math.min(5, totalPaginas) }, (_, i) => {
                                     const pageNum = i + 1;
@@ -236,18 +236,17 @@ export const TempData = () => {
                                         <button
                                             key={pageNum}
                                             onClick={() => setPagina(pageNum)}
-                                            className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
-                                                pagina === pageNum
+                                            className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${pagina === pageNum
                                                     ? 'bg-blue-600 text-white'
                                                     : 'text-gray-700 hover:bg-gray-100'
-                                            }`}
+                                                }`}
                                         >
                                             {pageNum}
                                         </button>
                                     );
                                 })}
                             </div>
-                            
+
                             <button
                                 onClick={() => setPagina(pagina + 1)}
                                 disabled={pagina === totalPaginas}
@@ -275,12 +274,12 @@ export const TempData = () => {
                                         fontSize={12}
                                         stroke="#6b7280"
                                     />
-                                    <YAxis 
-                                        domain={['auto', 'auto']} 
+                                    <YAxis
+                                        domain={['auto', 'auto']}
                                         fontSize={12}
                                         stroke="#6b7280"
                                     />
-                                    <Tooltip 
+                                    <Tooltip
                                         contentStyle={{
                                             backgroundColor: 'rgba(255, 255, 255, 0.95)',
                                             border: '1px solid #e5e7eb',
@@ -288,11 +287,11 @@ export const TempData = () => {
                                             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                                         }}
                                     />
-                                    <Line 
-                                        type="monotone" 
-                                        dataKey="temperatura" 
-                                        stroke="#3b82f6" 
-                                        strokeWidth={3} 
+                                    <Line
+                                        type="monotone"
+                                        dataKey="temperatura"
+                                        stroke="#3b82f6"
+                                        strokeWidth={3}
                                         dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
                                         activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2 }}
                                     />

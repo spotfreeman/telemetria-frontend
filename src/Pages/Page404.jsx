@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { 
-    HomeIcon, 
-    ArrowLeftIcon, 
+import {
+    HomeIcon,
+    ArrowLeftIcon,
     ExclamationTriangleIcon,
     MagnifyingGlassIcon,
     QuestionMarkCircleIcon
@@ -44,7 +44,7 @@ export const Page404 = () => {
 
                     {/* Descripción */}
                     <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                        Lo sentimos, la página que estás buscando no existe o ha sido movida. 
+                        Lo sentimos, la página que estás buscando no existe o ha sido movida.
                         Pero no te preocupes, podemos ayudarte a encontrar lo que necesitas.
                     </p>
 
@@ -72,7 +72,7 @@ export const Page404 = () => {
                         <h3 className="text-xl font-semibold text-gray-900 mb-6">
                             Enlaces útiles
                         </h3>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Link
                                 to="/proyectos"
