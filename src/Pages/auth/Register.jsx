@@ -37,12 +37,18 @@ export const Registrar = () => {
 
         setLoading(true);
         try {
+            // Debug: Imprimir los datos que se van a enviar
+            console.log("Datos del formulario a enviar:", form);
+            
             const res = await fetch("https://telemetria-backend.onrender.com/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
             });
             const data = await res.json();
+            console.log("Respuesta del servidor:", data);
+            console.log("Status de la respuesta:", res.status);
+            
             if (res.ok) {
                 setMensaje(data.message || "Usuario registrado correctamente");
                 setForm({
