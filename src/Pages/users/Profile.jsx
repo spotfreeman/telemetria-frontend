@@ -43,6 +43,7 @@ export const Usuarioconfig = () => {
                     const userData = data.data; // El backend devuelve los datos en data.data
                     console.log("Datos del usuario cargados:", userData);
                     console.log("Rol del usuario:", userData.rol);
+                    console.log("Rol en localStorage al cargar:", localStorage.getItem("rol"));
                     setForm(f => ({
                         ...f,
                         username: userData.username || "",
