@@ -60,9 +60,15 @@ export const Esp32List = () => {
 
                 const data = await response.json();
                 console.log('Data recibida:', data);
+                console.log('Tipo de data:', typeof data);
+                console.log('Es array?', Array.isArray(data));
+                console.log('Tiene propiedad devices?', data?.devices);
+                console.log('devices es array?', Array.isArray(data?.devices));
 
                 // Asegurar que data sea un array
                 const devicesArray = Array.isArray(data) ? data : (data?.devices || []);
+                console.log('devicesArray final:', devicesArray);
+                console.log('devicesArray length:', devicesArray.length);
                 setDevices(devicesArray);
             } catch (err) {
                 setError(err.message);
@@ -175,6 +181,11 @@ export const Esp32List = () => {
 
                     {devices.length > 0 ? (
                         <div className="p-6">
+                            <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+                                <p className="text-sm text-blue-700">
+                                    Debug: {devices.length} dispositivos encontrados
+                                </p>
+                            </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {devices.map((device, index) => (
                                     <motion.div
