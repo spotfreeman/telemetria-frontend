@@ -147,6 +147,7 @@ export const Usuarioconfig = () => {
             // Debug: Imprimir los datos que se van a enviar
             console.log("Datos del perfil a actualizar:", updateData);
             console.log("Rol seleccionado:", form.rol);
+            console.log("Rol en updateData:", updateData.rol);
 
             const response = await fetch("https://telemetria-backend.onrender.com/api/auth/profile", {
                 method: "PUT",
@@ -161,13 +162,29 @@ export const Usuarioconfig = () => {
                 const data = await response.json();
                 console.log("Respuesta del servidor (perfil):", data);
                 console.log("Status de la respuesta:", response.status);
+                console.log("Datos del usuario en la respuesta:", data.data);
+                console.log("Rol en la respuesta del servidor:", data.data?.rol);
 
-                // Actualizar localStorage con los nuevos datos
-                if (form.nombre) {
-                    localStorage.setItem("nombre", form.nombre);
-                }
-                if (form.rol) {
-                    localStorage.setItem("rol", form.rol);
+                // Verificar si el backend devolvió los datos actualizados
+                if (data.data) {
+                    // Actualizar localStorage con los datos que devolvió el servidor
+                    if (data.data.nombre) {
+                        localStorage.setItem("nombre", data.data.nombre);
+                        console.log("Nombre actualizado en localStorage:", data.data.nombre);
+                    }
+                    if (data.data.rol) {
+                        localStorage.setItem("rol", data.data.rol);
+                        console.log("Rol actualizado en localStorage:", data.data.rol);
+                    }
+                } else {
+                    // Fallback: usar los datos del formulario si el servidor no devuelve datos
+                    console.log("El servidor no devolvió datos, usando datos del formulario");
+                    if (form.nombre) {
+                        localStorage.setItem("nombre", form.nombre);
+                    }
+                    if (form.rol) {
+                        localStorage.setItem("rol", form.rol);
+                    }
                 }
 
                 setMensaje("¡Datos actualizados correctamente!");

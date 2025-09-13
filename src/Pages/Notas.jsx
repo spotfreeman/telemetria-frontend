@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { 
-    TrashIcon, 
-    PencilSquareIcon, 
+import {
+    TrashIcon,
+    PencilSquareIcon,
     PlusIcon,
     DocumentArrowDownIcon,
     DocumentTextIcon,
@@ -48,7 +48,7 @@ export const Notas = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         setLoading(true);
-        
+
         try {
             if (editId) {
                 // Editar nota existente
@@ -175,7 +175,7 @@ export const Notas = () => {
                                 <PlusIcon className="w-5 h-5 mr-2" />
                                 Nueva Nota
                             </button>
-                            
+
                             <button
                                 onClick={exportarExcel}
                                 className="flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
@@ -232,7 +232,7 @@ export const Notas = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     {/* Botones de acción */}
                                     <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                         <button
