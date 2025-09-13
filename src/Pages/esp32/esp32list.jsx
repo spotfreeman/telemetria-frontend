@@ -62,11 +62,11 @@ export const Esp32List = () => {
                 console.log('Data recibida:', data);
                 console.log('Tipo de data:', typeof data);
                 console.log('Es array?', Array.isArray(data));
-                console.log('Tiene propiedad devices?', data?.devices);
-                console.log('devices es array?', Array.isArray(data?.devices));
+                console.log('Tiene propiedad dispositivos?', data?.dispositivos);
+                console.log('dispositivos es array?', Array.isArray(data?.dispositivos));
 
-                // Asegurar que data sea un array
-                const devicesArray = Array.isArray(data) ? data : (data?.devices || []);
+                // Asegurar que data sea un array - usar la propiedad correcta "dispositivos"
+                const devicesArray = Array.isArray(data) ? data : (data?.dispositivos || []);
                 console.log('devicesArray final:', devicesArray);
                 console.log('devicesArray length:', devicesArray.length);
                 setDevices(devicesArray);
