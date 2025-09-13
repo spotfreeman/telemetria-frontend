@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
-import { 
-    CalendarDaysIcon, 
-    UserIcon, 
+import {
+    CalendarDaysIcon,
+    UserIcon,
     DocumentTextIcon,
     PlusIcon,
     PencilIcon,
@@ -176,7 +176,7 @@ export const Calendario = () => {
                                 <PlusIcon className="w-5 h-5 mr-2 text-green-600" />
                                 {editId ? "Editar Vacaciones" : "Registrar Vacaciones"}
                             </h2>
-                            
+
                             <form onSubmit={handleRegistrar} className="space-y-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -232,7 +232,7 @@ export const Calendario = () => {
                                     >
                                         {editId ? "Actualizar Vacaciones" : "Registrar Vacaciones"}
                                     </button>
-                                    
+
                                     {editId && (
                                         <button
                                             type="button"
@@ -253,7 +253,7 @@ export const Calendario = () => {
                             <CheckCircleIcon className="w-5 h-5 mr-2 text-green-600" />
                             Vacaciones Registradas ({vacaciones.length})
                         </h2>
-                        
+
                         {vacaciones.length === 0 ? (
                             <div className="text-center py-12">
                                 <CalendarDaysIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -270,7 +270,7 @@ export const Calendario = () => {
                                                     <UserIcon className="w-4 h-4 text-blue-600 mr-2" />
                                                     <span className="font-semibold text-gray-900">{v.usuario}</span>
                                                 </div>
-                                                
+
                                                 <div className="grid grid-cols-2 gap-4 text-sm mb-2">
                                                     <div>
                                                         <span className="font-medium text-gray-600">Desde:</span>
@@ -281,7 +281,7 @@ export const Calendario = () => {
                                                         <p className="text-gray-800">{new Date(v.hasta).toLocaleDateString()}</p>
                                                     </div>
                                                 </div>
-                                                
+
                                                 {v.motivo && (
                                                     <div className="text-sm">
                                                         <span className="font-medium text-gray-600">Motivo:</span>
@@ -289,7 +289,7 @@ export const Calendario = () => {
                                                     </div>
                                                 )}
                                             </div>
-                                            
+
                                             <div className="flex gap-2 ml-4">
                                                 <button
                                                     onClick={() => handleEditar(v)}

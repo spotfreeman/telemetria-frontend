@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { CardLoading, ButtonLoading } from "../../Components/LoadingStates";
 
 
 export const Lista = () => {
@@ -12,18 +14,29 @@ export const Lista = () => {
     });
     const [busqueda, setBusqueda] = useState("");
     const [busquedaCodigo, setBusquedaCodigo] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        fetch('https://telemetria-backend.onrender.com/api/proyectos', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
+        const fetchProyectos = async () => {
+            try {
+                setLoading(true);
+                const token = localStorage.getItem("token");
+                const res = await fetch('https://telemetria-backend.onrender.com/api/proyectos', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await res.json();
                 setProyectos(Array.isArray(data) ? data : []);
-            });
+            } catch (error) {
+                console.error('Error fetching proyectos:', error);
+                setProyectos([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProyectos();
     }, []);
 
     const handleCrearProyecto = () => {
@@ -36,21 +49,28 @@ export const Lista = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        const token = localStorage.getItem("token"); // Obtén el token guardado
+        try {
+            setSubmitting(true);
+            const token = localStorage.getItem("token");
 
-        const res = await fetch('https://telemetria-backend.onrender.com/api/proyectos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Agrega el token aquí
-            },
-            body: JSON.stringify(form)
-        });
-        if (res.ok) {
-            const nuevoProyecto = await res.json();
-            setProyectos([nuevoProyecto, ...proyectos]);
-            setShowModal(false);
-            setForm({ codigo: "", nombre: "", estado: "" });
+            const res = await fetch('https://telemetria-backend.onrender.com/api/proyectos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(form)
+            });
+            if (res.ok) {
+                const nuevoProyecto = await res.json();
+                setProyectos([nuevoProyecto, ...proyectos]);
+                setShowModal(false);
+                setForm({ codigo: "", nombre: "", estado: "" });
+            }
+        } catch (error) {
+            console.error('Error creating proyecto:', error);
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -251,15 +271,16 @@ export const Lista = () => {
                                     >
                                         Cancelar
                                     </button>
-                                    <button
+                                    <ButtonLoading
                                         type="submit"
+                                        loading={submitting}
                                         className="flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-[1.02]"
                                     >
                                         <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
                                         Crear Proyecto
-                                    </button>
+                                    </ButtonLoading>
                                 </div>
                             </form>
                         </div>
@@ -281,7 +302,9 @@ export const Lista = () => {
                     </div>
 
                     {/* Grid de proyectos */}
-                    {proyectosFiltrados.length > 0 ? (
+                    {loading ? (
+                        <CardLoading count={6} />
+                    ) : proyectosFiltrados.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {proyectosFiltrados.map((proyecto, idx) => (
                                 <div

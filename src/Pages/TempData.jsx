@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
     LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid
 } from "recharts";
-import {
-    ChartPieIcon,
-    CpuChipIcon,
+import { 
+    ChartPieIcon, 
+    CpuChipIcon, 
     FireIcon,
     ClockIcon,
     ArrowUpIcon,
@@ -14,6 +14,8 @@ import {
     ExclamationTriangleIcon,
     CheckCircleIcon
 } from '@heroicons/react/24/outline';
+import { motion } from "framer-motion";
+import { MainLoading, ChartLoading, TableLoading } from "../Components/LoadingStates";
 
 export const TempData = () => {
     const [datos, setDatos] = useState([]);
@@ -72,17 +74,7 @@ export const TempData = () => {
         : '-';
 
     if (loading) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
-                        <ChartPieIcon className="w-8 h-8 text-white" />
-                    </div>
-                    <h2 className="text-xl font-semibold text-gray-700 mb-2">Cargando datos de telemetría...</h2>
-                    <p className="text-gray-500">Obteniendo información del Raspberry Pi</p>
-                </div>
-            </div>
-        );
+        return <MainLoading message="Cargando datos de telemetría..." />;
     }
 
     if (error) {
@@ -131,7 +123,12 @@ export const TempData = () => {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    <motion.div
+                        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                    >
                         <div className="flex items-center justify-between mb-4">
                             <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center">
                                 <ArrowUpIcon className="w-6 h-6 text-white" />
@@ -140,9 +137,14 @@ export const TempData = () => {
                         </div>
                         <h3 className="text-2xl font-bold text-gray-900 mb-1">{max}°C</h3>
                         <p className="text-sm font-medium text-red-600">Temperatura Máxima</p>
-                    </div>
+                    </motion.div>
 
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    <motion.div
+                        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                    >
                         <div className="flex items-center justify-between mb-4">
                             <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
                                 <ArrowDownIcon className="w-6 h-6 text-white" />
@@ -151,9 +153,14 @@ export const TempData = () => {
                         </div>
                         <h3 className="text-2xl font-bold text-gray-900 mb-1">{min}°C</h3>
                         <p className="text-sm font-medium text-blue-600">Temperatura Mínima</p>
-                    </div>
+                    </motion.div>
 
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    <motion.div
+                        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                    >
                         <div className="flex items-center justify-between mb-4">
                             <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
                                 <FireIcon className="w-6 h-6 text-white" />
@@ -162,9 +169,14 @@ export const TempData = () => {
                         </div>
                         <h3 className="text-2xl font-bold text-gray-900 mb-1">{avg}°C</h3>
                         <p className="text-sm font-medium text-green-600">Temperatura Promedio</p>
-                    </div>
+                    </motion.div>
 
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    <motion.div
+                        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                    >
                         <div className="flex items-center justify-between mb-4">
                             <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
                                 <ChartPieIcon className="w-6 h-6 text-white" />
@@ -173,7 +185,7 @@ export const TempData = () => {
                         </div>
                         <h3 className="text-2xl font-bold text-gray-900 mb-1">{almacenamiento}%</h3>
                         <p className="text-sm font-medium text-purple-600">Almacenamiento Libre</p>
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* Contenido Principal */}

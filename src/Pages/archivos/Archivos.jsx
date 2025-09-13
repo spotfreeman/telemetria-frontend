@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { 
-    DocumentIcon, 
-    MagnifyingGlassIcon, 
+import {
+    DocumentIcon,
+    MagnifyingGlassIcon,
     PlusIcon,
     PencilIcon,
     TrashIcon,
@@ -344,7 +344,7 @@ export const Archivos = () => {
                                     <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
                                         {archivo.nombre}
                                     </h3>
-                                    
+
                                     <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                                         {archivo.descripcion}
                                     </p>
