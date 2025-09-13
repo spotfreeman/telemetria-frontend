@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTheme } from '../Contexts/ThemeContext';
 
 // Importa los íconos de Heroicons
 import {
@@ -61,7 +62,9 @@ function Sidebar() {
     // Estado para controlar qué menús desplegables están abiertos
     const [openMenus, setOpenMenus] = useState({});
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [darkMode, setDarkMode] = useState(false);
+    
+    // Hook para el modo oscuro
+    const { isDarkMode, toggleTheme } = useTheme();
 
     /**
      * Alterna el estado abierto/cerrado de un menú desplegable.
@@ -82,6 +85,14 @@ function Sidebar() {
             icon: <UserCircleIcon className="h-5 w-5" />,
             children: [
                 { to: "/login", icon: <UserCircleIcon className="h-5 w-5" />, label: "Iniciar Sesión", color: "from-blue-500 to-cyan-500" }
+            ]
+        },
+        {
+            label: "Dashboard",
+            icon: <ChartPieIcon className="h-5 w-5" />,
+            color: "from-blue-500 to-indigo-500",
+            children: [
+                { to: "/dashboard", icon: <ChartPieIcon className="h-5 w-5" />, label: "Dashboard", color: "from-blue-500 to-indigo-500" },
             ]
         },
         {
@@ -129,7 +140,7 @@ function Sidebar() {
                     // El resto igual que antes
                     if (link.to === "/" && tokenValido) return false;
                     if (
-                        ["/proyectos", "/server", "/notas", "/calendario", "/archivos", "/tempdata", "/datos", "/bienvenida", "/esp32", "/mercado"]
+                        ["/proyectos", "/server", "/notas", "/calendario", "/archivos", "/tempdata", "/datos", "/bienvenida", "/esp32", "/mercado", "/dashboard"]
                             .includes(link.to) && !tokenValido
                     ) return false;
                     return true;
@@ -169,11 +180,11 @@ function Sidebar() {
                     <div className="flex items-center space-x-2">
                         {/* Toggle dark mode */}
                         <button
-                            onClick={() => setDarkMode(!darkMode)}
+                            onClick={toggleTheme}
                             className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-200"
                             title="Cambiar tema"
                         >
-                            {darkMode ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
+                            {isDarkMode ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
                         </button>
                         {/* Toggle collapse */}
                         <button
