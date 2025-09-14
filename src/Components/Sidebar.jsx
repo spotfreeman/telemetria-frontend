@@ -92,6 +92,7 @@ function Sidebar() {
             icon: <ChartPieIcon className="h-5 w-5" />,
             color: "from-blue-500 to-indigo-500",
             children: [
+                { to: "/bienvenida", icon: <HomeIcon className="h-5 w-5" />, label: "Bienvenida", color: "from-blue-500 to-indigo-500" },
                 { to: "/dashboard", icon: <ChartPieIcon className="h-5 w-5" />, label: "Dashboard", color: "from-blue-500 to-indigo-500" },
             ]
         },
@@ -118,11 +119,10 @@ function Sidebar() {
         },
         // Otros links sueltos
         {
-            label: "Sistema",
+            label: "Otros",
             icon: <Cog6ToothIcon className="h-5 w-5" />,
             color: "from-orange-500 to-red-500",
             children: [
-                { to: "/bienvenida", icon: <HomeIcon className="h-5 w-5" />, label: "Bienvenida", color: "from-orange-500 to-red-500" },
                 { to: "/server", icon: <FolderIcon className="h-5 w-5" />, label: "IP Server", color: "from-orange-500 to-red-500" },
             ]
         }
