@@ -15,7 +15,8 @@ import {
     UsersIcon,
     FolderIcon,
     CalendarDaysIcon,
-    BoltIcon
+    BoltIcon,
+    ArrowPathIcon
 } from '@heroicons/react/24/outline';
 import {
     LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, BarChart, Bar, PieChart, Pie, Cell
@@ -24,7 +25,9 @@ import {
 export const Dashboard = () => {
     const { isDarkMode } = useTheme();
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState(null);
+    const [lastUpdate, setLastUpdate] = useState(new Date());
     const [dashboardData, setDashboardData] = useState({
         stats: {
             totalDevices: 0,
@@ -40,11 +43,14 @@ export const Dashboard = () => {
         recentActivity: []
     });
 
-    useEffect(() => {
-        const fetchDashboardData = async () => {
-            try {
+    const fetchDashboardData = async (isRefresh = false) => {
+        try {
+            if (isRefresh) {
+                setRefreshing(true);
+            } else {
                 setLoading(true);
-                setError(null);
+            }
+            setError(null);
 
                 const token = localStorage.getItem("token");
                 if (!token) {
@@ -76,23 +82,23 @@ export const Dashboard = () => {
                         totalDevices: esp32Data?.dispositivos?.length || 0,
                         activeDevices: esp32Data?.dispositivos?.filter(d => d.status === 'online').length || 0,
                         totalProjects: Array.isArray(projectsData) ? projectsData.length : (projectsData?.proyectos?.length || 0),
-                        activeProjects: Array.isArray(projectsData) ? 
-                            projectsData.filter(p => p.estado === 'en_progreso').length : 
+                        activeProjects: Array.isArray(projectsData) ?
+                            projectsData.filter(p => p.estado === 'en_progreso').length :
                             (projectsData?.proyectos?.filter(p => p.estado === 'en_progreso').length || 0),
                         totalUsers: 0, // TODO: Implementar endpoint de usuarios
                         systemUptime: 99.9 // TODO: Calcular uptime real
                     },
-                    temperatureData: Array.isArray(tempData) ? 
+                    temperatureData: Array.isArray(tempData) ?
                         tempData.slice(0, 10).map(d => ({
                             hora: new Date(d.fecha_hora).toLocaleTimeString("es-CL", { hour: '2-digit', minute: '2-digit' }),
                             temperatura: d.temperatura
                         })) : [],
-                    humidityData: Array.isArray(tempData) ? 
+                    humidityData: Array.isArray(tempData) ?
                         tempData.slice(0, 10).map(d => ({
                             hora: new Date(d.fecha_hora).toLocaleTimeString("es-CL", { hour: '2-digit', minute: '2-digit' }),
                             humedad: d.almacenamiento || 0
                         })) : [],
-                    projectStatus: Array.isArray(projectsData) ? 
+                    projectStatus: Array.isArray(projectsData) ?
                         projectsData.reduce((acc, project) => {
                             const status = project.estado || 'desconocido';
                             acc[status] = (acc[status] || 0) + 1;
@@ -107,19 +113,21 @@ export const Dashboard = () => {
                 };
 
                 setDashboardData(processedData);
+                setLastUpdate(new Date());
             } catch (err) {
                 setError(err.message);
                 console.error('Error fetching dashboard data:', err);
             } finally {
-                setLoading(false);
+                if (isRefresh) {
+                    setRefreshing(false);
+                } else {
+                    setLoading(false);
+                }
             }
         };
 
+    useEffect(() => {
         fetchDashboardData();
-
-        // Auto-refresh cada 30 segundos
-        const interval = setInterval(fetchDashboardData, 30000);
-        return () => clearInterval(interval);
     }, []);
 
     if (loading) {
@@ -152,11 +160,10 @@ export const Dashboard = () => {
     const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
     return (
-        <div className={`min-h-screen py-8 px-4 transition-colors duration-300 ${
-            isDarkMode 
-                ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800' 
+        <div className={`min-h-screen py-8 px-4 transition-colors duration-300 ${isDarkMode
+                ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800'
                 : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100'
-        }`}>
+            }`}>
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
@@ -171,22 +178,38 @@ export const Dashboard = () => {
                     <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
                         Dashboard de Telemetría
                     </h1>
-                    <p className={`text-lg transition-colors duration-300 ${
-                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
+                    <p className={`text-lg transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                        }`}>
                         Monitoreo en tiempo real del sistema
                     </p>
-                    <div className={`flex items-center justify-center mt-4 space-x-6 text-sm transition-colors duration-300 ${
-                        isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                    }`}>
-                        <div className="flex items-center">
-                            <BoltIcon className="w-4 h-4 mr-1 text-green-500" />
-                            Actualización automática cada 30s
+                    <div className="flex items-center justify-center mt-4 space-x-4">
+                        <div className={`flex items-center space-x-6 text-sm transition-colors duration-300 ${
+                            isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                        }`}>
+                            <div className="flex items-center">
+                                <CheckCircleIcon className="w-4 h-4 mr-1 text-green-500" />
+                                Sistema operativo
+                            </div>
+                            <div className="flex items-center">
+                                <ClockIcon className="w-4 h-4 mr-1 text-blue-500" />
+                                Última actualización: {lastUpdate.toLocaleTimeString("es-CL")}
+                            </div>
                         </div>
-                        <div className="flex items-center">
-                            <CheckCircleIcon className="w-4 h-4 mr-1 text-green-500" />
-                            Sistema operativo
-                        </div>
+                        <button
+                            onClick={() => fetchDashboardData(true)}
+                            disabled={refreshing}
+                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center space-x-2 ${
+                                refreshing
+                                    ? 'bg-gray-400 cursor-not-allowed'
+                                    : isDarkMode
+                                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                            }`}
+                            title="Actualizar datos"
+                        >
+                            <ArrowPathIcon className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+                            <span>{refreshing ? 'Actualizando...' : 'Actualizar'}</span>
+                        </button>
                     </div>
                 </div>
 
@@ -196,11 +219,10 @@ export const Dashboard = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${
-                            isDarkMode 
-                                ? 'bg-gray-800/80 border-gray-700/50' 
+                        className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${isDarkMode
+                                ? 'bg-gray-800/80 border-gray-700/50'
                                 : 'bg-white/80 border-white/20'
-                        }`}
+                            }`}
                     >
                         <div className="flex items-center justify-between">
                             <div>
@@ -222,11 +244,10 @@ export const Dashboard = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${
-                            isDarkMode 
-                                ? 'bg-gray-800/80 border-gray-700/50' 
+                        className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${isDarkMode
+                                ? 'bg-gray-800/80 border-gray-700/50'
                                 : 'bg-white/80 border-white/20'
-                        }`}
+                            }`}
                     >
                         <div className="flex items-center justify-between">
                             <div>
@@ -248,11 +269,10 @@ export const Dashboard = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${
-                            isDarkMode 
-                                ? 'bg-gray-800/80 border-gray-700/50' 
+                        className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${isDarkMode
+                                ? 'bg-gray-800/80 border-gray-700/50'
                                 : 'bg-white/80 border-white/20'
-                        }`}
+                            }`}
                     >
                         <div className="flex items-center justify-between">
                             <div>
@@ -274,11 +294,10 @@ export const Dashboard = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
-                        className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${
-                            isDarkMode 
-                                ? 'bg-gray-800/80 border-gray-700/50' 
+                        className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${isDarkMode
+                                ? 'bg-gray-800/80 border-gray-700/50'
                                 : 'bg-white/80 border-white/20'
-                        }`}
+                            }`}
                     >
                         <div className="flex items-center justify-between">
                             <div>
@@ -317,10 +336,10 @@ export const Dashboard = () => {
                                     <XAxis dataKey="hora" />
                                     <YAxis />
                                     <Tooltip />
-                                    <Line 
-                                        type="monotone" 
-                                        dataKey="temperatura" 
-                                        stroke="#EF4444" 
+                                    <Line
+                                        type="monotone"
+                                        dataKey="temperatura"
+                                        stroke="#EF4444"
                                         strokeWidth={2}
                                         dot={{ fill: '#EF4444', strokeWidth: 2, r: 4 }}
                                     />
@@ -395,11 +414,10 @@ export const Dashboard = () => {
                                     transition={{ delay: index * 0.1 }}
                                     className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                                 >
-                                    <div className={`w-3 h-3 rounded-full mr-4 ${
-                                        activity.status === 'success' ? 'bg-green-500' :
-                                        activity.status === 'warning' ? 'bg-yellow-500' :
-                                        activity.status === 'error' ? 'bg-red-500' : 'bg-blue-500'
-                                    }`}></div>
+                                    <div className={`w-3 h-3 rounded-full mr-4 ${activity.status === 'success' ? 'bg-green-500' :
+                                            activity.status === 'warning' ? 'bg-yellow-500' :
+                                                activity.status === 'error' ? 'bg-red-500' : 'bg-blue-500'
+                                        }`}></div>
                                     <div className="flex-1">
                                         <p className="text-gray-800 font-medium">{activity.message}</p>
                                         <p className="text-sm text-gray-500">{activity.time}</p>

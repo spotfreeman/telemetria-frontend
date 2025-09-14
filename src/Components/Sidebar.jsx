@@ -62,7 +62,7 @@ function Sidebar() {
     // Estado para controlar qué menús desplegables están abiertos
     const [openMenus, setOpenMenus] = useState({});
     const [isCollapsed, setIsCollapsed] = useState(false);
-    
+
     // Hook para el modo oscuro
     const { isDarkMode, toggleTheme } = useTheme();
 

@@ -28,7 +28,7 @@ export const ThemeProvider = ({ children }) => {
         } else {
             document.documentElement.classList.remove('dark');
         }
-        
+
         // Guardar la preferencia en localStorage
         localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
     }, [isDarkMode]);

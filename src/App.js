@@ -37,40 +37,40 @@ function App() {
           <Sidebar />
           <div className="flex-1">
 
-          <Routes>
-            <Route path="/" element={<Intro />} />
+            <Routes>
+              <Route path="/" element={<Intro />} />
 
-            <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<Login />} />
 
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/datos" element={<DatosPage />} />
-            <Route path="/tempdata" element={<TempData />} />
-            <Route path="/server" element={<Server />} />
-            <Route path="/notas" element={<Notas />} />
-            <Route path='/calendario' element={<Calendario />} />
-            <Route path="/archivos" element={<Archivos />} />
-            <Route path='/bienvenida' element={<Welcome />} />
-            <Route path="/usuarioconfig" element={<Profile />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/datos" element={<DatosPage />} />
+              <Route path="/tempdata" element={<TempData />} />
+              <Route path="/server" element={<Server />} />
+              <Route path="/notas" element={<Notas />} />
+              <Route path='/calendario' element={<Calendario />} />
+              <Route path="/archivos" element={<Archivos />} />
+              <Route path='/bienvenida' element={<Welcome />} />
+              <Route path="/usuarioconfig" element={<Profile />} />
 
-            <Route path="/register" element={<Register />} />
+              <Route path="/register" element={<Register />} />
 
-            {/* Rutas de ESP32 */}
-            <Route path="/esp32" element={<Esp32List />} />
-            <Route path="/esp32/:deviceId" element={<Esp32Detail />} />
+              {/* Rutas de ESP32 */}
+              <Route path="/esp32" element={<Esp32List />} />
+              <Route path="/esp32/:deviceId" element={<Esp32Detail />} />
 
-            {/* Ruta para Mercado */}
-            <Route path="/mercado" element={<Mercado />} />
+              {/* Ruta para Mercado */}
+              <Route path="/mercado" element={<Mercado />} />
 
-            {/* Rutas de proyectos */}
-            <Route path="/proyectos" element={<Lista />} />
-            <Route path="/proyectos/:id" element={<ProyectoDetalle />} />
+              {/* Rutas de proyectos */}
+              <Route path="/proyectos" element={<Lista />} />
+              <Route path="/proyectos/:id" element={<ProyectoDetalle />} />
 
-            {/* Agrega más rutas según sea necesario */}
+              {/* Agrega más rutas según sea necesario */}
 
-            {/* Ruta para manejar 404 */}
-            <Route path="*" element={<Page404 />} />
-          </Routes>
-        </div>
+              {/* Ruta para manejar 404 */}
+              <Route path="*" element={<Page404 />} />
+            </Routes>
+          </div>
         </div>
       </Router>
     </ThemeProvider>
