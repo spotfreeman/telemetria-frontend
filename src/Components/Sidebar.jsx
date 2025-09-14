@@ -100,7 +100,6 @@ function Sidebar() {
             icon: <ChartPieIcon className="h-5 w-5" />,
             color: "from-emerald-500 to-teal-500",
             children: [
-                { to: "/datos", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Histórico", color: "from-emerald-500 to-teal-500" },
                 { to: "/tempdata", icon: <ChartPieIcon className="h-5 w-5" />, label: "Rpi Resumen", color: "from-emerald-500 to-teal-500" },
                 { to: "/esp32", icon: <UsersIcon className="h-5 w-5" />, label: "ESP32", color: "from-emerald-500 to-teal-500" },
             ]
@@ -140,7 +139,7 @@ function Sidebar() {
                     // El resto igual que antes
                     if (link.to === "/" && tokenValido) return false;
                     if (
-                        ["/proyectos", "/server", "/notas", "/calendario", "/archivos", "/tempdata", "/datos", "/bienvenida", "/esp32", "/mercado", "/dashboard"]
+                        ["/proyectos", "/server", "/notas", "/calendario", "/archivos", "/tempdata", "/bienvenida", "/esp32", "/mercado", "/dashboard"]
                             .includes(link.to) && !tokenValido
                     ) return false;
                     return true;

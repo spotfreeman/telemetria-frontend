@@ -68,7 +68,7 @@ export const TempData = () => {
                 console.log('Es array?', Array.isArray(data));
                 console.log('Tiene propiedad data?', data?.data);
                 console.log('data.temperaturas es array?', Array.isArray(data?.data?.temperaturas));
-                
+
                 // Asegurar que data sea un array - usar la estructura correcta del backend
                 const datosArray = Array.isArray(data) ? data : (data?.data?.temperaturas || data?.temperaturas || []);
                 console.log('datosArray final:', datosArray);

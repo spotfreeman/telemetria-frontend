@@ -2,7 +2,6 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 
-import DatosPage from './DatosPage';
 import { TempData } from './Pages/TempData';
 import { Server } from './Pages/Server';
 import { Notas } from './Pages/Notas';
@@ -43,7 +42,6 @@ function App() {
               <Route path="/login" element={<Login />} />
 
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/datos" element={<DatosPage />} />
               <Route path="/tempdata" element={<TempData />} />
               <Route path="/server" element={<Server />} />
               <Route path="/notas" element={<Notas />} />

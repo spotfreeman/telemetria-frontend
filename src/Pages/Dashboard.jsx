@@ -198,10 +198,10 @@ export const Dashboard = () => {
                             onClick={() => fetchDashboardData(true)}
                             disabled={refreshing}
                             className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center space-x-2 ${refreshing
-                                    ? 'bg-gray-400 cursor-not-allowed'
-                                    : isDarkMode
-                                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                ? 'bg-gray-400 cursor-not-allowed'
+                                : isDarkMode
+                                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                    : 'bg-blue-600 hover:bg-blue-700 text-white'
                                 }`}
                             title="Actualizar datos"
                         >
