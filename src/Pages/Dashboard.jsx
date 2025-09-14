@@ -52,79 +52,79 @@ export const Dashboard = () => {
             }
             setError(null);
 
-                const token = localStorage.getItem("token");
-                if (!token) {
-                    throw new Error('No hay token de autenticación');
-                }
-
-                // Fetch múltiples endpoints en paralelo
-                const [esp32Response, tempResponse, projectsResponse] = await Promise.all([
-                    fetch('https://telemetria-backend.onrender.com/api/telemetry/esp32', {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    }),
-                    fetch('https://telemetria-backend.onrender.com/api/temperaturas', {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    }),
-                    fetch('https://telemetria-backend.onrender.com/api/proyectos', {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    })
-                ]);
-
-                const [esp32Data, tempData, projectsData] = await Promise.all([
-                    esp32Response.json(),
-                    tempResponse.json(),
-                    projectsResponse.json()
-                ]);
-
-                // Procesar datos para el dashboard
-                const processedData = {
-                    stats: {
-                        totalDevices: esp32Data?.dispositivos?.length || 0,
-                        activeDevices: esp32Data?.dispositivos?.filter(d => d.status === 'online').length || 0,
-                        totalProjects: Array.isArray(projectsData) ? projectsData.length : (projectsData?.proyectos?.length || 0),
-                        activeProjects: Array.isArray(projectsData) ?
-                            projectsData.filter(p => p.estado === 'en_progreso').length :
-                            (projectsData?.proyectos?.filter(p => p.estado === 'en_progreso').length || 0),
-                        totalUsers: 0, // TODO: Implementar endpoint de usuarios
-                        systemUptime: 99.9 // TODO: Calcular uptime real
-                    },
-                    temperatureData: Array.isArray(tempData) ?
-                        tempData.slice(0, 10).map(d => ({
-                            hora: new Date(d.fecha_hora).toLocaleTimeString("es-CL", { hour: '2-digit', minute: '2-digit' }),
-                            temperatura: d.temperatura
-                        })) : [],
-                    humidityData: Array.isArray(tempData) ?
-                        tempData.slice(0, 10).map(d => ({
-                            hora: new Date(d.fecha_hora).toLocaleTimeString("es-CL", { hour: '2-digit', minute: '2-digit' }),
-                            humedad: d.almacenamiento || 0
-                        })) : [],
-                    projectStatus: Array.isArray(projectsData) ?
-                        projectsData.reduce((acc, project) => {
-                            const status = project.estado || 'desconocido';
-                            acc[status] = (acc[status] || 0) + 1;
-                            return acc;
-                        }, {}) : {},
-                    recentActivity: [
-                        { id: 1, type: 'device', message: 'ESP32_001 envió datos', time: '2 min ago', status: 'success' },
-                        { id: 2, type: 'project', message: 'Proyecto Alpha actualizado', time: '5 min ago', status: 'info' },
-                        { id: 3, type: 'alert', message: 'Temperatura alta detectada', time: '10 min ago', status: 'warning' },
-                        { id: 4, type: 'user', message: 'Nuevo usuario registrado', time: '15 min ago', status: 'success' }
-                    ]
-                };
-
-                setDashboardData(processedData);
-                setLastUpdate(new Date());
-            } catch (err) {
-                setError(err.message);
-                console.error('Error fetching dashboard data:', err);
-            } finally {
-                if (isRefresh) {
-                    setRefreshing(false);
-                } else {
-                    setLoading(false);
-                }
+            const token = localStorage.getItem("token");
+            if (!token) {
+                throw new Error('No hay token de autenticación');
             }
-        };
+
+            // Fetch múltiples endpoints en paralelo
+            const [esp32Response, tempResponse, projectsResponse] = await Promise.all([
+                fetch('https://telemetria-backend.onrender.com/api/telemetry/esp32', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }),
+                fetch('https://telemetria-backend.onrender.com/api/temperaturas', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }),
+                fetch('https://telemetria-backend.onrender.com/api/proyectos', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+            ]);
+
+            const [esp32Data, tempData, projectsData] = await Promise.all([
+                esp32Response.json(),
+                tempResponse.json(),
+                projectsResponse.json()
+            ]);
+
+            // Procesar datos para el dashboard
+            const processedData = {
+                stats: {
+                    totalDevices: esp32Data?.dispositivos?.length || 0,
+                    activeDevices: esp32Data?.dispositivos?.filter(d => d.status === 'online').length || 0,
+                    totalProjects: Array.isArray(projectsData) ? projectsData.length : (projectsData?.proyectos?.length || 0),
+                    activeProjects: Array.isArray(projectsData) ?
+                        projectsData.filter(p => p.estado === 'en_progreso').length :
+                        (projectsData?.proyectos?.filter(p => p.estado === 'en_progreso').length || 0),
+                    totalUsers: 0, // TODO: Implementar endpoint de usuarios
+                    systemUptime: 99.9 // TODO: Calcular uptime real
+                },
+                temperatureData: Array.isArray(tempData) ?
+                    tempData.slice(0, 10).map(d => ({
+                        hora: new Date(d.fecha_hora).toLocaleTimeString("es-CL", { hour: '2-digit', minute: '2-digit' }),
+                        temperatura: d.temperatura
+                    })) : [],
+                humidityData: Array.isArray(tempData) ?
+                    tempData.slice(0, 10).map(d => ({
+                        hora: new Date(d.fecha_hora).toLocaleTimeString("es-CL", { hour: '2-digit', minute: '2-digit' }),
+                        humedad: d.almacenamiento || 0
+                    })) : [],
+                projectStatus: Array.isArray(projectsData) ?
+                    projectsData.reduce((acc, project) => {
+                        const status = project.estado || 'desconocido';
+                        acc[status] = (acc[status] || 0) + 1;
+                        return acc;
+                    }, {}) : {},
+                recentActivity: [
+                    { id: 1, type: 'device', message: 'ESP32_001 envió datos', time: '2 min ago', status: 'success' },
+                    { id: 2, type: 'project', message: 'Proyecto Alpha actualizado', time: '5 min ago', status: 'info' },
+                    { id: 3, type: 'alert', message: 'Temperatura alta detectada', time: '10 min ago', status: 'warning' },
+                    { id: 4, type: 'user', message: 'Nuevo usuario registrado', time: '15 min ago', status: 'success' }
+                ]
+            };
+
+            setDashboardData(processedData);
+            setLastUpdate(new Date());
+        } catch (err) {
+            setError(err.message);
+            console.error('Error fetching dashboard data:', err);
+        } finally {
+            if (isRefresh) {
+                setRefreshing(false);
+            } else {
+                setLoading(false);
+            }
+        }
+    };
 
     useEffect(() => {
         fetchDashboardData();
@@ -161,8 +161,8 @@ export const Dashboard = () => {
 
     return (
         <div className={`min-h-screen py-8 px-4 transition-colors duration-300 ${isDarkMode
-                ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800'
-                : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100'
+            ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800'
+            : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100'
             }`}>
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
@@ -183,9 +183,8 @@ export const Dashboard = () => {
                         Monitoreo en tiempo real del sistema
                     </p>
                     <div className="flex items-center justify-center mt-4 space-x-4">
-                        <div className={`flex items-center space-x-6 text-sm transition-colors duration-300 ${
-                            isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                        }`}>
+                        <div className={`flex items-center space-x-6 text-sm transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                            }`}>
                             <div className="flex items-center">
                                 <CheckCircleIcon className="w-4 h-4 mr-1 text-green-500" />
                                 Sistema operativo
@@ -198,13 +197,12 @@ export const Dashboard = () => {
                         <button
                             onClick={() => fetchDashboardData(true)}
                             disabled={refreshing}
-                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center space-x-2 ${
-                                refreshing
+                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center space-x-2 ${refreshing
                                     ? 'bg-gray-400 cursor-not-allowed'
                                     : isDarkMode
                                         ? 'bg-blue-600 hover:bg-blue-700 text-white'
                                         : 'bg-blue-600 hover:bg-blue-700 text-white'
-                            }`}
+                                }`}
                             title="Actualizar datos"
                         >
                             <ArrowPathIcon className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
@@ -220,8 +218,8 @@ export const Dashboard = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${isDarkMode
-                                ? 'bg-gray-800/80 border-gray-700/50'
-                                : 'bg-white/80 border-white/20'
+                            ? 'bg-gray-800/80 border-gray-700/50'
+                            : 'bg-white/80 border-white/20'
                             }`}
                     >
                         <div className="flex items-center justify-between">
@@ -245,8 +243,8 @@ export const Dashboard = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                         className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${isDarkMode
-                                ? 'bg-gray-800/80 border-gray-700/50'
-                                : 'bg-white/80 border-white/20'
+                            ? 'bg-gray-800/80 border-gray-700/50'
+                            : 'bg-white/80 border-white/20'
                             }`}
                     >
                         <div className="flex items-center justify-between">
@@ -270,8 +268,8 @@ export const Dashboard = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                         className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${isDarkMode
-                                ? 'bg-gray-800/80 border-gray-700/50'
-                                : 'bg-white/80 border-white/20'
+                            ? 'bg-gray-800/80 border-gray-700/50'
+                            : 'bg-white/80 border-white/20'
                             }`}
                     >
                         <div className="flex items-center justify-between">
@@ -295,8 +293,8 @@ export const Dashboard = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
                         className={`backdrop-blur-sm rounded-2xl shadow-xl border p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${isDarkMode
-                                ? 'bg-gray-800/80 border-gray-700/50'
-                                : 'bg-white/80 border-white/20'
+                            ? 'bg-gray-800/80 border-gray-700/50'
+                            : 'bg-white/80 border-white/20'
                             }`}
                     >
                         <div className="flex items-center justify-between">
@@ -415,8 +413,8 @@ export const Dashboard = () => {
                                     className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                                 >
                                     <div className={`w-3 h-3 rounded-full mr-4 ${activity.status === 'success' ? 'bg-green-500' :
-                                            activity.status === 'warning' ? 'bg-yellow-500' :
-                                                activity.status === 'error' ? 'bg-red-500' : 'bg-blue-500'
+                                        activity.status === 'warning' ? 'bg-yellow-500' :
+                                            activity.status === 'error' ? 'bg-red-500' : 'bg-blue-500'
                                         }`}></div>
                                     <div className="flex-1">
                                         <p className="text-gray-800 font-medium">{activity.message}</p>

@@ -64,8 +64,15 @@ export const TempData = () => {
 
                 const data = await response.json();
                 console.log('Data recibida:', data);
-                // Asegurar que data sea un array
-                const datosArray = Array.isArray(data) ? data : (data?.datos || data?.temperaturas || []);
+                console.log('Tipo de data:', typeof data);
+                console.log('Es array?', Array.isArray(data));
+                console.log('Tiene propiedad data?', data?.data);
+                console.log('data.temperaturas es array?', Array.isArray(data?.data?.temperaturas));
+                
+                // Asegurar que data sea un array - usar la estructura correcta del backend
+                const datosArray = Array.isArray(data) ? data : (data?.data?.temperaturas || data?.temperaturas || []);
+                console.log('datosArray final:', datosArray);
+                console.log('datosArray length:', datosArray.length);
                 setDatos(datosArray);
             } catch (err) {
                 setError(err.message);
@@ -116,7 +123,8 @@ export const TempData = () => {
             }
 
             const data = await response.json();
-            const datosArray = Array.isArray(data) ? data : (data?.datos || data?.temperaturas || []);
+            // Usar la misma estructura que en fetchData
+            const datosArray = Array.isArray(data) ? data : (data?.data?.temperaturas || data?.temperaturas || []);
             setDatos(datosArray);
         } catch (err) {
             setError(err.message);
