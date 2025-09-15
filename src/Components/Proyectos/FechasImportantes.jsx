@@ -72,7 +72,7 @@ const FechasImportantes = ({
                                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                                     {formatFecha(fechasOrdenadas[0].fechainicio)} - {formatFecha(fechasOrdenadas[0].fechafin)}
                                 </span>
-                                <span className="text-sm text-gray-500">
+                                <span className="text-sm text-gray-500 dark:text-gray-400">
                                     Próxima fecha importante
                                 </span>
                             </div>
@@ -102,17 +102,17 @@ const FechasImportantes = ({
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                             <div>
                                 <span className="font-medium text-gray-700">Aumento:</span>
-                                <span className="ml-2 text-gray-900">{fechasOrdenadas[0].aumento} días</span>
+                                <span className="ml-2 text-gray-900 dark:text-white">{fechasOrdenadas[0].aumento} días</span>
                             </div>
                             <div>
                                 <span className="font-medium text-gray-700">Fecha Actualizada:</span>
-                                <span className="ml-2 text-gray-900">{formatFecha(fechasOrdenadas[0].fechaactualizada)}</span>
+                                <span className="ml-2 text-gray-900 dark:text-white">{formatFecha(fechasOrdenadas[0].fechaactualizada)}</span>
                             </div>
                         </div>
                     </div>
                 </div>
             ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                     <svg className="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
@@ -140,18 +140,18 @@ const FechasImportantes = ({
                             <tbody className="divide-y divide-gray-200">
                                 {fechasOrdenadas.map((fecha, idx) => (
                                     <tr key={idx} className="hover:bg-gray-50">
-                                        <td className="px-4 py-3 text-sm text-gray-900">
+                                        <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                                             <div className="flex flex-col">
                                                 <span className="font-medium">{formatFecha(fecha.fechainicio)}</span>
-                                                <span className="text-xs text-gray-500">hasta {formatFecha(fecha.fechafin)}</span>
+                                                <span className="text-xs text-gray-500 dark:text-gray-400">hasta {formatFecha(fecha.fechafin)}</span>
                                             </div>
                                         </td>
-                                        <td className="px-4 py-3 text-sm text-gray-900">
+                                        <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 +{fecha.aumento} días
                                             </span>
                                         </td>
-                                        <td className="px-4 py-3 text-sm text-gray-900">
+                                        <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                                             {formatFecha(fecha.fechaactualizada)}
                                         </td>
                                         <td className="px-4 py-3 text-center">
@@ -185,7 +185,7 @@ const FechasImportantes = ({
                     </div>
                 </div>
             ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                     <svg className="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
@@ -199,7 +199,7 @@ const FechasImportantes = ({
     return (
         <div>
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800 flex items-center">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center">
                     <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
@@ -209,17 +209,17 @@ const FechasImportantes = ({
 
             <div className="space-y-2">
                 {accordionSections.map((section) => (
-                    <div key={section.id} className="border border-gray-200 rounded-lg overflow-hidden">
+                    <div key={section.id} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                         <button
-                            className="w-full flex items-center justify-between px-4 py-3 text-left bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-colors"
+                            className="w-full flex items-center justify-between px-4 py-3 text-left bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-colors"
                             onClick={() => toggleAccordion(section.id)}
                         >
                             <div className="flex items-center">
                                 <span className="text-lg mr-3">{section.icon}</span>
-                                <span className="font-medium text-gray-900">{section.title}</span>
+                                <span className="font-medium text-gray-900 dark:text-white">{section.title}</span>
                             </div>
                             <svg
-                                className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${activeAccordion === section.id ? 'rotate-180' : ''
+                                className={`w-5 h-5 text-gray-500 dark:text-gray-400 transform transition-transform duration-200 ${activeAccordion === section.id ? 'rotate-180' : ''
                                     }`}
                                 fill="none"
                                 stroke="currentColor"
@@ -229,7 +229,7 @@ const FechasImportantes = ({
                             </svg>
                         </button>
                         {activeAccordion === section.id && (
-                            <div className="px-4 py-4 bg-white border-t border-gray-200">
+                            <div className="px-4 py-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
                                 {section.content}
                             </div>
                         )}
@@ -242,7 +242,7 @@ const FechasImportantes = ({
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold text-gray-900">
+                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                                 {editFechasIdx !== null ? "Editar Fechas Importantes" : "Agregar Fechas Importantes"}
                             </h2>
                             <button

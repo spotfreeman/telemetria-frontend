@@ -49,3 +49,4 @@ Render.com hará deployment automático cada vez que hagas push a la rama `main`
 2. El login debe funcionar con las credenciales de prueba
 3. El registro debe crear nuevos usuarios
 4. La navegación debe funcionar sin problemas
+

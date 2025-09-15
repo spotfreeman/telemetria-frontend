@@ -136,13 +136,13 @@ export const Dashboard = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
                 <div className="text-center max-w-md mx-auto p-8">
                     <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <ExclamationTriangleIcon className="w-8 h-8 text-white" />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-700 mb-2">Error al cargar Dashboard</h2>
-                    <p className="text-gray-500 mb-4">{error}</p>
+                    <h2 className="text-xl font-semibold text-gray-700 dark:text-white mb-2">Error al cargar Dashboard</h2>
+                    <p className="text-gray-500 dark:text-gray-400 mb-4">{error}</p>
                     <button
                         onClick={() => window.location.reload()}
                         className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
