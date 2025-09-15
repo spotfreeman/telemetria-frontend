@@ -2,16 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { TableLoading, ButtonLoading } from "../../Components/LoadingStates";
+import { useRoles } from "../../hooks/useRoles";
 import {
     PencilIcon,
     TrashIcon,
     EyeIcon,
     PlusIcon,
-    MagnifyingGlassIcon
+    MagnifyingGlassIcon,
+    ShieldExclamationIcon,
+    UserIcon
 } from '@heroicons/react/24/outline';
 
 
 export const Lista = () => {
+    const { canCreateProjects, canEditProjects, canDeleteProjects, userInfo, isAdmin } = useRoles();
     const [proyectos, setProyectos] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [form, setForm] = useState({
@@ -148,7 +152,7 @@ export const Lista = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 px-4">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
@@ -160,14 +164,28 @@ export const Lista = () => {
                     <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                         Gestión de Proyectos
                     </h1>
-                    <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
+                    <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">
                         Administra y supervisa todos tus proyectos desde un solo lugar. Crea nuevos proyectos,
                         realiza seguimiento del progreso y mantén todo organizado.
                     </p>
+
+                    {/* Indicador de rol del usuario */}
+                    <div className="mt-4 flex items-center justify-center">
+                        <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${isAdmin
+                                ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 dark:from-purple-900 dark:to-pink-900 dark:text-purple-200'
+                                : 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200'
+                            }`}>
+                            <UserIcon className="w-4 h-4 mr-2" />
+                            <span className="font-semibold">{userInfo.nombre}</span>
+                            <span className="ml-2 px-2 py-1 rounded-full text-xs bg-white dark:bg-gray-700/50 dark:bg-gray-800/50">
+                                {userInfo.rol.toUpperCase()}
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Barra de herramientas */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8">
+                <div className="bg-white dark:bg-gray-700/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 p-6 mb-8">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         {/* Título de la sección */}
                         <div className="flex items-center">
@@ -188,7 +206,7 @@ export const Lista = () => {
                                 </div>
                                 <input
                                     type="text"
-                                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white/50 backdrop-blur-sm sm:w-64"
+                                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white dark:bg-gray-700/50 backdrop-blur-sm sm:w-64"
                                     placeholder="Buscar por código..."
                                     value={busquedaCodigo}
                                     onChange={e => setBusquedaCodigo(e.target.value)}
@@ -204,23 +222,30 @@ export const Lista = () => {
                                 </div>
                                 <input
                                     type="text"
-                                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white/50 backdrop-blur-sm sm:w-64"
+                                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white dark:bg-gray-700/50 dark:bg-gray-700/50 backdrop-blur-sm sm:w-64 text-gray-900 dark:text-white"
                                     placeholder="Buscar por nombre..."
                                     value={busqueda}
                                     onChange={e => setBusqueda(e.target.value)}
                                 />
                             </div>
 
-                            {/* Botón crear proyecto */}
-                            <button
-                                onClick={handleCrearProyecto}
-                                className="flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-[1.02]"
-                            >
-                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                                Crear Proyecto
-                            </button>
+                            {/* Botón crear proyecto - Solo visible para Admin */}
+                            {canCreateProjects ? (
+                                <button
+                                    onClick={handleCrearProyecto}
+                                    className="flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-[1.02]"
+                                >
+                                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    Crear Proyecto
+                                </button>
+                            ) : (
+                                <div className="flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 cursor-not-allowed">
+                                    <ShieldExclamationIcon className="w-5 h-5 mr-2" />
+                                    <span>Solo Administradores</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -228,7 +253,7 @@ export const Lista = () => {
                 {/* Modal para crear proyecto */}
                 {showModal && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 p-4">
-                        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8 w-full max-w-lg transform transition-all duration-300 scale-100">
+                        <div className="bg-white dark:bg-gray-700/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/20 p-8 w-full max-w-lg transform transition-all duration-300 scale-100">
                             {/* Header del modal */}
                             <div className="text-center mb-6">
                                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full mb-4">
@@ -239,14 +264,14 @@ export const Lista = () => {
                                 <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                                     Crear Nuevo Proyecto
                                 </h3>
-                                <p className="text-gray-600 mt-2">Completa la información para crear un nuevo proyecto</p>
+                                <p className="text-gray-600 dark:text-gray-400 mt-2">Completa la información para crear un nuevo proyecto</p>
                             </div>
 
                             {/* Formulario */}
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 {/* Campo Código */}
                                 <div className="space-y-2">
-                                    <label htmlFor="codigo" className="block text-sm font-medium text-gray-700">
+                                    <label htmlFor="codigo" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Código del Proyecto *
                                     </label>
                                     <div className="relative">
@@ -263,14 +288,14 @@ export const Lista = () => {
                                             value={form.codigo}
                                             onChange={handleChange}
                                             required
-                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white/50 backdrop-blur-sm"
+                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white dark:bg-gray-700/50 backdrop-blur-sm"
                                         />
                                     </div>
                                 </div>
 
                                 {/* Campo Nombre */}
                                 <div className="space-y-2">
-                                    <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
+                                    <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Nombre del Proyecto *
                                     </label>
                                     <div className="relative">
@@ -287,14 +312,14 @@ export const Lista = () => {
                                             value={form.nombre}
                                             onChange={handleChange}
                                             required
-                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white/50 backdrop-blur-sm"
+                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white dark:bg-gray-700/50 backdrop-blur-sm"
                                         />
                                     </div>
                                 </div>
 
                                 {/* Campo Estado */}
                                 <div className="space-y-2">
-                                    <label htmlFor="estado" className="block text-sm font-medium text-gray-700">
+                                    <label htmlFor="estado" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Estado Inicial *
                                     </label>
                                     <div className="relative">
@@ -309,7 +334,7 @@ export const Lista = () => {
                                             value={form.estado}
                                             onChange={handleChange}
                                             required
-                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white/50 backdrop-blur-sm appearance-none"
+                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white dark:bg-gray-700/50 backdrop-blur-sm appearance-none"
                                         >
                                             <option value="">Selecciona un estado</option>
                                             <option value="planificacion">Planificación</option>
@@ -327,7 +352,7 @@ export const Lista = () => {
                                     <button
                                         type="button"
                                         onClick={handleCloseModal}
-                                        className="px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200"
+                                        className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200"
                                     >
                                         Cancelar
                                     </button>
@@ -348,7 +373,7 @@ export const Lista = () => {
                 )}
 
                 {/* Tabla de Proyectos */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+                <div className="bg-white dark:bg-gray-700/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden">
                     {/* Header de la tabla */}
                     <div className="px-6 py-4 border-b border-gray-200">
                         <div className="flex items-center justify-between">
@@ -360,7 +385,7 @@ export const Lista = () => {
                                     Proyectos ({proyectosFiltrados.length})
                                 </h3>
                             </div>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
                                 Página {currentPage} de {totalPages}
                             </div>
                         </div>
@@ -374,10 +399,10 @@ export const Lista = () => {
                             {/* Tabla */}
                             <div className="overflow-x-auto">
                                 <table className="w-full">
-                                    <thead className="bg-gray-50">
+                                    <thead className="bg-gray-50 dark:bg-gray-700">
                                         <tr>
                                             <th
-                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
                                                 onClick={() => handleSort('codigo')}
                                             >
                                                 <div className="flex items-center">
@@ -390,7 +415,7 @@ export const Lista = () => {
                                                 </div>
                                             </th>
                                             <th
-                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
                                                 onClick={() => handleSort('nombre')}
                                             >
                                                 <div className="flex items-center">
@@ -403,7 +428,7 @@ export const Lista = () => {
                                                 </div>
                                             </th>
                                             <th
-                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
                                                 onClick={() => handleSort('estado')}
                                             >
                                                 <div className="flex items-center">
@@ -415,16 +440,16 @@ export const Lista = () => {
                                                     )}
                                                 </div>
                                             </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Acciones
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
+                                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                         {proyectosPaginados.map((proyecto, idx) => (
                                             <motion.tr
                                                 key={proyecto._id || idx}
-                                                className="hover:bg-gray-50 transition-colors duration-200"
+                                                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: idx * 0.05 }}
@@ -437,22 +462,22 @@ export const Lista = () => {
                                                             </svg>
                                                         </div>
                                                         <div>
-                                                            <div className="text-sm font-medium text-gray-900">{proyecto.codigo}</div>
+                                                            <div className="text-sm font-medium text-gray-900 dark:text-white">{proyecto.codigo}</div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <div className="text-sm text-gray-900 font-medium">{proyecto.nombre}</div>
-                                                    <div className="text-sm text-gray-500">Proyecto de telemetría</div>
+                                                    <div className="text-sm text-gray-900 dark:text-white font-medium">{proyecto.nombre}</div>
+                                                    <div className="text-sm text-gray-500 dark:text-gray-400">Proyecto de telemetría</div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${proyecto.estado === 'completado' ? 'bg-green-100 text-green-800' :
-                                                        proyecto.estado === 'en_progreso' ? 'bg-blue-100 text-blue-800' :
-                                                            proyecto.estado === 'planificacion' ? 'bg-yellow-100 text-yellow-800' :
-                                                                proyecto.estado === 'en_revision' ? 'bg-purple-100 text-purple-800' :
-                                                                    proyecto.estado === 'pausado' ? 'bg-orange-100 text-orange-800' :
-                                                                        proyecto.estado === 'cancelado' ? 'bg-red-100 text-red-800' :
-                                                                            'bg-gray-100 text-gray-800'
+                                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${proyecto.estado === 'completado' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                                                        proyecto.estado === 'en_progreso' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
+                                                            proyecto.estado === 'planificacion' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
+                                                                proyecto.estado === 'en_revision' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' :
+                                                                    proyecto.estado === 'pausado' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' :
+                                                                        proyecto.estado === 'cancelado' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+                                                                            'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
                                                         }`}>
                                                         {proyecto.estado}
                                                     </span>
@@ -485,14 +510,14 @@ export const Lista = () => {
                             {totalPages > 1 && (
                                 <div className="px-6 py-4 border-t border-gray-200">
                                     <div className="flex items-center justify-between">
-                                        <div className="text-sm text-gray-700">
+                                        <div className="text-sm text-gray-700 dark:text-gray-300">
                                             Mostrando {startIndex + 1} a {Math.min(endIndex, proyectosOrdenados.length)} de {proyectosOrdenados.length} proyectos
                                         </div>
                                         <div className="flex items-center space-x-2">
                                             <button
                                                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                                                 disabled={currentPage === 1}
-                                                className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                                                className="px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                                             >
                                                 Anterior
                                             </button>
@@ -505,7 +530,7 @@ export const Lista = () => {
                                                         onClick={() => setCurrentPage(pageNum)}
                                                         className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${currentPage === pageNum
                                                             ? 'bg-blue-600 text-white'
-                                                            : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+                                                            : 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-50'
                                                             }`}
                                                     >
                                                         {pageNum}
@@ -516,7 +541,7 @@ export const Lista = () => {
                                             <button
                                                 onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                                                 disabled={currentPage === totalPages}
-                                                className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                                                className="px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                                             >
                                                 Siguiente
                                             </button>
@@ -535,7 +560,7 @@ export const Lista = () => {
                             <h3 className="text-xl font-semibold text-gray-800 mb-2">
                                 {busqueda || busquedaCodigo ? 'No se encontraron proyectos' : 'No hay proyectos aún'}
                             </h3>
-                            <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                            <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
                                 {busqueda || busquedaCodigo
                                     ? 'Intenta ajustar los filtros de búsqueda para encontrar lo que buscas.'
                                     : 'Comienza creando tu primer proyecto para organizar y gestionar tus tareas.'

@@ -124,6 +124,7 @@ function Sidebar() {
             color: "from-orange-500 to-red-500",
             children: [
                 { to: "/server", icon: <FolderIcon className="h-5 w-5" />, label: "IP Server", color: "from-orange-500 to-red-500" },
+                { to: "/test-roles", icon: <ShieldExclamationIcon className="h-5 w-5" />, label: "Test Roles", color: "from-orange-500 to-red-500" },
             ]
         }
     ];
