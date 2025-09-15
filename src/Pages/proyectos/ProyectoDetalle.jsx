@@ -306,7 +306,7 @@ export const ProyectoDetalle = () => {
         // Crear ventana de impresión
         const ventanaImpresion = window.open('', '_blank', 'width=800,height=600');
 
-        // Contenido HTML optimizado para impresión
+        // Contenido HTML optimizado para impresión compacta
         const contenidoImpresion = `
             <!DOCTYPE html>
             <html lang="es">
@@ -323,80 +323,82 @@ export const ProyectoDetalle = () => {
                     
                     body {
                         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                        line-height: 1.6;
+                        line-height: 1.4;
                         color: #333;
                         background: white;
-                        padding: 20px;
+                        padding: 10px;
+                        font-size: 12px;
                     }
                     
                     .header {
                         text-align: center;
-                        border-bottom: 3px solid #3B82F6;
-                        padding-bottom: 20px;
-                        margin-bottom: 30px;
+                        border-bottom: 2px solid #3B82F6;
+                        padding-bottom: 8px;
+                        margin-bottom: 15px;
                     }
                     
                     .header h1 {
                         color: #1E40AF;
-                        font-size: 28px;
-                        margin-bottom: 10px;
+                        font-size: 20px;
+                        margin-bottom: 4px;
                     }
                     
                     .header .codigo {
-                        font-size: 18px;
+                        font-size: 14px;
                         color: #6B7280;
                         font-weight: 600;
                     }
                     
                     .header .fecha {
-                        font-size: 14px;
+                        font-size: 10px;
                         color: #9CA3AF;
-                        margin-top: 10px;
+                        margin-top: 4px;
                     }
                     
                     .section {
-                        margin-bottom: 25px;
+                        margin-bottom: 12px;
                         page-break-inside: avoid;
                     }
                     
                     .section h2 {
                         color: #1E40AF;
-                        font-size: 20px;
-                        margin-bottom: 15px;
-                        padding-bottom: 8px;
-                        border-bottom: 2px solid #E5E7EB;
+                        font-size: 14px;
+                        margin-bottom: 6px;
+                        padding-bottom: 3px;
+                        border-bottom: 1px solid #E5E7EB;
                     }
                     
                     .info-grid {
                         display: grid;
                         grid-template-columns: 1fr 1fr;
-                        gap: 20px;
-                        margin-bottom: 20px;
+                        gap: 8px;
+                        margin-bottom: 8px;
                     }
                     
                     .info-item {
                         background: #F8FAFC;
-                        padding: 15px;
-                        border-radius: 8px;
-                        border-left: 4px solid #3B82F6;
+                        padding: 6px;
+                        border-radius: 4px;
+                        border-left: 2px solid #3B82F6;
                     }
                     
                     .info-label {
                         font-weight: 600;
                         color: #374151;
-                        margin-bottom: 5px;
+                        margin-bottom: 2px;
+                        font-size: 10px;
                     }
                     
                     .info-value {
                         color: #1F2937;
-                        font-size: 16px;
+                        font-size: 11px;
                     }
                     
                     .estado-badge {
                         display: inline-block;
-                        padding: 6px 12px;
-                        border-radius: 20px;
-                        font-size: 12px;
+                        padding: 2px 6px;
+                        border-radius: 10px;
+                        font-size: 9px;
                         font-weight: 600;
                         text-transform: uppercase;
                     }
@@ -411,12 +413,13 @@ export const ProyectoDetalle = () => {
                     .table {
                         width: 100%;
                         border-collapse: collapse;
-                        margin-top: 15px;
+                        margin-top: 6px;
+                        font-size: 10px;
                     }
                     
                     .table th,
                     .table td {
-                        padding: 12px;
+                        padding: 4px 6px;
                         text-align: left;
                         border-bottom: 1px solid #E5E7EB;
                     }
@@ -425,24 +428,61 @@ export const ProyectoDetalle = () => {
                         background: #F3F4F6;
                         font-weight: 600;
                         color: #374151;
+                        font-size: 10px;
                     }
                     
-                    .table tr:hover {
-                        background: #F9FAFB;
+                    .table td {
+                        font-size: 10px;
                     }
                     
                     .footer {
-                        margin-top: 40px;
-                        padding-top: 20px;
-                        border-top: 2px solid #E5E7EB;
+                        margin-top: 15px;
+                        padding-top: 8px;
+                        border-top: 1px solid #E5E7EB;
                         text-align: center;
                         color: #6B7280;
-                        font-size: 14px;
+                        font-size: 9px;
+                    }
+                    
+                    .compact-info {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 3px 0;
+                        border-bottom: 1px solid #F3F4F6;
+                    }
+                    
+                    .compact-info:last-child {
+                        border-bottom: none;
+                    }
+                    
+                    .compact-label {
+                        font-weight: 600;
+                        color: #374151;
+                        font-size: 10px;
+                    }
+                    
+                    .compact-value {
+                        color: #1F2937;
+                        font-size: 10px;
                     }
                     
                     @media print {
-                        body { padding: 0; }
-                        .section { page-break-inside: avoid; }
+                        body { 
+                            padding: 5px; 
+                            font-size: 11px;
+                        }
+                        .section { 
+                            page-break-inside: avoid; 
+                            margin-bottom: 10px;
+                        }
+                        .header {
+                            margin-bottom: 10px;
+                        }
+                        .table th,
+                        .table td {
+                            padding: 3px 4px;
+                        }
                     }
                 </style>
             </head>
@@ -582,8 +622,7 @@ export const ProyectoDetalle = () => {
                 ` : ''}
 
                 <div class="footer">
-                    <p>Este reporte fue generado automáticamente por el Sistema de Telemetría</p>
-                    <p>Para más información, contacte al administrador del sistema</p>
+                    <p>Reporte generado por Sistema de Telemetría - ${new Date().toLocaleDateString('es-ES')}</p>
                 </div>
             </body>
             </html>
@@ -740,13 +779,13 @@ export const ProyectoDetalle = () => {
                             </button>
 
                             <button
-                                onClick={imprimirReporte}
+                                onClick={() => window.print()}
                                 className="flex items-center justify-center px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 transform hover:scale-[1.02]"
                             >
                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                                 </svg>
-                                Imprimir Reporte
+                                Imprimir
                             </button>
                         </div>
                     </div>

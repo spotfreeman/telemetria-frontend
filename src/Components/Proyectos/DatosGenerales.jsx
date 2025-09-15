@@ -11,72 +11,122 @@ const DatosGenerales = ({
     setEditando,
     setForm
 }) => (
-    <div className="w-auto mx-auto mt-2 bg-white rounded shadow p-8">
-        <div>
-            <div className="w-full bg-blue-100 rounded">
-                <h2 className="text-2xl font-bold mb-4 px-2 py-2 text-black">{proyecto.nombre}</h2>
-            </div>
-            {mensaje && <div className="mb-4 text-green-700 font-semibold">{mensaje}</div>}
-            {editando ? (
-                <form onSubmit={handleGuardar} className="flex flex-col gap-4 mb-8">
-                    <label>
-                        <span className="font-semibold">Código:</span>
-                        <input className="border rounded px-2 py-1 w-full" name="codigo" value={form.codigo} onChange={handleChange} />
-                    </label>
-                    <label>
-                        <span className="font-semibold">Nombre:</span>
-                        <input className="border rounded px-2 py-1 w-full" name="nombre" value={form.nombre} onChange={handleChange} />
-                    </label>
-                    <label>
-                        <span className="font-semibold">Estado:</span>
-                        <input className="border rounded px-2 py-1 w-full" name="estado" value={form.estado} onChange={handleChange} />
-                    </label>
-                    <label>
-                        <span className="font-semibold">Detalle:</span>
-                        <textarea className="border rounded px-2 py-1 w-full" name="descripcion" value={form.descripcion} onChange={handleChange} />
-                    </label>
-                    <div className="flex gap-2">
-                        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Guardar</button>
-                        <button
-                            type="button"
-                            className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
-                            onClick={() => { setEditando(false); setForm(proyecto); }}
-                        >
-                            Cancelar
-                        </button>
-                    </div>
-                </form>
-            ) : (
-                <div className="relative">
-                    <table className="mb-8 w-full border border-gray-300 rounded">
-                        <tbody>
-                            <tr>
-                                <th className="bg-blue-100 px-4 py-2 text-left w-1/4">Nombre</th>
-                                <td className="px-4 py-2">{proyecto.nombre}</td>
-                            </tr>
-                            <tr>
-                                <th className="bg-blue-100 px-4 py-2 text-left">Código</th>
-                                <td className="px-4 py-2">{proyecto.codigo}</td>
-                            </tr>
-                            <tr>
-                                <th className="bg-blue-100 px-4 py-2 text-left">Estado</th>
-                                <td className="px-4 py-2">{proyecto.estado}</td>
-                            </tr>
-                            <tr>
-                                <th className="bg-blue-100 px-4 py-2 text-left">Descripcion</th>
-                                <td className="px-4 py-2">{proyecto.descripcion}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button
-                        className="absolute top-2 right-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        onClick={() => setEditando(true)}
-                    >
-                        <HiOutlineAdjustments />
-                    </button>
-                </div>
+    <div>
+        <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center">
+                <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.009-5.824-2.57M15 6.343A7.962 7.962 0 0112 5c-2.34 0-4.29 1.009-5.824 2.57" />
+                </svg>
+                Datos Generales
+            </h3>
+            {!editando && (
+                <button
+                    className="flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200"
+                    onClick={() => setEditando(true)}
+                >
+                    <HiOutlineAdjustments className="w-4 h-4 mr-1" />
+                    Editar
+                </button>
             )}
         </div>
+        {mensaje && <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 font-medium">{mensaje}</div>}
+        {editando ? (
+            <form onSubmit={handleGuardar} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Código del Proyecto</label>
+                        <input
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            name="codigo"
+                            value={form.codigo}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                        <select
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            name="estado"
+                            value={form.estado}
+                            onChange={handleChange}
+                        >
+                            <option value="planificacion">Planificación</option>
+                            <option value="en_progreso">En Progreso</option>
+                            <option value="en_revision">En Revisión</option>
+                            <option value="pausado">Pausado</option>
+                            <option value="completado">Completado</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del Proyecto</label>
+                    <input
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        name="nombre"
+                        value={form.nombre}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                    <textarea
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+                        name="descripcion"
+                        value={form.descripcion}
+                        onChange={handleChange}
+                        rows={3}
+                    />
+                </div>
+                <div className="flex gap-3 pt-2">
+                    <button
+                        type="submit"
+                        className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                    >
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Guardar Cambios
+                    </button>
+                    <button
+                        type="button"
+                        className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                        onClick={() => { setEditando(false); setForm(proyecto); }}
+                    >
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        ) : (
+            <div className="space-y-3">
+                <div className="flex items-center justify-between py-3 border-b border-gray-200">
+                    <span className="text-sm font-medium text-gray-600">Código del Proyecto</span>
+                    <span className="text-sm text-gray-800 font-mono">{proyecto.codigo}</span>
+                </div>
+                <div className="flex items-center justify-between py-3 border-b border-gray-200">
+                    <span className="text-sm font-medium text-gray-600">Estado</span>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${proyecto.estado === 'completado' ? 'bg-green-100 text-green-800' :
+                            proyecto.estado === 'en_progreso' ? 'bg-blue-100 text-blue-800' :
+                                proyecto.estado === 'planificacion' ? 'bg-yellow-100 text-yellow-800' :
+                                    proyecto.estado === 'en_revision' ? 'bg-purple-100 text-purple-800' :
+                                        proyecto.estado === 'pausado' ? 'bg-orange-100 text-orange-800' :
+                                            proyecto.estado === 'cancelado' ? 'bg-red-100 text-red-800' :
+                                                'bg-gray-100 text-gray-800'
+                        }`}>
+                        {proyecto.estado}
+                    </span>
+                </div>
+                {proyecto.descripcion && (
+                    <div className="py-3">
+                        <span className="text-sm font-medium text-gray-600 block mb-2">Descripción</span>
+                        <p className="text-sm text-gray-800 leading-relaxed">{proyecto.descripcion}</p>
+                    </div>
+                )}
+            </div>
+        )}
     </div>
 );
 
