@@ -18,6 +18,7 @@ import {
     BellIcon,
     SunIcon,
     MoonIcon,
+    ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
 
 // Importa el componente ValorUF
