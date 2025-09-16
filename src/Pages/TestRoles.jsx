@@ -16,12 +16,31 @@ export const TestRoles = () => {
     } = useRoles();
 
     const [testRole, setTestRole] = useState(userRole);
+    const [isChangingRole, setIsChangingRole] = useState(false);
 
-    const handleRoleChange = (newRole) => {
-        setTestRole(newRole);
-        localStorage.setItem('rol', newRole);
-        // Recargar la página para aplicar el nuevo rol
-        window.location.reload();
+    const handleRoleChange = async (newRole) => {
+        if (isChangingRole) return; // Evitar múltiples clics
+        
+        setIsChangingRole(true);
+        
+        try {
+            // Actualizar el rol en localStorage
+            localStorage.setItem('rol', newRole);
+            setTestRole(newRole);
+            
+            // Mostrar mensaje de confirmación
+            console.log(`Rol cambiado a: ${newRole}`);
+            
+            // Pequeño delay para que el usuario vea el cambio
+            setTimeout(() => {
+                // Recargar la página para aplicar el nuevo rol en toda la aplicación
+                window.location.reload();
+            }, 500);
+            
+        } catch (error) {
+            console.error('Error al cambiar rol:', error);
+            setIsChangingRole(false);
+        }
     };
 
     const roles = [
@@ -57,16 +76,35 @@ export const TestRoles = () => {
                             <button
                                 key={role.value}
                                 onClick={() => handleRoleChange(role.value)}
-                                className={`p-4 rounded-lg border-2 transition-all duration-200 ${testRole === role.value
+                                disabled={isChangingRole}
+                                className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                                    isChangingRole 
+                                        ? 'opacity-50 cursor-not-allowed' 
+                                        : 'cursor-pointer'
+                                } ${testRole === role.value
                                         ? `border-${role.color}-500 bg-${role.color}-50 dark:bg-${role.color}-900/20`
                                         : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                                     }`}
                             >
-                                <div className={`w-8 h-8 rounded-full bg-${role.color}-500 mx-auto mb-2`}></div>
-                                <p className="text-sm font-medium text-gray-800 dark:text-white">{role.label}</p>
+                                <div className={`w-8 h-8 rounded-full bg-${role.color}-500 mx-auto mb-2 flex items-center justify-center`}>
+                                    {isChangingRole && testRole === role.value ? (
+                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    ) : null}
+                                </div>
+                                <p className="text-sm font-medium text-gray-800 dark:text-white">
+                                    {isChangingRole && testRole === role.value ? 'Cambiando...' : role.label}
+                                </p>
                             </button>
                         ))}
                     </div>
+                    
+                    {isChangingRole && (
+                        <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                            <p className="text-sm text-blue-700 dark:text-blue-300 text-center">
+                                🔄 Cambiando rol... La página se recargará automáticamente.
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Información del Usuario Actual */}
